@@ -14,10 +14,11 @@
  This generic function calculates some neutrality statistics.
 }
 
+
 \usage{
 
 \S4method{neutrality.stats}{GENOME}(object,new.populations=FALSE,new.outgroup=FALSE,
-subsites=FALSE,detail=FALSE)
+subsites=FALSE,detail=FALSE, FAST=FALSE, do.R2=FALSE)
 \S4method{get.neutrality}{GENOME}(object,theta=FALSE,stats=TRUE)
 
 }
@@ -27,8 +28,23 @@ subsites=FALSE,detail=FALSE)
   \item{object}{an object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default:\code{FALSE}}
   \item{new.outgroup}{vector of outgroup sequences. default:\code{FALSE}}
-  \item{subsites}{\code{"syn"} for synonymous sites and \code{"nonsyn"} for nonsynonymous sites}
+  \item{subsites}{ 
+
+                  \code{"transitions"}: SNPs which are transitions. \cr
+                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"syn"}: synonymous sites. \cr
+                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"exon"}: SNPs in exon regions. \cr
+                  \code{"intron"}: SNPs in intron regions. \cr
+                  \code{"coding"}: SNPs in coding regions (CDS). \cr
+                  \code{"utr"}:  SNPs in UTR regions. \cr
+                  \code{"gene"}: SNPs in genes. \cr
+          default:\code{FALSE}}
+
+  
   \item{detail}{default:\code{FALSE}, \code{TRUE} for some detail statistics. Note:slower!}  
+  \item{FAST}{Fast computation. only works if there is no outgroup defined.}
+  \item{do.R2}{Rozas R2}
   \item{stats}{show the results of each statistic. default:\code{TRUE}}
   \item{theta}{show the theta values. default:\code{FALSE}}
 }
@@ -82,7 +98,7 @@ subsites=FALSE,detail=FALSE)
 
 # GENOME.class <- readData("\home\Alignments")
 # GENOME.class
-# GENOME.class <- neutrality.stats(GENOME.class)
+# GENOME.class <- neutrality.stats(GENOME.class, FAST=TRUE)
 # GENOME.class <- neutrality.stats(GENOME.class,list(1:4,5:10),subsites="syn")
 # GENOME.class <- neutrality.stats(GENOME.class,list(c("seq1","seq5","seq3"),
 # c("seq2","seq8")))

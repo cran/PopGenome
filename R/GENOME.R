@@ -1,5 +1,10 @@
 setClass("GENOME", representation(
 
+BIG.BIAL     =   "list", # length 1 for ff objects
+SLIDE.POS    =   "list",
+big.data     =   "logical",
+gff.info     =   "logical",
+snp.data     =   "logical",
 basepath     =   "character",
 project      =   "character",
 populations  =   "list",        # populations
@@ -9,12 +14,21 @@ outgroup     =   "vector",      # outgroup
 region.names =   "character",
 genelength   =   "numeric",     # number of genes that where calculated
 n.sites      =   "numeric",
+n.sites2     =   "numeric", # important for SNP data
 n.biallelic.sites = "numeric",
 n.gaps       =   "numeric",
 n.unknowns   =   "numeric",
 n.valid.sites       =   "numeric",
 n.polyallelic.sites =   "numeric",
 trans.transv.ratio  =   "numeric",
+
+## GFF Infos 
+
+Coding.region ="numeric",
+UTR.region    ="numeric",
+Intron.region ="numeric",
+Exon.region   ="numeric",
+Gene.region   ="numeric",
 
 ######## Pops for each Test Module
 
@@ -25,6 +39,8 @@ Pop_Linkage     =  "list",
 Pop_Slide       =  "list", 
 Pop_MK          =  "list",
 Pop_Detail      =  "list",
+Pop_Recomb      =  "list",
+Pop_Sweeps      =  "list",
 
 ##################################
 FSTNLISTE              =   "list",
@@ -82,8 +98,11 @@ Rozas.ZZ               =   "matrix",
 Rozas.ZA               =   "matrix",
 Wall.B                 =   "matrix",
 Wall.Q                 =   "matrix",
+mult.Linkage           =   "matrix",
 
-
+RM                     =   "matrix",
+CL                     =   "matrix",
+CLmax                  =   "matrix",
 
 MDSD="matrix",
 MDG1="matrix",
@@ -118,17 +137,20 @@ setMethod("show", "GENOME",
  cat("-----\n")
  cat("Modules:\n")
  cat("-----\n")
- out <- data.frame(Calculation=c("readData","neutrality.stats","linkage.stats","F_ST.stats","MKT","detail.stats","MS","--------------","set.populations","sliding.window.transform","show.slots","get.status"),         
+ out <- data.frame(Calculation=c("readData","neutrality.stats","linkage.stats","recomb.stats","F_ST.stats","sweeps.stats","MKT","detail.stats","MS","--------------","set.populations","sliding.window.transform","splitting.data","show.slots","get.status"),         
  
-                Description=c("Summary data","Neutrality tests","Linkage disequilibrium","Fixation index","McDonald & Kreitman test","Mismatch distribution","Coalescent simulation",
-"-----------","defines the populations","Sliding window","?provided slots?","status of calculations"),
+                Description=c("Reading data","Neutrality tests","Linkage disequilibrium","Recombination","Fixation index","Selective sweeps","McDonald-Kreitman test","Mixed statistics","Coalescent simulation",
+"-----------","Defines the populations","Sliding window","Splits the data","?provided slots?","Status of calculations"),
                 
-                Get.the.Result = c("get.sum.data","get.neutrality","get.linkage","get.F_ST,get.diversity","get.MKT","get.detail","@","-------------","","get.*","",""),
+                Get.the.Result = c("get.sum.data","get.neutrality","get.linkage","get.recomb","get.F_ST,get.diversity","get.sweeps","get.MKT","get.detail","@","-------------","","","","","")
 
-                Calculated = c(TRUE,object@Pop_Neutrality$calculated,object@Pop_Linkage$calculated,object@Pop_FSTH$calculated,object@Pop_MK$calculated,
-object@Pop_Detail$calculated,NA,NA,NA,object@Pop_Slide$calculated,NA,NA)
+                # ,
+
+                #Calculated = c(TRUE,object@Pop_Neutrality$calculated,object@Pop_Linkage$calculated,object@Pop_Recomb #$calculated,object@Pop_FSTH$calculated,object@Pop_MK$calculated,
+#object@Pop_Detail$calculated,NA,NA,NA,object@Pop_Slide$calculated,NA,NA)
                 )
   print(out)
+
 # cat("\n")
 #  cat("--------- Help ----------------")
 #  cat("\n")
@@ -148,13 +170,19 @@ setMethod("show.slots", "GENOME",
  cat("-----\n")
  cat("SLOTS:\n")
  cat("-----\n")
- out <- data.frame(Slots=c("project","populations","outgroup","region.names","n.sites","Pi","nucleotide.F_ST","nuc.F_ST.pairwise","haplotype.F_ST","Nei.G_ST","Hudson.G_ST","Hudson.H_ST","hap.F_ST.pairwise","Tajima.D","Fu.Li.F","Fu.Li.D","Fu.F_S","Strobeck","n.segragting.sites","Rozas.R_2","Kelly.Z_nS","Rozas.ZA","Rozas.ZZ","Wall.B","Wall.Q","MDSD","MDG1","MDG2","region.stats","region.data"),         
+ out <- data.frame(Slots=c("project","populations","outgroup","region.names","n.sites","Pi","nucleotide.F_ST","nuc.F_ST.pairwise",
+"haplotype.F_ST","Nei.G_ST","Hudson.G_ST","Hudson.H_ST","hap.F_ST.pairwise",
+"Tajima.D","Fu.Li.F","Fu.Li.D","Fu.F_S","Strobeck","n.segragting.sites","Rozas.R_2",
+"Kelly.Z_nS","Rozas.ZA","Rozas.ZZ","Wall.B","Wall.Q","RM","CL","CLmax",
+"MDSD","MDG1","MDG2","Coding.region","Gene.region","UTR.region","Intron.region","Exon.region","region.stats","region.data"),         
  
-                Description=c("project name","list of populations","outgroup vector","region names","length of each gene","Nucleotide Diversity (Nei)","F_ST (Nucleotides)",
-                "Pairwise F_ST (Nucleotides)","F_ST (Haplotypes)","G_ST from Nei 1973","G_ST from Hudson 1992","H_ST from Hudson 1992","Pairwise F_ST (Haplotypes)","Tajima's D","Fu & Li's F*","Fu & Li's D*","Fu & Li's F_S","Strobeck","Segregating Sites","Ramos & Rozas R_2","Linkage Disequilibrium","Rozas ZA statistic","Rozas ZZ statistic","Walls B","Walls Q","mismatch distribution","mismatch distribution","mismatch distribution",
+                Description=c("project name","list of populations","outgroup vector","region names","length of each region","Nucleotide Diversity (Nei)","F_ST (Nucleotides)",
+                "Pairwise F_ST (Nucleotides)","F_ST (Haplotypes)","G_ST from Nei 1973","G_ST from Hudson 1992","H_ST from Hudson 1992","Pairwise F_ST (Haplotypes)","Tajima's D","Fu & Li's F*","Fu & Li's D*","Fu & Li's F_S","Strobeck","Segregating Sites","Ramos & Rozas R_2","Linkage Disequilibrium","Rozas ZA statistic","Rozas ZZ statistic","Walls B","Walls Q","Hudson & Kaplan RM","Composite Likelihood (Nielson)","Max Composite Likelihood (Nielson)","mismatch distribution","mismatch distribution","mismatch distribution","length of Coding region","length of Gene region","length of UTR region","length of Intron region","length of Exon region",
                 "  detail stats (class::region.stats)"," summary data (class::region.data)"),
                 
-                Module = c("Data","Data","Data","Data","Data","FST","FST","FST","FST","FST","FST","FST","FST","FST","Neutrality","Neutrality","Neutrality","Neutrality","Neutrality","Neutrality","Linkage","Linkage","Linkage","Linkage","Linkage","Detail","Detail","Detail","!!!","!!!"))
+                Module = c("Data","Data","Data","Data","Data","FST","FST","FST","FST","FST","FST","FST","FST","FST","Neutrality","Neutrality","Neutrality",
+"Neutrality","Neutrality","Neutrality","Linkage","Linkage","Linkage","Linkage","Linkage","Recomb","Sweeps","Sweeps","Detail","Detail","Detail",
+"Gff/Gtf","Gff/Gtf","Gff/Gtf","Gff/Gtf","Gff/Gtf","!!!","!!!"))
   
   print(out)
  })
@@ -301,6 +329,10 @@ change             <- object@region.data
 populations        <- vector("list",npops)
 object@populations <- new.populations
 
+# Init
+
+XX_popmissing  <- vector("list",length(object@region.names))
+XX_populations <- vector("list",length(object@region.names))
 
 ############################################################
 progr <- progressBar()
@@ -336,8 +368,8 @@ for(xx in 1:length(object@region.names)){
 
        # if(length(populations)==0){next} # Keine Population vorhanden
 
-     change@populations[[xx]]  <- populations 
-     change@popmissing[[xx]]   <- popmissing
+     XX_populations[[xx]]  <- populations 
+     XX_popmissing[[xx]]   <- popmissing
 
  # PROGRESS #######################################################
     progr <- progressBar(xx,length(object@region.names), progr)
@@ -345,6 +377,8 @@ for(xx in 1:length(object@region.names)){
 
 }
 
+change@populations <- XX_populations
+change@popmissing  <- XX_popmissing
 object@region.data <- change
 return(object)
 
@@ -469,19 +503,23 @@ if(!object@Pop_Linkage$calculated){stop("Statistics have to be calculated first 
 
 if(F_ST){
 
+  if(length(object@Hudson.Snn)==0){object@Hudson.Snn <- matrix(,object@genelength,1)} # damit Snn nicht unbedingt berechnet werden muss
+
+
 if(!object@Pop_FSTH$calculated){stop("Statistics have to be calculated first !")}
 
   if(gene[1]==FALSE){
   
-  res  <- matrix(,object@genelength,5)
+  res  <- matrix(,object@genelength,6)
   pops <- vector("list",length(object@Pop_FSTH$Populations))
   for(xx in 1:length(object@Pop_FSTH$Populations)){
      res[,1]       <- object@hap.diversity.within[,xx]
-     res[,2]       <- object@Pi[,xx]*object@n.valid.sites
+     res[,2]       <- object@Pi[,xx] #*object@n.valid.sites
      res[,3]       <- object@haplotype.F_ST
      res[,4]       <- object@nucleotide.F_ST
      res[,5]       <- object@Nei.G_ST 
-     colnames(res) <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST")
+     res[,6]       <- object@Hudson.Snn
+     colnames(res) <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST","Hudson.Snn")
      rownames(res) <- object@region.names
      pops[[xx]]    <- res 
   }
@@ -493,7 +531,7 @@ if(!object@Pop_FSTH$calculated){stop("Statistics have to be calculated first !")
  
  }else{               # gene is is defined
  
-  res  <- matrix(,1,5)
+  res  <- matrix(,1,6)
   pops <- vector("list",length(object@Pop_FSTH$Populations))
   for(xx in 1:length(object@Pop_FSTH$Populations)){
      res[,1]       <- object@hap.diversity.within[gene,xx]
@@ -501,7 +539,8 @@ if(!object@Pop_FSTH$calculated){stop("Statistics have to be calculated first !")
      res[,3]       <- object@haplotype.F_ST[gene,1]
      res[,4]       <- object@nucleotide.F_ST[gene,1]
      res[,5]       <- object@Nei.G_ST[gene,1] 
-     colnames(res) <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST")
+     res[,6]       <- object@Hudson.Snn[gene,1]
+     colnames(res) <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST","Hudson.Snn")
      rownames(res) <- object@region.names[gene]
      pops[[xx]]    <- res 
   }
@@ -757,8 +796,9 @@ bayes_IN <- vector("list",length(object@populations))
  for(xx in 1:length(object@populations)){
 
    GLOBAL$loci <- 1 
-   sss  <- sapply(object@region.data@biallelic.matrix,function(bial){
+   sss         <- sapply(object@region.data@biallelic.matrix,function(bial){
 
+         bial <- popGetBial(object, GLOBAL$loci)
          if(length(bial)!=0 & length(object@populations)==length(object@region.data@populations[[GLOBAL$loci]])){         
 	   region_pop        <- object@region.data@populations[[GLOBAL$loci]]
            sub_bial          <- bial[region_pop[[xx]],,drop=FALSE]	  
@@ -774,7 +814,7 @@ bayes_IN <- vector("list",length(object@populations))
 	 } 
 	 
           })
-   matt                     <- matrix(unlist(sss),ncol=2,by=2)
+   matt                     <- matrix(unlist(sss),ncol=2,byrow=2)
    bayes_IN[[xx]]           <- cbind(rowSums(matt),2,matt)
    colnames(bayes_IN[[xx]]) <- c("size","haps","nullen","einsen")
   }
@@ -874,10 +914,29 @@ setMethod("get.MKT", "GENOME",
 # ----------------------------------------------------------------------
 popGetBial <- function( XX , bialmatNr )
 {
-  if(length(XX@region.data@biallelic.matrix[[bialmatNr]])>0){
-            if(!is.na(XX@region.data@biallelic.matrix[[bialmatNr]][1])){ # is na wegen sliding window mode letztes NULL verschwindet :(
+
+# ff or not
+#if(XX@big.data){
+
+    if(length(XX@BIG.BIAL)==0){
+     if(XX@big.data){open(XX@region.data@biallelic.matrix[[bialmatNr]])} # da zuviele ff files open... muss nich !
+     bial <- XX@region.data@biallelic.matrix[[bialmatNr]][,,drop=FALSE]
+     if(XX@big.data){close(XX@region.data@biallelic.matrix[[bialmatNr]])}# da zuviele ff files open... muss nich !
+    }else{ 
+     #if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss kurioserweise nich !
+     # open(XX@BIG.BIAL[[1]])
+     bial <- XX@BIG.BIAL[[1]][,XX@SLIDE.POS[[bialmatNr]],drop=FALSE]
+    }
+
+#}else{
+
+#  bial <- XX@region.data@biallelic.matrix[[bialmatNr]]}
+###########
+
+  if(length(bial)>0){
+            if(!is.na(bial[1])){ # is na wegen sliding window mode letztes NULL verschwindet :(
 	 
-               return(XX@region.data@biallelic.matrix[[bialmatNr]])
+               return(bial)
             }else{
 	    return(NULL)
             }
@@ -888,13 +947,16 @@ popGetBial <- function( XX , bialmatNr )
 # ---------------------------------------------------------------------
 # Calc Neutrality (calc_freqstats)
 # ----------------------------------------------------------------------
- setGeneric("neutrality.stats", function(object,new.populations=FALSE,new.outgroup=FALSE,subsites=FALSE,detail=FALSE) standardGeneric("neutrality.stats"))
+ setGeneric("neutrality.stats", function(object,new.populations=FALSE,new.outgroup=FALSE,subsites=FALSE,detail=FALSE,FAST=FALSE,do.R2=FALSE) standardGeneric("neutrality.stats"))
  setMethod("neutrality.stats", "GENOME",
  
- function(object,new.populations,new.outgroup,subsites,detail){
+ function(object,new.populations,new.outgroup,subsites,detail,FAST,do.R2){
  
- region.names                         <- object@region.names 
+ region.names                         <- object@region.names
  n.region.names                       <- length(region.names)
+
+ if(object@big.data){region.names <- NULL} # because of memory space
+ 
  
  object@Pop_Neutrality$sites       <- "ALL"
  object@Pop_Neutrality$calculated  <- TRUE
@@ -918,6 +980,8 @@ popGetBial <- function( XX , bialmatNr )
  
 ## bial        <- object@biallelics
 
+
+
  # Init
  init        <- matrix(,n.region.names,npops)
  TajD        <- init
@@ -937,6 +1001,10 @@ popGetBial <- function( XX , bialmatNr )
  FS          <- init
  Strobeck    <- init
  change      <- object@region.stats
+
+ #--- for Coalescent simulation
+ Pop_Neutrality <- vector("list",n.region.names)
+ #-----------------------------
 
  # Names
  nam <- paste("pop",1:npops)
@@ -1002,16 +1070,67 @@ for(xx in 1:n.region.names){
 ### if Subsites ----------------------------------
 bial <- popGetBial(object,xx)
 
+if(length(bial)==0){next} # when no biallelic positions in the region
+
+
+if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+   #object@Pop_Neutrality$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+  # object@Pop_Neutrality$sites <- "transversions"   
+} 
+
 if(subsites=="syn" & length(bial!=0)){
    syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
    bial       <- bial[,syn,drop=FALSE]
-   object@Pop_Neutrality$sites <- "synonymous"
+   #object@Pop_Neutrality$sites <- "synonymous"
 }
+
 if(subsites=="nonsyn" & length(bial!=0)){
    nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
    bial          <- bial[,nonsyn,drop=FALSE]
-   object@Pop_Neutrality$sites <- "nonsynonymous"
+   #object@Pop_Neutrality$sites <- "nonsynonymous"
 }
+
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   bial          <- bial[,intron,drop=FALSE]
+  # object@Pop_Neutrality$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+   #object@Pop_Neutrality$sites <- "utr"
+}
+
+if(subsites=="exon" & length(bial!=0)){
+   exon           <- which(object@region.data@ExonSNPS[[xx]]==TRUE)
+   bial           <- bial[,exon,drop=FALSE]
+   #object@Pop_Neutrality$sites <- "exon"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]]))
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+   # object@Pop_Neutrality$sites <- "coding"
+}
+
+if(subsites=="gene" & length(bial!=0)){
+   gene             <- which(object@region.data@GeneSNPS[[xx]])
+   bial             <- bial[,gene,drop=FALSE]
+  # object@Pop_Neutrality$sites <- "gene"
+}
+
+} # End of if subsites
 
 ############### ---------------------------------
 
@@ -1065,28 +1184,41 @@ if(subsites=="nonsyn" & length(bial!=0)){
     outgroup <- object@region.data@outgroup[[xx]]
   }
   # --------------------------------------
-  
-    
+      
     
     # important for Coalescent Simulation
-    change@Pop_Neutrality[[xx]] <- list(Populations=populations,Outgroup=outgroup)
-    
+    # change@Pop_Neutrality[[xx]] <- list(Populations=populations,Outgroup=outgroup)
+      Pop_Neutrality[[xx]] <- list(Populations=populations,Outgroup=outgroup)
+ 
     # important for Coalescent Simulation
     #change@Pop_Neutrality[[xx]]$Outgroup    <- outgroup
 
-    if(object@Pop_Slide$calculated){
+   # NON FAST C
+   if(!FAST){ 
+    if(object@Pop_Slide$calculated | subsites[1]!=FALSE){
     res          <- calc_freqstats(bial,populations=populations,outgroup=outgroup)
     }else{
     res          <- calc_freqstats(bial,populations=populations,outgroup=outgroup,
                     data=list(n.nucleotides=object@region.data@n.nucleotides[[xx]],n.valid.sites=object@n.valid.sites[xx]))
     }
-    
+   } 
+   # FAST C
+   if(FAST){ 
+    if(object@Pop_Slide$calculated | subsites[1]!=FALSE){
+    res          <- calc_freqstats_FAST(bial,populations=populations,outgroup=outgroup)
+    }else{
+    res          <- calc_freqstats_FAST(bial,populations=populations,outgroup=outgroup,
+                    data=list(n.nucleotides=object@region.data@n.nucleotides[[xx]],n.valid.sites=object@n.valid.sites[xx]))
+    }
+   } 
+
     if(NEWPOP)  {if(length(popmissing)!=0){respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}} # nur die Populationen, die existieren
     if(!NEWPOP) {if(length(object@region.data@popmissing[[xx]])!=0){popmissing <- object@region.data@popmissing[[xx]];respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}}
     
     # -----------------------
     #   fill detailed Slots
     # -----------------------
+    
     if(detail){
 
      
@@ -1116,25 +1248,28 @@ if(subsites=="nonsyn" & length(bial!=0)){
     #change@sfreq[[xx]]  <- res$FREQ
 
     TajD[xx,respop]     <- res$taj_D 
-    thetaT[xx,respop]   <- res$THETA["thetaT",]
-    thetaS[xx,respop]   <- res$THETA["thetaS",]
-    thetaFL[xx,respop]  <- res$THETA["thetaFL",]
-    thetaSA[xx,respop]  <- res$THETA["thetaSA",]
-    thetaTA[xx,respop]  <- res$THETA["thetaTA",]
-    thetaFW[xx,respop]  <- res$THETA["thetaFW",]
-    thetaL[xx,respop]   <- res$THETA["thetaL",]
+    thetaT[xx,respop]   <- res$THETA[3,]
+    thetaS[xx,respop]   <- res$THETA[2,]
+    thetaFL[xx,respop]  <- res$THETA[4,]
+    thetaSA[xx,respop]  <- res$THETA[5,]
+    thetaTA[xx,respop]  <- res$THETA[6,]
+    thetaFW[xx,respop]  <- res$THETA[7,]
+    thetaL[xx,respop]   <- res$THETA[8,]
     
-    S   [xx,respop]     <- res$THETA["S",]
+    S   [xx,respop]     <- res$THETA[1,]
     FuLi_F[xx,respop]   <- res$FuLi_F
     FuLi_D[xx,respop]   <- res$FuLi_D
     HnFw[xx,respop]     <- res$HnFw
     Ez[xx,respop]       <- res$Ez
-    r2                  <- calcR2(bial,populations,res$THETA["thetaT",],res$THETA["S",])
-    R2[xx,respop]       <- r2
-      
+    
+    if(do.R2){
+     r2                  <- calcR2(bial,populations,res$THETA["thetaT",],res$THETA["S",])
+     R2[xx,respop]       <- r2
+    }   
 
+   
   # PROGRESS #######################################################
-    progr <- progressBar(xx,n.region.names, progr)
+     progr <- progressBar(xx,n.region.names, progr)
   ###################################################################
 
  }
@@ -1142,7 +1277,8 @@ if(subsites=="nonsyn" & length(bial!=0)){
 
 
 }
-
+ 
+ change@Pop_Neutrality        <- Pop_Neutrality # important for Coalescent Simulation
  object@region.stats          <- change
  object@Tajima.D              <- TajD
  object@n.segregating.sites   <- S
@@ -1169,12 +1305,16 @@ if(subsites=="nonsyn" & length(bial!=0)){
 # popLinkage  (linkdisequ)
 # ------------------------------------------------------------
 
-setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE) standardGeneric("linkage.stats"))
+setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,include.unknown=FALSE,do.WALL=TRUE) standardGeneric("linkage.stats"))
  setMethod("linkage.stats", "GENOME",
- function(object,new.populations,subsites,detail){
+ function(object,new.populations,subsites,detail,include.unknown,do.WALL){
+
+if(include.unknown){detail <-TRUE} #FIXME
 
  region.names                       <- object@region.names
  n.region.names                     <- length(region.names)
+ if(object@big.data){region.names <- NULL} # because of memory space
+ 
  
  object@Pop_Linkage$sites        <- "ALL"
  object@Pop_Linkage$calculated   <- TRUE
@@ -1197,7 +1337,10 @@ setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE
  ZZ          <- init
  WALLB       <- init
  WALLQ       <- init
+ linkage.disequilibrium <- vector("list",n.region.names)
  change      <- object@region.stats
+ Pop_Linkage <- vector("list",n.region.names) # important for Coalescent simulation
+
 
 # Names
  nam               <- paste("pop",1:npops)
@@ -1230,17 +1373,67 @@ for(xx in 1:n.region.names){
 ### if Subsites ----------------------------------
 bial <- popGetBial(object,xx)
 
+
+if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+   #object@Pop_Linkage$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+   #object@Pop_Linkage$sites <- "transversions"   
+} 
+
 if(subsites=="syn" & length(bial!=0)){
    syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
    bial       <- bial[,syn,drop=FALSE]
-   object@Pop_Linkage$sites <- "synonymous"
+   #object@Pop_Linkage$sites <- "synonymous"
 }
 if(subsites=="nonsyn" & length(bial!=0)){
    nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
    bial          <- bial[,nonsyn,drop=FALSE]
-   object@Pop_Linkage$sites <- "nonsynonymous"
+   #object@Pop_Linkage$sites <- "nonsynonymous"
 }
 
+
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   #if(length(intron)==0){
+   #       intron <- object@region.data@GeneSNPS[[xx]] & !object@region.data@ExonSNPS[[xx]]	  
+   #}
+   bial          <- bial[,intron,drop=FALSE]
+   #object@Pop_Linkage$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+   #object@Pop_Linkage$sites <- "utr"
+}
+
+if(subsites=="exon" & length(bial!=0)){
+   exon           <- which(object@region.data@ExonSNPS[[xx]]==TRUE)
+   bial           <- bial[,exon,drop=FALSE]
+   #object@Pop_Linkage$sites <- "exon"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]]))
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+   #object@Pop_Linkage$sites <- "coding"
+}
+
+if(subsites=="gene" & length(bial!=0)){
+   gene             <- which(object@region.data@GeneSNPS[[xx]])
+   bial             <- bial[,gene,drop=FALSE]
+   #object@Pop_Linkage$sites <- "gene"
+}
+}# End if subsites
 ############### ---------------------------------
 
 
@@ -1278,22 +1471,32 @@ if(subsites=="nonsyn" & length(bial!=0)){
     
 
      # important for Coalescent Simulation
-    change@Pop_Linkage[[xx]] <- list(Populations=populations,Outgroup=NULL)
+     # change@Pop_Linkage[[xx]] <- list(Populations=populations,Outgroup=NULL)
+     Pop_Linkage[[xx]]        <- list(Populations=populations,Outgroup=NULL)
+     # ------------------- fill detail slots
 
-    # ------------------- fill detail slots
+    if(!detail){
+    res                          <- linkdisequ_FAST(bial,populations)
+    Zns[xx,respop]               <- res$Zns
+    ZA [xx,respop]               <- res$ZA
+    ZZ [xx,respop]               <- res$ZZ
+    }   
+
     if(detail){
      res                         <- linkdisequ(bial,populations)
-     change@linkage.disequilibrium[[xx]]   <- res$res
+     linkage.disequilibrium[[xx]]   <- res$res
      Zns[xx,respop]              <- res$Zns
      ZA [xx,respop]              <- res$ZA
      ZZ [xx,respop]              <- res$ZZ
     }
     # -------------------
     
-    
+       
+    if(do.WALL){
     res              <- wall99bq(bial,populations)
     WALLB[xx,respop] <- res$B 
     WALLQ[xx,respop] <- res$Q
+    }
 
   # PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
@@ -1301,6 +1504,8 @@ if(subsites=="nonsyn" & length(bial!=0)){
 
  }
 }
+ change@linkage.disequilibrium <- linkage.disequilibrium
+ change@Pop_Linkage  <- Pop_Linkage # important for Coalescent Simulation
  object@region.stats <- change 
  object@Kelly.Z_nS   <- Zns
  object@Rozas.ZA     <- ZA
@@ -1321,8 +1526,10 @@ if(subsites=="nonsyn" & length(bial!=0)){
 
  function(object,new.populations,subsites,detail,mode){
   
-  region.names    <- object@region.names
+  region.names     <- object@region.names
   n.region.names  <- length(region.names)
+  if(object@big.data){region.names <- NULL} # because of memory space
+ 
   
   #bial        <- object@biallelics
   
@@ -1383,6 +1590,7 @@ else{poppairs <- 1;nn <- "pop1"}
   PIA               <- init1
   nuc.F_ST.pairwise <- init1
   FSTN              <- init2
+  nucleotide.diversity <- vector("list",n.region.names) # region.stats
   change            <- object@region.stats
  
   popnames          <- paste("pop",1:npops) 
@@ -1415,8 +1623,7 @@ else{poppairs <- 1;nn <- "pop1"}
  # } 
 
 Pout                    <- TRUE
-if(mode[1]=="ALL"){Pout <- FALSE}
-
+if(mode[1]=="ALL"){Pout <- TRUE}
 
 if(Pout){
 ## PROGRESS #########################
@@ -1431,18 +1638,80 @@ for(xx in 1:n.region.names){
 
 bial <- popGetBial(object,xx)
 
+if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+   #object@Pop_FSTN$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+  # object@Pop_FSTN$sites <- "transversions"   
+} 
+
 if(subsites=="syn" & length(bial!=0)){
    syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
    bial       <- bial[,syn,drop=FALSE]
-   object@Pop_FSTN$sites <- "synonymous"
+  # object@Pop_FSTN$sites <- "synonymous"
 }
 if(subsites=="nonsyn" & length(bial!=0)){
    nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
    bial          <- bial[,nonsyn,drop=FALSE]
-
-
-   object@Pop_FSTN$sites <- "nonsynonymous"
+  # object@Pop_FSTN$sites <- "nonsynonymous"
 }
+
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   #if(length(intron)==0){
+   #       intron <- object@region.data@GeneSNPS[[xx]] & !object@region.data@ExonSNPS[[xx]]	  
+   #}
+   bial          <- bial[,intron,drop=FALSE]
+  # object@Pop_Linkage$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+  # object@Pop_FSTN$sites <- "utr"
+}
+
+if(subsites=="exon" & length(bial!=0)){
+   exon           <- which(object@region.data@ExonSNPS[[xx]]==TRUE)
+   bial           <- bial[,exon,drop=FALSE]
+  # object@Pop_FSTN$sites <- "exon"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]])==TRUE)
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+  # object@Pop_FSTN$sites <- "coding"
+}
+
+if(subsites=="gene" & length(bial!=0)){
+   gene             <- which(object@region.data@GeneSNPS[[xx]]==TRUE)
+   bial             <- bial[,gene,drop=FALSE]
+  # object@Pop_FSTN$sites <- "gene"
+}
+
+if(subsites=="intergenic"){
+  intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   if(length(intron)==0){
+     intron <- !object@region.data@ExonSNPS[[xx]]	  
+   }
+  utr            <- object@region.data@UTRSNPS[[xx]]
+  exon           <- object@region.data@ExonSNPS[[xx]]
+  gene           <- object@region.data@GeneSNPS[[xx]]
+  coding         <- !is.na(object@region.data@synonymous[[xx]])  
+
+  inter          <- !(intron|utr|exon|gene|coding)
+  bial           <- bial[,inter,drop=FALSE]
+ # object@Pop_FSTN$sites <- "intergenic"
+}
+}# end if subsites
 
 ############### ---------------------------------
 
@@ -1466,7 +1735,7 @@ if(subsites=="nonsyn" & length(bial!=0)){
        }
        
        #----------------------#
-       temp         <- delNULLpop(populations) # Lösche nicht vorhandene Populationen
+       temp         <- delNULLpop(populations) # L\F6sche nicht vorhandene Populationen
        populations  <- temp$Populations
        popmissing   <- temp$popmissing
        #----------------------#   
@@ -1514,7 +1783,7 @@ if(subsites=="nonsyn" & length(bial!=0)){
     }
     
     res                    <- fstcalc(bial,populations,data=data.list,outgroup=FALSE)
-    if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden überhaupt berechnet
+    if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden \FCberhaupt berechnet
     if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
    
     respop     <- temp$respop
@@ -1524,7 +1793,7 @@ if(subsites=="nonsyn" & length(bial!=0)){
    if(detail){ 
       # change[[xx]]@FSTPAIR                <- res$FSTPAIR 
       # change[[xx]]@FST1ALL                <- res$FST1ALL
-      change@nucleotide.diversity[[xx]]     <- res$PIA   
+      nucleotide.diversity[[xx]]            <- res$PIA   
      # change[[xx]]@SV1         <- res$SV1
      # change[[xx]]@SV2         <- res$SV2
     
@@ -1547,7 +1816,7 @@ if(Pout){
  }
 }  
 
-
+ change@nucleotide.diversity  <- nucleotide.diversity
  object@region.stats          <- change  
  object@nucleotide.F_ST       <- FSTN
  object@nuc.diversity.between <- PIA
@@ -1566,19 +1835,44 @@ if(Pout){
  #setGeneric("getFSTH", function(object) standardGeneric("getFSTH"))
  #setMethod("getFSTH", "GENOME", function(object) return(object@FSTH))
 
- setGeneric("F_ST.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=TRUE,mode="ALL") standardGeneric("F_ST.stats"))
- setMethod("F_ST.stats","GENOME",function(object,new.populations,subsites,detail,mode){
+ setGeneric("F_ST.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=TRUE,mode="ALL",only.haplotype.counts=FALSE,FAST=FALSE) standardGeneric("F_ST.stats"))
+ setMethod("F_ST.stats","GENOME",function(object,new.populations,subsites,detail,mode,only.haplotype.counts,FAST){
   
  # mode nur wegen Progress Balken !
+
+ # hier die FST abgespeckte FAST Version !
+
+ if(FAST){
+
+    if(!missing(new.populations)){
+         
+         object  <- SNPFST(object,new.populations,subsites=subsites,detail=detail,mode=mode,only.haplotype.counts=only.haplotype.counts)
+
+    }else{
+        
+         object  <- SNPFST(object,subsites=subsites,detail=detail,mode=mode,only.haplotype.counts=only.haplotype.counts)
+    }
+
+    
+    
+    return(object)
+  
+ }
+# ----------------------------------------
+
+
 
  # also calculate popFSTN
  if(mode[1]=="ALL"){
 
+   cat("nucleotide \n")
    if(!missing(new.populations)){
          object <- popFSTN(object,new.populations,subsites=subsites,detail=detail,mode=mode)
    }else{
          object <- popFSTN(object,subsites=subsites,detail=detail,mode=mode)
    }
+   cat("\n")
+   cat("haplotype \n")
 
  }
 
@@ -1594,8 +1888,10 @@ if(Pout){
  }
  #
  
-  region.names                    <- object@region.names
-  n.region.names                  <- length(region.names)
+  region.names                  <- object@region.names
+   n.region.names               <- length(region.names)
+  if(object@big.data){region.names <- NULL} # because of memory space
+ 
   object@Pop_FSTH$sites        <- "ALL"
   object@Pop_FSTH$calculated   <- TRUE
    
@@ -1656,8 +1952,11 @@ else{poppairs <- 1;nn <- "pop1"}
   hap.F_ST.pairwise     <- init3
   Nei.G_ST.pairwise     <- init3
   hap.diversity.between <- init3
+  haplotype.diversity   <- vector("list",n.region.names) # region stats
+  haplotype.counts      <- vector("list",n.region.names) # region stats
  
-  change <- object@region.stats
+  change    <- object@region.stats
+  Pop_FSTH  <- vector("list",n.region.names)
   
 #--------------------------------------------------
 
@@ -1704,15 +2003,81 @@ for(xx in 1:n.region.names){
 
 bial <- popGetBial(object,xx)
 
+if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+  # object@Pop_FSTH$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+  # object@Pop_FSTH$sites <- "transversions"   
+} 
+
 if(subsites=="syn" & length(bial!=0)){
    syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
    bial       <- bial[,syn,drop=FALSE]
+  # object@Pop_FSTH$sites <- "synonymous"
 }
 if(subsites=="nonsyn" & length(bial!=0)){
    nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
    bial          <- bial[,nonsyn,drop=FALSE]
+  # object@Pop_FSTH$sites <- "nonsynonymous"
 }
 
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   #if(length(intron)==0){
+   #       intron <- object@region.data@GeneSNPS[[xx]] & !object@region.data@ExonSNPS[[xx]]	  
+   #}
+   bial          <- bial[,intron,drop=FALSE]
+  # object@Pop_Linkage$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+  # object@Pop_FSTH$sites <- "utr"
+}
+
+if(subsites=="exon" & length(bial!=0)){
+   exon           <- which(object@region.data@ExonSNPS[[xx]]==TRUE)
+   bial           <- bial[,exon,drop=FALSE]
+  # object@Pop_FSTH$sites <- "exon"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]])==TRUE)
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+  # object@Pop_FSTH$sites <- "coding"
+}
+
+if(subsites=="gene" & length(bial!=0)){
+   gene             <- which(object@region.data@GeneSNPS[[xx]]==TRUE)
+   bial             <- bial[,gene,drop=FALSE]
+  # object@Pop_FSTH$sites <- "gene"
+}
+
+if(subsites=="intergenic"){
+  intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   if(length(intron)==0){
+     intron <- !object@region.data@ExonSNPS[[xx]]	  
+   }
+
+  utr            <- object@region.data@UTRSNPS[[xx]]
+  exon           <- object@region.data@ExonSNPS[[xx]]
+  gene           <- object@region.data@GeneSNPS[[xx]]
+  coding         <- !is.na(object@region.data@synonymous[[xx]])  
+
+  inter          <- !(intron|utr|exon|gene|coding)
+  bial           <- bial[,inter,drop=FALSE]
+  #object@Pop_FSTH$sites <- "intergenic"
+}
+}# End if subsites
 ############### ---------------------------------
 
 
@@ -1745,7 +2110,7 @@ if(subsites=="nonsyn" & length(bial!=0)){
     
     # Calculations
     # mat         <- bial[[xx]][unique(unlist(populations)),,drop=FALSE]
-    res           <- calc_hwhafsth(bial,populations)
+    res           <- calc_hwhafsth(bial,populations,only.haplotype.counts=only.haplotype.counts)
 
 
 
@@ -1753,12 +2118,13 @@ if(subsites=="nonsyn" & length(bial!=0)){
     #if(NEWPOP)  {if(length(popmissing)!=0){respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}} # nur die Populationen, die existieren
     #if(!NEWPOP) {if(length(object@DATA[[xx]]@popmissing)!=0){popmissing<- object@DATA[[xx]]@popmissing;respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}}
     
-    if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden überhaupt berechnet
+    if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden \FCberhaupt berechnet
     if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
    
     # important for Coalescent Simulation
-    change@Pop_FSTH[[xx]] <- list(Populations=populations,Outgroup=NULL)
-   
+    # change@Pop_FSTH[[xx]] <- list(Populations=populations,Outgroup=NULL)
+      Pop_FSTH[[xx]]        <-  list(Populations=populations,Outgroup=NULL)   
+
     respop     <- temp$respop
     respairpop <- temp$respairpop
     
@@ -1766,12 +2132,12 @@ if(subsites=="nonsyn" & length(bial!=0)){
    # fill detailed Slots --------------------------------#
     if(detail){
     
-     change@haplotype.counts[[xx]]       <- res$sfreqh
+     haplotype.counts[[xx]]              <- res$sfreqh
      # change[[xx]]@FSTHMATRIX           <- res$fsthmatrix
      # change[[xx]]@Gst_Hudson_pair      <- res$Gst_Hudson_pair
      # change[[xx]]@HSTpair              <- res$HSTpair
      # change[[xx]]@GstMATRIX            <- res$Gstmatrix                
-     change@haplotype.diversity[[xx]]    <- res$hapamatrix
+     haplotype.diversity[[xx]]           <- res$hapamatrix
     # change[[xx]]@KST                   <- res$KST
    
    } 
@@ -1782,11 +2148,7 @@ if(subsites=="nonsyn" & length(bial!=0)){
     hap.diversity.between[respairpop,xx] <- res$hapa
     FSTH[xx]          <- res$fsthALL
     FSTN2[xx]         <- res$fstnALL
-    if(object@Pop_Slide$calculated==FALSE){
-    Pi[xx,respop]     <- res$PIW_nei/object@n.valid.sites[xx]
-    }else{
     Pi[xx,respop]     <- res$PIW_nei
-    }
     hapw[xx,respop]   <- res$hapw
     GST[xx]           <- res$GstAll
     KST[xx]           <- res$KST
@@ -1803,6 +2165,9 @@ if(subsites=="nonsyn" & length(bial!=0)){
  }
 }
  
+ change@haplotype.diversity   <- haplotype.diversity
+ change@haplotype.counts      <- haplotype.counts
+ change@Pop_FSTH              <- Pop_FSTH
  object@region.stats          <- change
  object@hap.F_ST.pairwise     <- hap.F_ST.pairwise
  object@Nei.G_ST.pairwise     <- Nei.G_ST.pairwise
@@ -1832,9 +2197,10 @@ setGeneric("F_ST.stats.2", function(object,new.populations="list",snn=TRUE) stan
 
  function(object,new.populations,snn){
 
-  region.names                    <- object@region.names
-  n.region.names                  <- length(region.names)
-  
+  region.names                     <- object@region.names  
+  n.region.names                   <- length(region.names)
+  if(object@big.data){region.names <- NULL} # because of memory space
+
   if(!missing(new.populations)){
     NEWPOP <- TRUE
     populations <- vector("list",length(new.populations))
@@ -1957,7 +2323,8 @@ for(xx in 1:n.region.names){
   
   region.names   <- object@region.names
   n.region.names <- length(object@region.names)
-  
+  if(object@big.data){region.names <- NULL} # because of memory space
+
   object@Pop_MK$sites        <- "ALL"
   object@Pop_MK$calculated   <- TRUE
   
@@ -2135,20 +2502,24 @@ for(xx in 1:n.region.names){
 # ---------------------------------------------------------------------
 # Calc Neutrality (calc_freqstats)
 # ----------------------------------------------------------------------
- setGeneric("detail.stats", function(object,new.populations=FALSE,subsites=FALSE,biallelic.structure=TRUE,mismatch.distribution=TRUE) standardGeneric("detail.stats"))
+ setGeneric("detail.stats", function(object,new.populations=FALSE,new.outgroup=FALSE,subsites=FALSE,biallelic.structure=FALSE,mismatch.distribution=FALSE,site.spectrum=TRUE) standardGeneric("detail.stats"))
  setMethod("detail.stats", "GENOME",
  
- function(object,new.populations,subsites,biallelic.structure,mismatch.distribution){
+ function(object,new.populations,new.outgroup,subsites,biallelic.structure,mismatch.distribution,site.spectrum){
  
  region.names   <- object@region.names 
  n.region.names <- length(region.names)
+
+ if(object@big.data){region.names <- NULL} # because of memory space
+
+ 
  
  object@Pop_Detail$sites       <- "ALL"
  object@Pop_Detail$calculated  <- TRUE
   
+ # new populations
+
  if(missing(new.populations)){
-
-
  npops                         <- length(object@populations)
  object@Pop_Detail$Populations <- object@populations
 
@@ -2156,8 +2527,21 @@ for(xx in 1:n.region.names){
  npops                             <- length(new.populations)
  object@Pop_Detail$Populations     <- new.populations
  }
+
+# Outgroup
+ if(missing(new.outgroup)){
+ object@Pop_Detail$Outgroup <- object@populations
+ }else{
+ object@Pop_Detail$Outgroup <- new.outgroup
+ }
  
  
+ # Outgroup
+  if(!missing(new.outgroup)){
+   NEWOUT <- TRUE
+  }else{
+   NEWOUT <- FALSE
+  } 
 
  change      <- object@region.stats
  # Names
@@ -2199,16 +2583,52 @@ for(xx in 1:n.region.names){
 
 bial <- popGetBial(object,xx)
 
+if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+  # object@Pop_Detail$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+  # object@Pop_Detail$sites <- "transversions"   
+} 
+
 if(subsites=="syn" & length(bial!=0)){
    syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
    bial       <- bial[,syn,drop=FALSE]
-   object@Pop_Detail$sites <- "synonymous"
+   #object@Pop_Detail$sites <- "synonymous"
 }
 if(subsites=="nonsyn" & length(bial!=0)){
    nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
    bial          <- bial[,nonsyn,drop=FALSE]
-   object@Pop_Detail$sites <- "nonsynonymous"
+   #object@Pop_Detail$sites <- "nonsynonymous"
 }
+
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   bial          <- bial[,intron,drop=FALSE]
+   #object@Pop_Detail$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+  # object@Pop_Detail$sites <- "utr"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]])==TRUE)
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+  # object@Pop_Detail$sites <- "coding"
+}
+
+
+}# End if subsites
 
 ############### ---------------------------------
 
@@ -2245,12 +2665,37 @@ if(subsites=="nonsyn" & length(bial!=0)){
       if(NEWPOP)  {if(length(popmissing)!=0){respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}} # nur die Populationen, die existieren
       if(!NEWPOP) {if(length(object@region.data@popmissing[[xx]])!=0){popmissing <- object@region.data@popmissing[[xx]];respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}}
 
+    
+    ## Outgroup
+  if(NEWOUT){
+
+	if(is.character(new.outgroup)){
+           outgroup <- match(new.outgroup,rownames(bial)) 
+           naids    <- which(!is.na(outgroup))
+           outgroup <- outgroup[naids]  
+        }else{
+           outgroup <- new.outgroup
+           ids      <- which(outgroup>dim(bial)[1])
+           if(length(ids)>0){outgroup <- outgroup[-ids]}   
+        }
+        
+        if(length(outgroup)==0){outgroup <- FALSE}
+
+  }else{
+    outgroup <- object@region.data@outgroup[[xx]]
+  }
+  # --------------------------------------
+
+# Statistics
+
+    # biallelic.structure
      if(biallelic.structure){
        data.list                            <- list(biallelic.sites=object@region.data@biallelic.sites[[xx]])
        sxx                                  <- calc_sxsfss(bial,populations=populations,data=data.list)    
        change@biallelic.structure[[xx]]     <- sxx
      }
 
+     # mismatch distribution
      if(mismatch.distribution){
       if(!object@Pop_Slide$calculated){
       data.list              <- list(n.nucleotides=object@region.data@n.nucleotides[[xx]],n.valid.sites=object@n.valid.sites[xx],
@@ -2266,8 +2711,12 @@ if(subsites=="nonsyn" & length(bial!=0)){
       MDG1[xx,respop]         <- misdis[2,]
       MDG2[xx,respop]         <- misdis[3,]
      }
+     # site.spectrum
+    if(site.spectrum){ 
+     res2                              <- jointfreqdist(bial,populations=populations,outgroup=outgroup)
+     change@minor.allele.freqs[[xx]]   <- res2$jfd
+    }
 
-    
     # -----------------------
     #   fill detailed Slots
     # -----------------------
@@ -2280,13 +2729,12 @@ if(subsites=="nonsyn" & length(bial!=0)){
  }
   
 }
-  if(mismatch.distribution){
+
    object@MDSD <- MDSD
    object@MDG1 <- MDG1
    object@MDG2 <- MDG2
    object@region.stats  <- change
-  }
-
+  
   return(object)
  })
 
@@ -2322,13 +2770,37 @@ return(pops1)
 ##################################################################################
 
 
-setGeneric("sliding.window.transform", function(object,width=7,jump=5,type=1) standardGeneric("sliding.window.transform"))
+setGeneric("sliding.window.transform", function(object,width=7,jump=5,type=1,whole.data=TRUE) standardGeneric("sliding.window.transform"))
  setMethod("sliding.window.transform", "GENOME",
 
- function(object,width,jump,type){
+ function(object,width,jump,type,whole.data){
 
+n.region.names  <- length(object@region.names)
+
+if(whole.data){
+
+  if(n.region.names > 1 && length(object@BIG.BIAL[[1]])==0){
+
+    object         <- concatenate_to_whole_genome(object,n.region.names)
+    n.region.names <- 1
+
+  }
+
+ SPLIT <- sliding.window.transform.fast(object,width,jump,type)
+ return(SPLIT)
+
+}else{
+ 
+ if(object@snp.data){
+  RETURN <- slide.snp.sep(object,width,jump,type) 
+ }else{
+  RETURN <- sliding.window.transform.new(object,width,jump,type)
+ }
+ return(RETURN)
+
+}
   
-n.region.names  <- length(object@region.names)  
+  
 
  # Check if there is a new population defined ! 
  # Init 
@@ -2344,12 +2816,14 @@ count                   <-  1
 
 for(xx in 1:n.region.names){
 
-
- bial <- popGetBial(object,xx)
- 
+ if(object@big.data){
+  bial <- object@region.data@biallelic.matrix[[xx]] 
+ }else{
+  bial <- popGetBial(object,xx)
+ }
 
  if(length(bial)==0){
-    
+     
      # genomeobj@DATA[[count]] <- NULL
      # genomeobj@GEN[[count]]  <- NULL
      ddatt@biallelic.matrix[[count]] <- as.matrix(NaN)
@@ -2360,7 +2834,7 @@ for(xx in 1:n.region.names){
  }
 
  if(length(bial)!=0){ # if a biallelic position exists
-                    
+     bial.sites            <- as.numeric(colnames(bial))                 
   # Calculate type 3 = reference Biallelic Matrix. type 5 = reference GEN   
   if(type==1){repeatlength <- ceiling( (dim(bial)[2]-width+1)/jump)}
   if(type==2){repeatlength <- ceiling( (object@n.sites[xx]-width+1)/jump)} 
@@ -2381,12 +2855,22 @@ for(xx in 1:n.region.names){
         
         start      <- ((zz-1) * jump + 1)
         end 	   <- ((zz-1) * jump + width) 
-        window	   <- start:end 
+       
 
        if(type==1){
         
+       
+	 window	   <- start:end 
         #genomeobj@DATA[[count]] <- new("DATA")
-        ddatt@biallelic.matrix[[count]] <- object@region.data@biallelic.matrix[[xx]][,window,drop=FALSE]
+        #ddatt@biallelic.matrix[[count]] <- object@region.data@biallelic.matrix[[xx]][,window,drop=FALSE]
+
+         if(object@big.data){
+               ddatt@biallelic.matrix[[count]]  <- ff(bial[,window,drop=FALSE],dim=dim(bial[,window,drop=FALSE]))               
+         }else{
+               ddatt@biallelic.matrix[[count]]  <- bial[,window,drop=FALSE]
+         }
+
+        # ddatt@biallelic.matrix[[count]] <- bial[,window,drop=FALSE]
         ddatt@outgroup[[count]]         <- object@region.data@outgroup[[xx]]
         ddatt@populations[[count]]      <- object@region.data@populations[[xx]]
         ddatt@popmissing[[count]]       <- object@region.data@popmissing[[xx]]
@@ -2400,6 +2884,8 @@ for(xx in 1:n.region.names){
 
        }
         
+       
+        
         #   value                 <- calc_freqstats(bial[,window,drop=FALSE],populations)
         #   TajD[zz,respop]       <- value$taj_D
         #   S   [zz,respop]       <- value$THETA["S",]
@@ -2407,8 +2893,9 @@ for(xx in 1:n.region.names){
 
         if(type==2){
       
-            bialpos        <- as.numeric(colnames(bial))
-            ids            <- is.element(bialpos,window)
+            # bialpos        <- as.numeric(colnames(bial))
+            ids            <- (bial.sites >= start) & (bial.sites<=end) 
+            # ids            <- is.element(bialpos,window)
             bialpos        <- which(ids)
 
            if(length(bialpos)!=0){
@@ -2417,7 +2904,13 @@ for(xx in 1:n.region.names){
               #genomeobj@DATA[[count]]@biallelic.matrix <- object@DATA[[xx]]@biallelic.matrix[,bialpos,drop=FALSE]
               #genomeobj@DATA[[count]]@outgroup         <- object@DATA[[xx]]@outgroup
               #genomeobj@GEN [[count]] <- new("GEN")
-              ddatt@biallelic.matrix[[count]]  <- object@region.data@biallelic.matrix[[xx]][,bialpos,drop=FALSE]
+
+              if(object@big.data){
+               ddatt@biallelic.matrix[[count]]  <- ff(bial[,bialpos,drop=FALSE],dim=dim(bial[,bialpos,drop=FALSE]))               
+              }else{
+               ddatt@biallelic.matrix[[count]]  <- bial[,bialpos,drop=FALSE]
+              }
+
               ddatt@outgroup[[count]]          <- object@region.data@outgroup[[xx]]
               ddatt@populations[[count]]       <- object@region.data@populations[[xx]]
               ddatt@popmissing[[count]]        <- object@region.data@popmissing[[xx]]
@@ -2476,20 +2969,27 @@ for(xx in 1:n.region.names){
 genomeobj@populations               <- object@populations
 genomeobj@region.names              <- paste(1:length(NAM),":",NAM,sep="")
 genomeobj@genelength                <- length(NAM)
+
+ if(length(ddatt@popmissing)==0){ddatt@popmissing <- vector("list",length(genomeobj@region.names))}
+        # weil liste fÃ¼llen mit NULL nicht funktioniert, eh besser die Sachen schon vorher zu definieren
+
 genomeobj@region.data               <- ddatt
 genomeobj@Pop_Neutrality$calculated <- FALSE
 genomeobj@Pop_FSTN$calculated       <- FALSE
 genomeobj@Pop_FSTH$calculated       <- FALSE
 genomeobj@Pop_MK$calculated         <- FALSE
+genomeobj@Pop_Recomb$calculated     <- FALSE
 genomeobj@Pop_Linkage$calculated    <- FALSE
 genomeobj@Pop_Slide$calculated      <- TRUE
 genomeobj@Pop_Detail$calculated     <- FALSE
+genomeobj@big.data                  <- object@big.data
 
 return(genomeobj)
 
  })
  
  
+
 
 
 

@@ -1,6 +1,4 @@
 
-
-
 calc_freqstats<- function(matrix,populations,outgroup=FALSE,data=NULL,methods=FALSE,Achaz=FALSE){
 
 
@@ -295,7 +293,7 @@ ap_pop_ancestral <- function(mat){
    matrixerg[6] <- thetaTA
    matrixerg[7] <- thetaFW
    matrixerg[8] <- thetaL
-
+   
    matrixerg <- c(matrixerg,sfreq)
 
 return(matrixerg)
@@ -304,22 +302,28 @@ return(matrixerg)
 
 #----- FUNCTION: ap_pop -----------------------------------------#
 
+       freq       <- numeric(3) 
+       matrixerg  <- numeric(6)
+      
 ap_pop <- function(mat){
 
-       S       <-0
-       thetaS  <-0
-       thetaT  <-0
-       thetaFL <-0
-       thetaSA <-0
-       thetaTA <-0
+       S          <-0
+       thetaS     <-0
+       thetaT     <-0
+       thetaFL    <-0
+       thetaSA    <-0
+       thetaTA    <-0
+  
        le      <- length(mat) + 1
        sfreq   <- numeric(le) # EINSEN, NULLEN
-       freq    <- numeric(4)
+       # freq    <- numeric(4)
+        
        # modified
        freq[2] <- sum(mat==0,na.rm=TRUE)
        freq[3] <- sum(mat==1,na.rm=TRUE)
-       freq[4] <- sum(is.na(mat))
-       freq[1] <- freq[2] +freq[3]
+       
+       # freq[4] <- sum(is.na(mat))
+       freq[1] <- freq[2] + freq[3]
        
        if(freq[1]){
           sfreq[freq[3]+1] <- 1 # Anzahl der Einsen in der Spalte
@@ -343,7 +347,7 @@ ap_pop <- function(mat){
           }
        }
 
-   matrixerg    <- numeric(6)
+   # matrixerg    <- numeric(6)
    matrixerg[1] <- S
    matrixerg[2] <- thetaS
    matrixerg[3] <- thetaT

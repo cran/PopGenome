@@ -62,7 +62,7 @@ if(dim(pp)[2]>1){ # more than 2 sites
      site2x  <- site2[!is.na(site2)]
      stAa    <- unique(site1x)
      stBb    <- unique(site2x)
-     if(length(stAa)<2|length(stBb)<2){RETURN} # one of the site is not polymorphic
+     if(length(stAa)<2|length(stBb)<2){return(RETURN)} # one of the site is not polymorphic
      
      
      # first site 

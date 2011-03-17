@@ -1,11 +1,11 @@
 ########################################################
 ################## Counts haplotypes ###################
 ########################################################
-
 counthaplotype <- function(seq){
-## die Funktion zählt die haploiden Datensätze
-## zwei oder mehr gleiche Sequenzen untereinander --> haploid
-## übernehme in seqHap nur die unterschiedlichen sequenzen
+
+ # die Funktion zaehlt die haploiden Datensaetze
+ # zwei oder mehr gleiche Sequenzen untereinander --> haploid
+ # uebernehme in seqHap nur die unterschiedlichen sequenzen
 
 #  seqHap
 

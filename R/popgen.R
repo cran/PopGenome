@@ -1,4 +1,4 @@
-popgen <- function(Code_matrix,Populations=FALSE,outgroup=FALSE,methods=FALSE,include.unknown=TRUE,gff=FALSE){
+popgen <- function(Code_matrix,Populations=FALSE,outgroup=FALSE,methods=FALSE,include.unknown=TRUE,gff=FALSE,FAST,SNP.DATA){
 
 
 ## KONVERTING ##########################################
@@ -132,16 +132,19 @@ if(outgroup[1]){
    ###### GET DATA #############################
 
 
-   obj <- get_data(Code_matrix,include.unknown,gff=gff)
+   obj <- get_data(Code_matrix,include.unknown,gff=gff,FAST,SNP.DATA)
    
+
    ## Exception
    if(length(obj)==1){ # No statistics calculated
    return(NA) # no biallelic sites
    }
    ############
 
-   if(length(rownames(Code_matrix) > 0)){ 
+   if(length(rownames(Code_matrix)) > 0){ 
     genes       <- rownames(Code_matrix)
+   }else{
+    genes       <- 1:dim(Code_matrix)[1]
    }
 
    #dat@MATRIX      <- Code_matrix

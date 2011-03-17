@@ -1,0 +1,4 @@
+PKG_LIBS = -lstdc++
+CPPSOURCES = $(wildcard whopgenome/*.cpp *.cpp)
+CSOURCES = $(wildcard tabix/*.c zlib/*.c *.c)
+OBJECTS = $(CPPSOURCES:.cpp=.o) $(CSOURCES:.c=.o)

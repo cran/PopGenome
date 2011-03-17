@@ -1,22 +1,22 @@
-init_coef <- function (sample_size){
+init_coef <- function (sample_size,p){
 
 #Tajima and Fu coefficients... and Achaz coefficients. Total  <- 23 Most from Simonsen 1995*/
 		
-      p <- rep(-1,24)
+       p <- rep(-1,24)
    
 		
       #an <- sum(1/1:(n-1))
       #bn <- sum(1/1:((n-1)*(n-1)))
       
 	    an <-0
-      bn <- 0.0
-	    n <- sample_size
+            bn <- 0.0
+	    n  <- sample_size
 	
 	 #schneller !!!!
    if(n>1){
-    bn <- 1/((1:(n-1))*(1:(n-1)))
-    bn <- sum(bn)
-    an <- 1/(1:(n-1))
+          bn <- 1/((1:(n-1))*(1:(n-1)))
+          bn <- sum(bn)
+          an <- 1/(1:(n-1))
 	  an <- sum(an)
 	 }
 	#for(x in 1:(n-1)) {

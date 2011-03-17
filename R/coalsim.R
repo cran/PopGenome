@@ -186,7 +186,7 @@ preserveHaplotypeInfo <- 0
 #------------------------------------------------------------------------------#
 ## This is a convenience function, which is invoked with just an object of class 
 ## testparams, avoiding to pass on every single parameter to coalsim() directly.  
-coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=FALSE,F_ST=FALSE){
+coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE){
 	
 	#check validity of arguments
 	if (class(p)[1] != "test.params")
@@ -243,7 +243,7 @@ coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=
 		if ( length(p@seeds) == 0 )		
 			seeds <- NA
 		
-		return(coalsim(p@n.sam, p@n.iter, p@theta, nloci, npop, nsites, obsVal, printtree, fixedSegsites, recombination, geneConv, growth,demography,seeds,migration,detail,testNames,numTests,neutrality,linkage,F_ST))
+		return(coalsim(p@n.sam, p@n.iter, p@theta, nloci, npop, nsites, obsVal, printtree, fixedSegsites, recombination, geneConv, growth,demography,seeds,migration,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS))
 		
 	} else {
 		stop("not enough parameters set to do the simulation")	
@@ -255,7 +255,7 @@ coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=
 #------------------------------------------------------------------------------#
 #                            	 coalsim									   #
 #------------------------------------------------------------------------------#
-coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= NA, obsVal = NA,  printtree = 0, fixedSegsites = NA, recombination=NA, geneConv=NA, growth=NA, demography=NA, seeds=NA, migration=NA,detail,testNames,numTests,neutrality,linkage,F_ST){
+coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= NA, obsVal = NA,  printtree = 0, fixedSegsites = NA, recombination=NA, geneConv=NA, growth=NA, demography=NA, seeds=NA, migration=NA,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS){
 
 	# do some error checking/handling prior to any calculation
 	if( !is.numeric(nsam) )
@@ -390,7 +390,7 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 	############################################################## ----------------------------- 
   # Definiere Populationen (nur wenn mehr als eine Population)
   # ----------------------------------------------------------- # ------------------------------ 
-  # nsam ist hierbei Länge der Populationen WICHTIG !!!!
+  # nsam ist hierbei L\E4nge der Populationen WICHTIG !!!!
   
 
   for(cloci in 1:nloci) { # -------------------------------------------------------- 
@@ -413,20 +413,18 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 	         ### Fot the package
                  # p_path <- .path.package("PopGenome")
 		
-                if (.Platform$OS.type == "unix") {
+  #              if (.Platform$OS.type == "unix") {
 			# mscall <- paste(p_path,"/exec/ms",sep="")
-			  mscall <- paste(getwd(),"/ms",sep="")
-		} else {
-			if (.Platform$OS.type == "windows") {
+	#		  mscall <- file.path(getwd(),"/ms",sep="")
+	#	} else {
+	#		if (.Platform$OS.type == "windows") {
 				# mscall <- paste(p_path,"\\exec\\ms.exe",sep="")
-                                  mscall <- paste(getwd(),"\\ms.exe",sep="")
-			} else {
-				stop("Your platform is unsupported.")
-			}
-		}
+  #       mscall <- file.path(getwd(),"ms.exe",sep="")
+	#		} else {
+	#			stop("Your platform is unsupported.")
+	#		}
+	#	}
 
-	
-	
 	
 	
 		# visually update progress
@@ -444,103 +442,175 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 	#			stop("Your platform is unsupported.")
 	#		}
 	#	}
-		
-		mscall <- paste(mscall, nsam[cloci], niter, " -t", theta[cloci], param)#-------------------------------------- rufe ms auf !!!!!!
-                output <- system(mscall, intern=TRUE)
-                
 
-  	  	# process/save ms input parameters (i.e. first line)
-  		line1 <- unlist(strsplit(output[1], " "))
+              
+		if (.Platform$OS.type == "unix"){ 
+		   mscall <- paste("./ms", nsam[cloci], niter, " -t",theta[cloci], param)#-------------------------------------- call ms !!!!!!
+                }
+		
+                if (.Platform$OS.type == "windows"){
+ 		   mscall <- paste("ms.exe", nsam[cloci], niter, " -t",theta[cloci], param)
+                } 
+                
+     
+         
+	   # ---------------------------------------------------------------------------------------------------------       
+         # just a dummy insertion to calculate msms
+         
+		   MSMS_in <- FALSE
+		   
+                old_workspace  <- getwd()
+
+                if(MSMS[1]!=FALSE){			
+	                 ss       <- setwd(file.path(old_workspace,"msms","bin"))
+
+			 if (.Platform$OS.type == "unix"){ 	
+ 	                  mscall   <- paste("./msms",MSMS,"-ms",nsam[cloci], niter, " -t", theta[cloci], param)
+		         }
+			
+			 if (.Platform$OS.type == "windows"){
+  			  mscall   <- paste("msms.exe",MSMS,"-ms",nsam[cloci], niter, " -t", theta[cloci], param)
+                         } 
 	
+			             MSMS_in  <- list(nsam=nsam[cloci])
+			                
+		}
+		             
+	#-----------------------------------------------------------------------------------------------------------
+
+	 
+	 
+	 
+	 
+
+       #         output <- system(mscall, intern=TRUE)
+  	  	# process/save ms input parameters (i.e. first line)
+  #		line1 <- unlist(strsplit(output[1], " "))
 		#print(paste("Processing Loci", cloci, "..."))
 	
 		# process/save seed values (i.e. the second line of output)
-		line2 <- unlist(strsplit(output[2], " "))
-		seeds <- c(as.numeric( line2[1] ), as.numeric( line2[2] ), as.numeric( line2[3] ) )
+#		line2 <- unlist(strsplit(output[2], " "))
+#		seeds <- c(as.numeric( line2[1] ), as.numeric( line2[2] ), as.numeric( line2[3] ) )
 	  
-		nlines <- length(output)
+#		nlines <- length(output)
 	
-		# define some variables to accumulate collected data
-		first <- TRUE
-		positions <- matrix()
-		trees <- matrix()
-		
-    for (i in 1:nlines) {
+#		# define some variables to accumulate collected data
+#		first <- TRUE
+#		positions <- matrix()
+#		trees <- matrix()
+#		
+ #   for (i in 1:nlines) {
 			# look for next sample data output
-			
-			if (output[i] == "//") {
-				
-				# new sample detected, move to next line
-				i = i+1
-				
-				# check whether gene tree information (in Newick format) are present, i.e. printtree option is active
-				
-				if (substr(output[i], 0, 1) == "(") {
-					
-					if (first){
-						trees <- rbind(output[i])
-					} else {
-						trees <- rbind(trees, output[i])
-					}
-					
-					i = i+1
-				} 
-				
-				# get the line with the number of segregated sites
-				segsitesLine      <- unlist(strsplit(output[i], " "))
-				nsegsites	  <- as.numeric(segsitesLine[2])
-				
-				
-        # in case of option fixedSegsites another line is omitted giving the propability emission of this number of
-				# segregated sites, this information is omitted for now
-				if (substr(output[i], 0, 1) == "p") {
-					i = i+1
-				} 
-								
-				# haplotypes <- matrix()
-				
-				
-         if ( nsegsites > 0 ) {  	
-          # move along to line with position information
-					i = i+1
-					
-					if (preservePositionInfo) {
-						# get position information
-						# positionsLine <- unlist(strsplit(output[i], " "))
-						# positions <- rbind(positions, as.numeric(positionsLine[2:length(positionsLine)]))
-					
-						if (first){
-							positions <- rbind(substr(output[i], 12, nchar(output[i])-1))
-						} else {
-							positions <- rbind(positions, substr(output[i], 12, nchar(output[i])-1))
-						}
-					}
-					
-					# move on to the next line, i.e the first line of haplotypes
-					i = i+1
-				
-					for (j in 1:nsam[cloci]) {
+#			
+#			if (output[i] == "//") {
+#				
+#				# new sample detected, move to next line
+#				i = i+1
+#				
+##				# check whether gene tree information (in Newick format) are present, i.e. printtree option is active
+#				
+#				if (substr(output[i], 0, 1) == "(") {
+##					
+#					if (first){
+#						trees <- rbind(output[i])
+##					} else {
+#						trees <- rbind(trees, output[i])
+#					}
+#					
+##					i = i+1
+#				} 
+##				
+#				# get the line with the number of segregated sites
+#				segsitesLine      <- unlist(strsplit(output[i], " "))
+#				nsegsites	  <- as.numeric(segsitesLine[2])
+##				
+#				
+ #       # in case of option fixedSegsites another line is omitted giving the propability emission of this number of
+##				# segregated sites, this information is omitted for now
+#				if (substr(output[i], 0, 1) == "p") {
+#					i = i+1
+##				} 
+#								
+#				# haplotypes <- matrix()
+#				
+##				
+   
 
-						row <- as.numeric(unlist(strsplit(output[i], "")))
-				
-						# aggregate all haplotypes in a matrix
-						if (j==1) {
-							haplotypes <- rbind(row)
-						} else {
-							haplotypes <- rbind(haplotypes, row)
-						}
-				
-						# increase i so that this line is not visited again once more
-						i = i+1
-					}
-			
-                                                   # haplotypes is the biallelic matrix
-					           # analyse sample
-					                                      
 
-                                               ## STATISTICS ########################################
+
+ #   if ( nsegsites > 0 ) {  	
+  #      #       # move along to line with position information
+#					i = i+1
+#					
+#					if (preservePositionInfo) {
+#						# get position information
+#						# positionsLine <- unlist(strsplit(output[i], " "))
+#						# positions <- rbind(positions, as.numeric(positionsLine[2:length(positionsLine)]))
+##					
+#						if (first){
+#							positions <- rbind(substr(output[i], 12, nchar(output[i])-1))
+##						} else {
+#							positions <- rbind(positions, substr(output[i], 12, nchar(output[i])-1))
+##						}
+#					}
+##					
+#					# move on to the next line, i.e the first line of haplotypes
+#					i = i+1
+##				
+#					for (j in 1:nsam[cloci]) {
+##
+#						row <- as.numeric(unlist(strsplit(output[i], "")))
+#				
+##						# aggregate all haplotypes in a matrix
+#						if (j==1) {
+#							haplotypes <- rbind(row)
+##						} else {
+#							haplotypes <- rbind(haplotypes, row)
+##						}
+#				
+##						# increase i so that this line is not visited again once more
+#						i = i+1
+##					}
+#			
+ #                                                  # haplotypes is the biallelic matrix
+#					           # analyse sample
+##					           print(haplotypes)                           
+
+
+
+
+
+			 	if (.Platform$OS.type == "unix") {
+			  system(paste(mscall," > ms.out"))
+		} else {
+			if (.Platform$OS.type == "windows") {
+			  shell(paste(mscall," > ms.out")) 
+			} else {
+				stop("Your platform is unsupported.")
+			}
+		}
+			
+			
+			
+  			    msout <- read.ms.output(file.ms.output="ms.out",MSMS=MSMS_in)
+                            
+
+			    setwd(old_workspace)	
+
+			for(zz in 1:length(msout$segsites)){
+
+				trees <- matrix()
+                                seeds <- NaN	
+				if(msout$segsites[zz]>0){ # wenn segsites da
+
+                                         haplotypes <- msout$gametes[[zz]]  
+					 positions  <- msout$positions[[zz]]
+ 					 
+
+                                             ## STATISTICS ########################################
                                                if(neutrality){
-                                                 obj       <- calc_freqstats(haplotypes,Populations)
+
+                                                 obj      <- calc_freqstats(haplotypes,Populations)
                                                  SEG      <- obj$THETA["S",]
                                                  thetaT   <- obj$THETA["thetaT",]
                                                  thetaS   <- obj$THETA["thetaS",]
@@ -573,12 +643,12 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                                  ZA              <- nix
                                                  ZZ              <- nix 
                                         
-						                                  if(detail){
+						if(detail){
                                                 
                                                  res             <- linkdisequ(haplotypes,Populations)
-    						                                 Zns             <- res$Zns
-  						                                   ZA              <- res$ZA
-     						                                 ZZ              <- res$ZZ
+    						 Zns             <- res$Zns
+  						 ZA              <- res$ZA
+     						 ZZ              <- res$ZZ
 
                                                 }
 
@@ -592,7 +662,9 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                                 Pi              <- res$PIW_nei
                                                 FSTH            <- res$fsthALL
                                                 FSTN2           <- res$fstnALL
-                                                GST             <- res$GstAll       
+                                                GST             <- res$GstAll
+                                                SNN             <- snn(haplotypes,Populations)
+						      
                                                 #res             <- fstcalc(haplotypes,Populations,data=NULL)
                                                 #FSTN2           <- res$FSTALL
                                                 #print(hapw)
@@ -600,11 +672,12 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                                 #print(FSTH)
                                                 #print(GST)
                                                 #print(FSTN2)
+
                                               }
             
            			
 				
-                       } else { ### <- keine segregating sites
+                              } else { ### <- keine segregating sites
 				
 				                                nix       <- rep(NaN,npop)
                                         if(neutrality){
@@ -619,6 +692,7 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                         Strobeck  <- nix
                                         HnFw      <- nix
                                         Ez        <- nix
+
                                         }
 
                                         if(linkage){
@@ -634,50 +708,55 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                         Pi              <- nix
                                         FSTH            <- NaN
                                         FSTN2           <- NaN
-                                        GST             <- NaN    
+                                        GST             <- NaN   
+					SNN             <- NaN
+ 
                                         }
 	
 			                               		positions <- c(0)
 					
-		        }
+		        } # end keine segsites
 						
-				if (first) {		
+				if (zz==1) {		
 					# if the first entry is made to the matrix add speaking column names and
 					# csStats <- rbind(c(pi, tH, tD, flD, flF, fwH, nsegsites))
-          csStats <- vector("list",npop)
+           			csStats <- vector("list",npop)
           for(xx in 1:npop){
-
 
                    if(neutrality){csStats[[xx]]  <- rbind(c(TD[xx],SEG[xx],R2[xx],FuLi_F[xx],FuLi_D[xx],FS[xx],Strobeck[xx],HnFw[xx],Ez[xx],thetaT[xx],thetaS[xx]))}
                    if(linkage){csStats[[xx]]     <- rbind(c(WALLB[xx],WALLQ[xx],ZA[xx],ZZ[xx],Zns[xx]))}
-                   if(F_ST){hapwX <- hapw[xx];PiX<-Pi[xx];csStats[[xx]]<- rbind(c(hapwX,PiX,FSTH,FSTN2,GST))} 
-                   colnames(csStats[[xx]])     <- c(testNames)
-        	         first = FALSE
-	  } # End über alle Populationen
-				  		  
-        } else {
-				  # add all computed test statistics for each sample to the stats matrix
-					# csStats <- rbind(csStats, c(pi, tH, tD, flD, flF, fwH, nsegsites))				}
-	
-     for(xx in 1:npop){
+                   if(F_ST){hapwX <- hapw[xx];PiX<-Pi[xx];csStats[[xx]]<- rbind(c(hapwX,PiX,FSTH,FSTN2,GST,SNN))} 
+                   colnames(csStats[[xx]])      <- c(testNames)
+        	        # first = FALSE
+	  } # End \FCber alle Populationen
+
+
+			  		  
+       } else {
+#				  # add all computed test statistics for each sample to the stats matrix
+#					# csStats <- rbind(csStats, c(pi, tH, tD, flD, flF, fwH, nsegsites))				
+#	
+    for(xx in 1:npop){
               # print(csStats[[xx]])
-               if(neutrality){csStats[[xx]]   <- rbind(csStats[[xx]],c(TD[xx],SEG[xx],R2[xx],FuLi_F[xx],FuLi_D[xx],FS[xx],Strobeck[xx],HnFw[xx],Ez[xx],thetaT[xx],thetaS[xx]))}
-               if(linkage)   {csStats[[xx]]   <- rbind(csStats[[xx]],c(WALLB[xx],WALLQ[xx],ZA[xx],ZZ[xx],Zns[xx]))}
-               if(F_ST)      {hapwX<-hapw[xx];PiX <- Pi[xx];csStats[[xx]]   <- rbind(csStats[[xx]],c(hapwX,PiX,FSTH,FSTN2,GST))}
-           }
-       }
+               if(neutrality){csStats[[xx]]         <- rbind(csStats[[xx]],c(TD[xx],SEG[xx],R2[xx],FuLi_F[xx],FuLi_D[xx],FS[xx],Strobeck[xx],HnFw[xx],Ez[xx],thetaT[xx],thetaS[xx]))}
+               if(linkage)   {csStats[[xx]]        <- rbind(csStats[[xx]],c(WALLB[xx],WALLQ[xx],ZA[xx],ZZ[xx],Zns[xx]))}
+               if(F_ST)      {hapwX<-hapw[xx];PiX <- Pi[xx];csStats[[xx]]   <- rbind(csStats[[xx]],c(hapwX,PiX,FSTH,FSTN2,GST,SNN))}
+          
+      }
       
-     } #if
+    } #if
 		
-    } #for 1 to nlines
+    
+} # end of each simulation biallelic matrix	
+
+
 		
-		
-		
-		# Hier sind die samples abgearbeitet !!!!!! -------------------------------------------------------------- ENDE der SAMPLES für ein Locus
-		csStats <- as.matrix(csStats)
+ 		
+
+		# Hier sind die samples abgearbeitet !!!!!! -------------------------------------------------------------- ENDE der SAMPLES f\FCr ein Locus
+		csStats           <- as.matrix(csStats)
 		rownames(csStats) <- paste("pop",1:npop)
-		colnames(csStats) <- "cs.stats"
-		   
+		colnames(csStats) <- "cs.stats"	  
 		
     # save all calculated data in slots of the locstats class
 		lData <- new("loc.stats", 
@@ -699,7 +778,9 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 			colnames(obsVal_my) <- testNames
 			
       ## Konvert obsVal --------------------------
+
       for(xx in 1:npop){
+       
        obsVal_my[xx,] <- obsVal[[xx]][cloci,]
 			}
 			# for one gene !!!
@@ -718,6 +799,7 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
   } # for 1 to nloci  <------------------------------------------------------------- ENDE EINES GEN (LOCI)
   
   
+
 if(is.list(obsVal)){return(locusData)} ### return only when observed Data is present
 	
 # Prepare the summary class over all loci	
@@ -880,7 +962,7 @@ getDemographyParam <- function(d) {
 		} else {
 			if (d[1] == 2) {
 				
-				# set all subpopÕs to size x * N_0 and growth rates to zero.
+				# set all subpop\D5s to size x * N_0 and growth rates to zero.
 				return( paste("-eN", d[2], d[3]) )
 			} else {
 				if (d[1] == 3) {

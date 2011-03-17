@@ -2,16 +2,27 @@
 \docType{methods}
 \alias{get.status-methods}
 \alias{get.status,GENOME-method}
+
+
+
 \title{State of Calculations}
 
 \description{
-coming soon ...
+Some informations about the definitions of poulations and subsites.
 }
-\section{Methods}{
-\describe{
 
-\item{object = "GENOME"}{ coming soon ...}
-}}
+\usage{
+
+\S4method{get.status}{GENOME}(object)
+
+}
+
+ \arguments{
+
+  \item{object}{An object of class \code{"GENOME"}}
+  
+}
+
 
 \examples{
 # get.status(GENOME.class)

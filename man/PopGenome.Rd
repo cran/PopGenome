@@ -15,30 +15,23 @@ R-package for Population genetic analysis
 
 }
 \details{
-\tabular{ll}{
-Package: \tab PopGenome\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2011-03-17\cr
-Depends: \tab R (>= 1.8.0)\cr
-License: \tab What license is it under?\cr
-LazyLoad: \tab yes\cr
-Packaged: \tab Tue Sep 20 15:33:01 2011; bapfe\cr
-Built: \tab R 2.8.1; $x86_{64}$-unknown-linux-gnu; 2011-09-20 15:33:04; unix\cr
-}
 
 Index:
 \preformatted{
-F_ST.stats              Fixation index
-MKT                     McDonald & Kreitman test
-MS                      Coalescent simulation
-detail.stats            Several statistics
-linkage.stats           Linkage disequilibrium
-neutrality.stats        Neutrality statistics
-readData                Reading alignments and calculating summary data
-sliding.window.transform
-                        Sliding window transformation.
-test.params             Set parameter for coalescent simulation.
+F_ST.stats               Fixation index
+MKT                      McDonald & Kreitman test
+MS                       Coalescent simulation
+detail.stats             Several statistics
+linkage.stats            Linkage disequilibrium
+neutrality.stats         Neutrality statistics
+readData                 Reading alignments and calculating summary data
+readSNP                  Read data from the 1001 genome project
+readVCF                  Read data from the 1000 genome project
+readHapMap               Read HapMap data
+sliding.window.transform Sliding window transformation.
+splitting.data           Splitting data in subsites
+test.params              Set parameter for coalescent simulation.
+
 }
 
 }
@@ -54,6 +47,7 @@ Maintainer: Bastian Pfeifer <Bastian.Pfeifer@uni-duesseldorf.de>
 
 ?readData
 \link{readData}
+
 }
 \examples{
 

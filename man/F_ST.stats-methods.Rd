@@ -18,8 +18,16 @@
 
 \usage{
 
-\S4method{F_ST.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,
-detail=TRUE,mode="ALL")
+\S4method{F_ST.stats}{GENOME}(
+object,
+new.populations=FALSE,
+subsites=FALSE,
+detail=TRUE,
+mode="ALL",
+only.haplotype.counts=FALSE,
+FAST=FALSE
+)
+
 \S4method{get.diversity}{GENOME}(object,between=FALSE)
 \S4method{get.F_ST}{GENOME}(object,mode=FALSE,pairwise=FALSE)
 
@@ -29,10 +37,23 @@ detail=TRUE,mode="ALL")
 
   \item{object}{An object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default:\code{FALSE}}
-  \item{subsites}{synonymous positions (subsites="syn"), nonsynonymous positions (subsites="nonsyn")}
+  \item{subsites}{ 
+
+                  \code{"transitions"}: SNPs which are transitions. \cr
+                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"syn"}: synonymous sites. \cr
+                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"exon"}: SNPs in exon regions. \cr
+                  \code{"intron"}: SNPs in intron regions. \cr
+                  \code{"coding"}: SNPs in coding regions (CDS). \cr
+                  \code{"utr"}:  SNPs in UTR regions. \cr
+                  \code{"gene"}: SNPs in genes. \cr
+  } 
   \item{detail}{detail statistics. Note: slower!}
   \item{between}{\code{TRUE}: show between diversities. \code{FALSE}: show within diversities}
   \item{mode}{mode=\code{"haplotype"} or mode=\code{"nucleotide"}}
+  \item{only.haplotype.counts}{only calculate the haplotype counts}
+  \item{FAST}{if \code{TRUE} only calculate a subset of statistics. see details !}
   \item{pairwise}{show paiwise comparisons. default:\code{FALSE}}
 }
 
@@ -40,25 +61,38 @@ detail=TRUE,mode="ALL")
 \value{
 
 \tabular{rlll}{
-            \tab Slot                	\tab Reference   \tab Description\cr
-          1.\tab \code{haplotype.F_ST} 	\tab [1]         \tab Fixation Index based on haplotype      frequencies\cr
-          2.\tab \code{nucleotide.F_ST}        \tab [1]         \tab Fixation Index based on minor.allele   frequencies\cr
+            \tab Slot                	        \tab Reference   \tab Description\cr
+          1.\tab \code{haplotype.F_ST} 	        \tab [1]         \tab Fixation Index based on haplotype      frequencies\cr
+          2.\tab \code{nucleotide.F_ST}         \tab [1]         \tab Fixation Index based on minor.allele   frequencies\cr
           3.\tab \code{Nei.G_ST}             	\tab [2]         \tab Nei's Fixation Index\cr
-          4.\tab \code{Hudson.G_ST}            \tab [3]         \tab \cr
-          5.\tab \code{Hudson.H_ST}            \tab [3]         \tab \cr
-          6.\tab \code{Hudson.K_ST}            \tab [3]         \tab \cr
-          7.\tab \code{nuc.diversity.within}   \tab [1]         \tab Nucleotide diversity (within the population)\cr
-          8.\tab \code{hap.diversity.within}   \tab [1]         \tab Haplotype diversity (within the population) \cr
+          4.\tab \code{Hudson.G_ST}             \tab [3]         \tab see reference ... \cr
+          5.\tab \code{Hudson.H_ST}             \tab [3]         \tab see reference ... \cr
+          6.\tab \code{Hudson.K_ST}             \tab [3]         \tab see reference ... \cr
+          7.\tab \code{nuc.diversity.within}    \tab [1]         \tab Nucleotide diversity (within the population)\cr
+          8.\tab \code{hap.diversity.within}    \tab [1]         \tab Haplotype diversity (within the population) \cr
           9.\tab \code{Pi}          	        \tab [4]         \tab Diversity from Nei (within the population)  \cr
-          10.\tab \code{hap.F_ST.vs.all}       \tab [1]         \tab Fixation Index for each population against the rest (haplotype)\cr
-          11.\tab \code{nuc.F_ST.vs.all}       \tab [1]         \tab Fixation Index for each population against the rest (nucleotide)\cr
-          12.\tab \code{hap.diversity.between} \tab [1]         \tab Haplotype diversities between populations\cr
-          13.\tab \code{nuc.diversity.between} \tab [1]         \tab Nucleotide diversities between populations\cr
-          14.\tab \code{nuc.F_ST.pairwise}     \tab [1]         \tab Fixation Index for every pair of population (nucleotide)\cr
-          15.\tab \code{hap.F_ST.pairwise}     \tab [1]         \tab Fixation Index for every pair of population (haplotype)\cr
-          16.\tab \code{Nei.G_ST.pairwise}     \tab [2]         \tab Fixation Index for every pair of population (Nei)\cr
-          17.\tab \code{region.stats}          \tab             \tab an object of class "region.stats" for detail statistics\cr
+          10.\tab \code{hap.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against the rest (haplotype)\cr
+          11.\tab \code{nuc.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against the rest (nucleotide)\cr
+          12.\tab \code{hap.diversity.between}  \tab [1]         \tab Haplotype diversities between populations\cr
+          13.\tab \code{nuc.diversity.between}  \tab [1]         \tab Nucleotide diversities between populations\cr
+          14.\tab \code{nuc.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of population (nucleotide)\cr
+          15.\tab \code{hap.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of population (haplotype)\cr
+          16.\tab \code{Nei.G_ST.pairwise}      \tab [2]         \tab Fixation Index for every pair of population (Nei)\cr
+          17.\tab \code{region.stats}           \tab             \tab an object of class "region.stats" for detail statistics\cr
        }
+
+}
+
+\seealso{
+# methods?F_ST.stats.2  
+#\link{F_ST.stats.2}
+}
+
+\details{
+
+If \code{FAST} is switched on, this module only calculates \code{nuc.diversity.within}, \code{hap.diversity.within}, \code{haplotype.F_ST},
+\code{nucleotide.F_ST} and \code{pi}.
+ 
 
 }
 

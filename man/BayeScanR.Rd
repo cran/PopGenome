@@ -1,0 +1,66 @@
+\name{BayeScanR}
+
+\docType{methods}
+\alias{BayeScanR}
+
+
+\title{An R-version of BayeScan (Foll \& Gagiotti 2008)}
+
+
+\description{
+
+BayeScanR is an R-version of BayeScan for codominant marker.
+
+}
+
+\usage{
+
+BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000)
+
+}
+
+\arguments{
+
+  \item{input}{textfile or an R-object returned from getBayes()}
+  \item{nb.pilot}{number of pilot runs}
+  \item{pilot.runtime}{length of pilot runs}
+  \item{main.runtime}{length of main runs} 
+
+} 
+
+\value{
+
+returned value is an object of class \code{"BAYESRETURN"} \cr \cr
+-------------------------------------------------------------- \cr
+Following Slots will be filled \cr
+-------------------------------------------------------------- \cr
+
+   \item{alpha}{alpha effects}
+   \item{beta}{beta effects}
+   \item{var_alpha}{variance of alpha values}
+   \item{a_inc}{which alpha is included in the model}
+   \item{fst}{FST values}
+
+
+}
+
+\references{ 
+[1] Foll M and OE Gaggiotti (2008). \emph{A genome scan method to identify selected loci appropriate for both dominant and codominant markers: A Bayesian perspective.} Genetics 180: 977-993 \cr \cr
+}
+
+
+
+
+\examples{
+
+# GENOME.class <- readData("...\Alignments")
+# GENOME.class <- F_ST.stats(GENOME.class,list(1:5,6:10))
+# Bayes.input  <- getBayes(GENOME.class)
+# BAYES.class  <- BayeScanR(Bayes.input)
+# BAYES.class
+
+}
+
+
+
+\keyword{methods}

@@ -10,13 +10,15 @@
 
 \title{Linkage Disequilibrium}
 
+
 \description{
  A generic function to calculate some linkage disequilibrium statistics.
 }
 
 \usage{
 
-\S4method{linkage.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,detail=FALSE)
+\S4method{linkage.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,
+          include.unknown=FALSE, do.WALL=TRUE)
 \S4method{get.linkage}{GENOME}(object)
 
 }
@@ -25,9 +27,23 @@
 
   \item{object}{An object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default=\code{FALSE}}
-  \item{subsites}{synonymous positions (subsites=\code{"syn"}), nonsynonymous positions (subsites=\code{"nonsyn"})}
-  \item{detail}{if you want to calculate some detail statistics. slower! default:\code{FALSE}}  
+  \item{subsites}{ 
 
+                  \code{"transitions"}: SNPs which are transitions. \cr
+                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"syn"}: synonymous sites. \cr
+                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"exon"}: SNPs in exon regions. \cr
+                  \code{"intron"}: SNPs in intron regions. \cr
+                  \code{"coding"}: SNPs in coding regions (CDS). \cr
+                  \code{"utr"}:  SNPs in UTR regions. \cr
+                  \code{"gene"}: SNPs in genes. \cr
+          default:\code{FALSE}}
+  
+  
+  \item{detail}{if you want to calculate some detail statistics. slower! default:\code{FALSE}}  
+  \item{include.unknown}{TRUE, if unknown positions should be considered. Slower !  see readData()}
+  \item{do.WALL}{Wall B/Q}
 }
 
 

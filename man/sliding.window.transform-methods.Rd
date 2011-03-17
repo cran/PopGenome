@@ -9,12 +9,13 @@
 
 \description{
  This generic function transforms the existing object of class \code{"GENOME"} in another object of class \code{"GENOME"}, so that 
- sliding window calculations are possible.
+ sliding window calculations become possible without loosing the method-capacity of the PopGenome environment.   
+ 
 }
 
 \usage{
 
-\S4method{sliding.window.transform}{GENOME}(object,width=7,jump=5,type=1)
+\S4method{sliding.window.transform}{GENOME}(object,width=7,jump=5,type=1,whole.data=TRUE)
 
 
 }
@@ -24,29 +25,33 @@
   \item{object}{an object of class \code{"GENOME"}}
   \item{width}{window size. default:\code{7}}
   \item{jump}{jump size. default:\code{5}}
-  \item{type}{\code{1} scan only biallelic positions, \code{2} scan the whole alignment. default:\code{1}}
+  \item{type}{\code{1} scan only biallelic positions (SNPs), \code{2} scan the genome. default:\code{1}}
+  \item{whole.data}{scanning the whole data by concatenating the regions. If FALSE, the regions are scaned seperately}
 
 }
 
 \value{
 
-The function creates an object of class \code{"GENOME"} 
+The function creates an transformed object of class \code{"GENOME"} 
 
 }
 
 \note{
-In this version of PopGenome Sliding Window applications will scan alignments separately.
-What can be the file set to be analyzed depends on how much workspace is available. 
-In a future version of PopGenome this problem is circumvented by moving data swapped.
+
+You should not use the big.data option in the readData function, if you want to scan regions seperately.
+
+ 
 }
 
 
 \examples{
 
-# GENOME.class  <- readData("...\Alignments")
-# slide.GENOME.class <- sliding.window.transform(slide.GENOME.class)
+# GENOME.class       <- readData("...\Alignments")
+# slide.GENOME.class <- sliding.window.transform(GENOME.class)
+# slide.GENOME.class <- sliding.window.transform(GENOME.class,100,100)
 # slide.GENOME.class <- neutrality.stats(slide.GENOME.class)
-# values <- get.neutrality(slide.GENOME.class)
+# slide.GENOME.class@region.names
+# values             <- get.neutrality(slide.GENOME.class)
 
 }
 

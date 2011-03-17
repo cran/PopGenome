@@ -6,13 +6,27 @@ freqtesto_achaz <- function(sample_size,fr,S,w1,w2)  #/* nomes outgroup */
 # S = Segregating Sites
 
 {
+
+    # NEU --------------
+    singleton <- S
+    #----------------
+
     Test <- 0 
-    fr <- fr[2:(length(fr)-1)] # ignorier monomorphe Frequenz Stellen 
+    fr   <- fr[2:(length(fr)-1)] # ignorier monomorphe Frequenz Stellen 
     
-    if(sample_size < 2 || S == 0){ return(NaN)}
+    # NEU -------------------------------
+    # ww = (double *)calloc(sample_size,sizeof(double));
+      ww <- numeric(sample_size)
+    # -----------------------------------
+
+    # if(sample_size < 2 || S == 0){ return(NaN)}
+    # NEU -------------
+      if(sample_size < 2){ return(NaN)}
+    # ----------------------------------    
+
 
     Th1   <- 0
-	  sumw1 <- 0
+    sumw1 <- 0
 
     for(i in 1:(sample_size-1)) {
 		 Th1   <- Th1 + fr[i]*(i*w1[i])
@@ -29,6 +43,27 @@ freqtesto_achaz <- function(sample_size,fr,S,w1,w2)  #/* nomes outgroup */
 	  }
 	   
     Th2 <-  Th2/sumw2
+
+     # NEU --------------------------
+      # if(Th1 == 0. && Th2 == 0.) return(-10000);
+     if(Th1 == 0 && Th2 == 0){return(NaN)}
+     # ----------------------------
+
+     # NEU ------------------------
+     Thw   <- 0
+     sumww <- 0
+    for(i in 1:(sample_size-1)) {
+		if(i==1) {ss <- singleton}
+		else{ ss <- 1}
+		ww[i] <- 1/i * ss
+		Thw   <- Thw + fr[i]*i*ww[i]
+		sumww <- sumww + ww[i]
+	}
+    Thw <-  Thw/sumww
+    # -----------------------------------------
+
+
+
   
   alfan  <- 0
 	
@@ -52,7 +87,31 @@ freqtesto_achaz <- function(sample_size,fr,S,w1,w2)  #/* nomes outgroup */
   }
   }
   
-	Test <- (Th1 - Th2)/(sqrt(alfan* S/an(sample_size) + betan*S*(S-1)/(an(sample_size)*an(sample_size)+a2n(sample_size))))
+    # NEU ------------------------------------------------------------------------
+    #/*Theta2*/
+	alfat <- 0
+	for(i in 1:(sample_size-1)) {
+		alfat <- alfat + (ww[i]/sumww * ww[i]/sumww)*i
+	}	
+ 	betat <- 0
+	for(i in 1:(sample_size-1)) {
+		betat <- betat + i*i * (ww[i]/sumww * ww[i]/sumww) * sigmaii(sample_size,i)
+               if((i+1)<=(sample_size-1)){
+		for(j in (i+1):(sample_size-1)) {
+			betat <- betat + 2.0 * i*j * ww[i]/sumww * ww[j]/sumww * sigmaij(sample_size,j,i)
+		}
+               }
+	}
+	Thw2 <- (Thw*Thw - alfat*Thw)/(1.0 + betat)	
+    
+     # ------------------------------------------------
+
+        # NEU --------------
+        #/*Test*/
+	Test <- (Th1 - Th2)/(sqrt(alfan*Thw + betan*Thw2))
+        #------------------------------------
+
+	# Test <- (Th1 - Th2)/(sqrt(alfan* S/an(sample_size) + betan*S*(S-1)/(an(sample_size)*an(sample_size)+a2n(sample_size))))
   
   if(is.na(Test)){return(NaN)}
 	if (abs(Test) < 1.0E-15){return(0)}
@@ -67,10 +126,21 @@ freqtestn_achaz <- function(sample_size,fr,S,w1,w2) #/* NO outgroup */
 
 {
 
-    if(sample_size < 2 || S == 0) {return(NaN)}
+    # if(sample_size < 2 || S == 0) {return(NaN)} # old
+    
+    # NEU ---
+     singleton <- S
+    #--------
 
-    Th1   <- 0
-	  sumw1 <- 0
+    if(sample_size < 2) {return(NaN)}
+ 	
+    # NEU ---
+    # ww = (double *)calloc(sample_size,sizeof(double));
+      ww <- numeric(sample_size)
+    #-----------
+
+       Th1   <- 0
+       sumw1 <- 0
 	
     for(i in 1:floor(sample_size/2)) {
 		  Th1   <-  Th1 + (fr[i])*w1[i]/(psii(sample_size,i))
@@ -81,17 +151,33 @@ freqtestn_achaz <- function(sample_size,fr,S,w1,w2) #/* NO outgroup */
 
 	  
     Th2   <- 0
-	  sumw2 <- 0
+    sumw2 <- 0
 	
     for(i in 1:floor(sample_size/2)) {
 		  Th2   <-  Th2 + (fr[i])*w2[i]/(psii(sample_size,i))
 		  sumw2 <- sumw2 + w2[i]
-	  }
+    }
 
     Th2 <- Th2/sumw2
   
-	alfan <- 0
+     # hier fehlt was !----- NEU !!!
+      if(Th1 == 0  && Th2 == 0 ) return(NaN);
 	
+	Thw   <-  0
+	sumww <-  0 
+	for(i in 1:floor(sample_size/2)) {
+		if(i==1){ss <- singleton}
+		else{ ss <- 1}
+		if(i == sample_size-i){ww[i] = sample_size/(i*(sample_size - i)*2.0)*ss}
+		else{ ww[i] <- sample_size/(i*(sample_size - i)*1.0)*ss}
+		Thw    <- Thw + fr[i]*ww[i]/(psii(sample_size,i));
+		sumww  <- sumww + ww[i]
+	}
+    Thw <- Thw/sumww
+     # ---------------------
+
+
+	alfan <- 0	
 	for(i in 1:floor(sample_size/2)) {
 		omi   <- omegain(sample_size,i,w1,w2)
 		psi   <- psii(sample_size,i)
@@ -107,16 +193,42 @@ freqtestn_achaz <- function(sample_size,fr,S,w1,w2) #/* NO outgroup */
 		psi <- psii(sample_size,i)
 		betan <- betan + omi/psi * omi/psi * rhoii(sample_size,i)
 
-    if((i+1)<=floor(sample_size/2)){ # Wegen R Schleifen
-     for(j in (i+1):floor(sample_size/2)) {
+             if((i+1)<=floor(sample_size/2)){ # Wegen R Schleifen
+                  for(j in (i+1):floor(sample_size/2)) {
 			omj <- omegain(sample_size,j,w1,w2)
 			psj <- psii(sample_size,j)
 			betan <- betan + 2.0 * omi/psi * omj/psj * rhoij(sample_size,j,i)
-		 }
+		  }
+	     }
+	 }
+    
+     # ......... NEU ........................
+     # Theta2*/
+	alfat <- 0
+	for(i in 1:floor(sample_size/2)) {
+		psi   <- psii(sample_size,i);
+		alfat <- alfat + (ww[i]/sumww * ww[i]/sumww)/psi
+	}	
+ 	betat <- 0
+	for(i in 1:floor(sample_size/2)) {
+		psi   <- psii(sample_size,i)
+		betat <- betat + (ww[i]/sumww)/psi * (ww[i]/sumww)/psi * rhoii(sample_size,i)
+		for(j in i+1:floor(sample_size/2)) {
+			psj   <- psii(sample_size,j)
+			betat <- betat + 2.0 * (ww[i]/sumww)/psi * (ww[j]/sumww)/psj * rhoij(sample_size,j,i)
 		}
 	}
 
-	Test <- (Th1 - Th2)/(sqrt(alfan*S/an(sample_size) + betan*S*(S-1.0)/(an(sample_size)*an(sample_size)+a2n(sample_size))))
+	Thw2 <- (Thw*Thw - alfat*Thw)/(1.0 + betat)
+
+     #-----------------
+
+     # Test <- (Th1 - Th2)/(sqrt(alfan*S/an(sample_size) + betan*S*(S-1.0)/(an(sample_size)*an(sample_size)+a2n(sample_size))))
+     
+     # NEU ---
+     Test  <- (Th1 - Th2)/(sqrt(alfan*Thw + betan*Thw2))
+     # ----- 
+     # print(Test)
 
   if (is.na(Test)){return(NaN)}
 	if (abs(Test) < 1.0E-15){return(0)}

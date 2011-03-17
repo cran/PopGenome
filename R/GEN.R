@@ -35,16 +35,16 @@ cat("-----\n")
                
 
                 Description=c(
-               " nucleotide diversity","haplotype diversity","haplotype distribution","minor allele frequencies","linkage disequilibrium","shared and fixed polymorphisms"),
+               " Nucleotide diversity","Haplotype diversity","Haplotype distribution","Minor allele frequencies","Linkage disequilibrium","Shared and fixed polymorphisms"),
 
-               Module=c("FST","FST","FST","Neutrality","Linkage","Detail"))
+               Module=c("FST","FST","FST","Detail","Linkage","Detail"))
  
               
 
 
  print(out)
  cat("\n---------------\n")
- print("These are the Slots (class region.data)") 
+ cat("These are the Slots (class region.data) \n") 
 })
 
 

@@ -1,5 +1,5 @@
 
-MS <- function(GENO,niter=10,thetaID="user",params=FALSE,detail=FALSE,neutrality=FALSE,linkage=FALSE,F_ST=FALSE){
+MS <- function(GENO,niter=10,thetaID="user",params=FALSE,detail=FALSE,neutrality=FALSE, linkage = FALSE,F_ST = FALSE, MSMS = FALSE){
 
 
 ## User can define some additional parameters
@@ -29,8 +29,8 @@ F_ST        <- FALSE
 }
 
 if(F_ST){
-numTests    <- 5
-testNames   <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST")
+numTests    <- 6
+testNames   <- c("hap.diversity.within","Pi","haplotype.F_ST","nucleotide.F_ST","Nei.G_ST","Hudson.Snn")
 neutrality  <- FALSE
 linkage     <- FALSE
 }
@@ -143,8 +143,9 @@ if(thetaID=="user" &  PAR ){
 if(PAR){
  if(length(params@migration)!=0){
  migg <- params@migration
- }else{migg <- 1}
- if(length(params@theta)!=0){
+}else{migg <- 1}
+
+if(length(params@theta)!=0){
  THETA <- params@theta
  }
 }
@@ -153,7 +154,9 @@ for(xx in 1:nloci){
 
 if(!PAR) {params   <-  new("test.params")}   # <---------------------------------------- create an own test.params object
 
-if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
+#if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
+
+if(length(popGetBial(GENO,xx))!=0){
 
  if(neutrality){
  npops        <- length(GENO@region.stats@Pop_Neutrality[[xx]]$Populations)
@@ -187,7 +190,13 @@ if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
  
  if(npops>1){
   if(!PAR & length(params@migration)==0){
-    params@migration <- c(migration,1)
+
+  	if(MSMS[1]==FALSE){ 
+   	   params@migration    <- c(migration,10)
+	}else{
+	   params@migration    <- c(migration,10)
+	}
+
   }else{
     params@migration <- c(migration,migg)
   }
@@ -207,23 +216,28 @@ if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
            if(thetaID=="user")                 {params@theta      <-  THETA[xx]}         
          
           
-               bial                <- GENO@region.data@biallelic.matrix[[xx]]
-
+               #bial                <- GENO@region.data@biallelic.matrix[[xx]]
+                bial                <- popGetBial(GENO,xx) 
+               
                if(length(bial)>0){ 
                                 
-                if(neutrality){WholePopulations  <- unlist(GENO@region.stats@Pop_Neutrality[[xx]]$Populations)}
-                if(linkage){WholePopulations     <- unlist(GENO@region.stats@Pop_Linkage[[xx]]$Populations)}
-                if(F_ST)   {WholePopulations     <- unlist(GENO@region.stats@Pop_FSTH[[xx]]$Populations)}
+                if(neutrality) {WholePopulations     <- unlist(GENO@region.stats@Pop_Neutrality[[xx]]$Populations)}
+                if(linkage)    {WholePopulations     <- unlist(GENO@region.stats@Pop_Linkage[[xx]]$Populations)}
+                if(F_ST)       {WholePopulations     <- unlist(GENO@region.stats@Pop_FSTH[[xx]]$Populations)}
                 
-                 nsammy                          <- length(WholePopulations)
+                 nsammy                              <- length(WholePopulations)
+
                }                                              
   }
   
 ## Change ( if there are more than one populations ) get the theta value of the whole Populations
 
   if(npops>1) 
+
   { 
-        bial <- GENO@region.data@biallelic.matrix[[xx]]
+       # bial <- GENO@region.data@biallelic.matrix[[xx]]
+         bial                <- popGetBial(GENO,xx)   
+
         if(length(bial)>0){ 
 
            if(neutrality){WholePopulations  <- unlist(GENO@region.stats@Pop_Neutrality[[xx]]$Populations)}
@@ -243,18 +257,24 @@ if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
   }
  
  ### if there is theta == 0
- if(params@theta==0){locusData <- c(locusData,NA);next}
+ if(params@theta==0 | is.na(params@theta)){locusData <- c(locusData,NA);next}
   
-  params@n.sam        <-  nsammy
-  params@n.sites      <-  GENO@n.sites[xx]
+  params@n.sam           <-  nsammy
+  params@n.sites         <-  GENO@n.sites[xx]
+
+  # Notlösung (ändern)
+  # params@fixed.seg.sites <-  GENO@n.biallelic.sites[xx]
+  #
 
   if(neutrality){params@obs.val      <-  getMS(GENO,xx,neutrality=TRUE)}
   if(linkage)   {params@obs.val      <-  getMS(GENO,xx,neutrality=FALSE,linkage=TRUE)}
   if(F_ST)      {params@obs.val      <-  getMS(GENO,xx,neutrality=FALSE,linkage=FALSE,F_ST=TRUE)}
   
   ## CALL MS with the parameters
-     locusData         <- c(locusData,coalsimC(params,detail=detail,testNames=testNames,numTests=numTests,neutrality=neutrality,linkage=linkage,F_ST=F_ST))   # list of locus DATA
-}else{locusData        <- c(locusData,NA)}# Wenn überhaupt Segregating Sites existieren
+     locusData         <- c(locusData,coalsimC(params,detail=detail,testNames=testNames,numTests=numTests,neutrality=neutrality,linkage=linkage,F_ST=F_ST,MSMS))   # list of locus DATA
+
+}else{locusData        <- c(locusData,NA)}  # Wenn überhaupt Segregating Sites existieren
+
 
 
 # PROGRESS #######################################################
@@ -268,9 +288,9 @@ if(length(GENO@region.data@biallelic.matrix[[xx]])!=0){
 ############################################
 # Init	
 
-if(neutrality){npop               <- length(GENO@Pop_Neutrality$Populations)}
-if(linkage){npop                  <- length(GENO@Pop_Linkage$Populations)}
-if(F_ST)   {npop                  <- length(GENO@Pop_FSTH$Populations)}
+if(neutrality){npop                  <- length(GENO@Pop_Neutrality$Populations)}
+if(linkage)   {npop                  <- length(GENO@Pop_Linkage$Populations)}
+if(F_ST)      {npop                  <- length(GENO@Pop_FSTH$Populations)}
 
 
 popnames           <- paste("pop",1:npop)
@@ -283,6 +303,7 @@ colnames(variance) <- "variance"
 colnames(average)  <- "average"
 #-----------------------------
 
+
 for(xx in 1:npop){
 	
 	# calc average and variance for all loci
@@ -293,6 +314,7 @@ for(xx in 1:npop){
 	colnames(variance[[xx]]) <- testNames
 		
 	for (i in 1:niter) {
+
 		for (j in 1:numTests) {
 			tmp <- matrix(ncol=1)
 			

@@ -1,0 +1,22 @@
+
+Changes in PopGenome 1.2.0
+=========================
+
+- new implented C++ functions to read alignments in several formats
+
+- using the ff-package to handle big data
+
+- reading SNP data from 1000/1001 Genome project
+
+- new features (create.PopGenome.method, region.as.fasta ...)
+
+- set.synnonsyn() to verify synonymous/non-synonymous sites of SNP-data 
+
+- new methods (Achaz, ...)
+
+- speed up calculations (C++ functions, multicore computation)
+
+- splitting.data() to analyse subsites like exon, gene, intron ...
+
+ 
+ 

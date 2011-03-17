@@ -6,8 +6,12 @@
 \alias{linkage.stats}
 \alias{sliding.window.transform}
 \alias{F_ST.stats}
+\alias{F_ST.stats.2}
 \alias{detail.stats}
 \alias{MKT}
+\alias{recomb.stats}
+\alias{sweeps.stats}
+\alias{Achaz.stats}
 \alias{set.populations}
 \alias{show.slots}
 \alias{get.status}
@@ -18,9 +22,16 @@
 \alias{get.detail}
 \alias{get.MKT}
 \alias{get.sum.data}
+\alias{get.recomb}
+\alias{get.sweeps}
+\alias{set.ref.positions}
+\alias{set.synnonsyn}
+\alias{splitting.data}
+\alias{mult.linkage.stats}
+\alias{getBayes}
+\alias{popGetBial}
+\alias{region.as.fasta}
 
-\alias{F_ST.stats.2,GENOME-method}
-\alias{getBayes,GENOME-method}
 
 \alias{getMS,GENOME-method}
 
@@ -29,128 +40,148 @@
 \alias{usage,GENOME-method}
 
 \title{Class "GENOME"}
+
 \description{A class where all values are stored}
 
-\section{Objects from the Class}{
-
-coming soon ...
-
-}
 \section{Slots}{
-	 \describe{
-    \item{\code{basepath}:}{Object of class \code{"character"} ~~ }
-    \item{\code{project}:}{Object of class \code{"character"} ~~ }
-    \item{\code{populations}:}{Object of class \code{"list"} ~~ }
-    \item{\code{poppairs}:}{Object of class \code{"vector"} ~~ }
-    \item{\code{outgroup}:}{Object of class \code{"vector"} ~~ }
-    \item{\code{region.names}:}{Object of class \code{"character"} ~~ }
-    \item{\code{genelength}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.sites}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.biallelic.sites}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.gaps}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.unknowns}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.valid.sites}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{n.polyallelic.sites}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{trans.transv.ratio}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{Pop_Neutrality}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_FSTN}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_FSTH}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_Linkage}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_Slide}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_MK}:}{Object of class \code{"list"} ~~ }
-    \item{\code{Pop_Detail}:}{Object of class \code{"list"} ~~ }
-    \item{\code{FSTNLISTE}:}{Object of class \code{"list"} ~~ }
-    \item{\code{nucleotide.F_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{nucleotide.F_ST2}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{nuc.diversity.between}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{nuc.diversity.within}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{nuc.F_ST.pairwise}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{nuc.F_ST.vs.all}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{n.haplotypes}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{hap.diversity.within}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{hap.diversity.between}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Pi}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{PIA_nei}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{haplotype.counts}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{haplotype.F_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{hap.F_ST.pairwise}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Nei.G_ST.pairwise}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{hap.F_ST.vs.all}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Nei.G_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Hudson.G_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Hudson.H_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Hudson.K_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Hudson.Snn}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{hap.pair.F_ST}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{MKT}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Tajima.D}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{SLIDE}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Fay.Wu.H}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Zeng.E}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Tajima}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Watterson}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Fu.Li}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Achaz.Watterson}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Achaz.Tajima}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Fay.Wu}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{theta_Zeng}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Fu.Li.F}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Fu.Li.D}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Yach}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{n.segregating.sites}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Rozas.R_2}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Fu.F_S}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Strobeck.S}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Kelly.Z_nS}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Rozas.ZZ}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Rozas.ZA}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Wall.B}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{Wall.Q}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{MDSD}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{MDG1}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{MDG2}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{genes}:}{Object of class \code{"list"} ~~ }
-    \item{\code{region.data}:}{Object of class \code{"region.data"} ~~ }
-    \item{\code{region.stats}:}{Object of class \code{"region.stats"} ~~ }
+    \describe{
+    \item{\code{BIG.BIAL}:}{Biallelic matrix as an ff-object}
+    \item{\code{SLIDE.POS}:}{Positions of biallelic sites (Sliding window mode)}
+    \item{\code{big.data}:}{ff-package ?}
+    \item{\code{gff.info}:}{Gff information ?}
+    \item{\code{snp.data}:}{SNP data ? }
+    \item{\code{basepath}:}{The basepath of the data}
+    \item{\code{project}:}{----}
+    \item{\code{populations}:}{Populations definded before reading data}
+    \item{\code{poppairs}:}{---}
+    \item{\code{outgroup}:}{A vector of outgroup sequences}
+    \item{\code{region.names}:}{Names/identifier of each region}
+    \item{\code{genelength}:}{Number of regions }
+    \item{\code{n.sites}:}{Total number of sites calculated}
+    \item{\code{n.sites2}:}{Total number of sites calculated}
+    \item{\code{n.biallelic.sites}:}{Number of biallelic sites (SNPs) }
+    \item{\code{n.gaps}:}{Number of gaps observed in the data}
+    \item{\code{n.unknowns}:}{Number of unknown.positions }
+    \item{\code{n.valid.sites}:}{Sites without gaps}
+    \item{\code{n.polyallelic.sites}:}{Sites with more than two variants}
+    \item{\code{trans.transv.ratio}:}{Transition-transversion ratio}
+    \item{\code{Coding.region}:}{Number of nucleotides in the CDS region }
+    \item{\code{UTR.region}:}{Number of nucleotides in the UTR region }
+    \item{\code{Intron.region}:}{Number of nucleotides in Intron region }
+    \item{\code{Exon.region}:}{Number of nucleotides in Exon region }
+    \item{\code{Gene.region}:}{Number of nucleotides in Gene region }
+    \item{\code{Pop_Neutrality}:}{Populations defined in the neutrality module}
+    \item{\code{Pop_FSTN}:}{Populations defined in the FST (nucleotide) module}
+    \item{\code{Pop_FSTH}:}{Populations defined in the FST (haplotype) module}
+    \item{\code{Pop_Linkage}:}{Populations defined in the Linkage module}
+    \item{\code{Pop_Slide}:}{---}
+    \item{\code{Pop_MK}:}{Populations defined in the MK module}
+    \item{\code{Pop_Detail}:}{Populations defined in the Detail module}
+    \item{\code{Pop_Recomb}:}{Populations defined in the Recombination module}
+    \item{\code{Pop_Sweeps}:}{Populations defined in the Selective sweeps module}
+    \item{\code{FSTNLISTE}:}{---}
+    \item{\code{nucleotide.F_ST}:}{Nucleotide FST }
+    \item{\code{nucleotide.F_ST2}:}{---}
+    \item{\code{nuc.diversity.between}:}{Nucleotide diversity between the populations}
+    \item{\code{nuc.diversity.within}:}{Nucleotide diversity within the populations}
+    \item{\code{nuc.F_ST.pairwise}:}{For each pair of populations}
+    \item{\code{nuc.F_ST.vs.all}:}{FST for one population vs the rest}
+    \item{\code{n.haplotypes}:}{---}
+    \item{\code{hap.diversity.within}:}{Haplotype diversity withing the popualtions}
+    \item{\code{hap.diversity.between}:}{Haplotype diversity between the populations}
+    \item{\code{Pi}:}{Pi from Nei}
+    \item{\code{PIA_nei}:}{Pi between the poulations}
+    \item{\code{haplotype.counts}:}{Counts of the haplotypes observed}
+    \item{\code{haplotype.F_ST}:}{Haplotype FST}
+    \item{\code{hap.F_ST.pairwise}:}{Haplotype diversity of each pair of populations}
+    \item{\code{Nei.G_ST.pairwise}:}{Haplotype diversity of each pair of populations}
+    \item{\code{hap.F_ST.vs.all}:}{FST for one population vs the rest}
+    \item{\code{Nei.G_ST}:}{GST from Nei}
+    \item{\code{Hudson.G_ST}:}{GST from Hudson}
+    \item{\code{Hudson.H_ST}:}{HST from Hudson}
+    \item{\code{Hudson.K_ST}:}{KST from Hudson}
+    \item{\code{Hudson.Snn}:}{Snn from Hudson}
+    \item{\code{hap.pair.F_ST}:}{---}
+    \item{\code{MKT}:}{Mcdonald-Kreitman values}
+    \item{\code{Tajima.D}:}{Tajima D statistic}
+    \item{\code{SLIDE}:}{---}
+    \item{\code{Fay.Wu.H}:}{}
+    \item{\code{Zeng.E}:}{}
+    \item{\code{theta_Tajima}:}{}
+    \item{\code{theta_Watterson}:}{}
+    \item{\code{theta_Fu.Li}:}{}
+    \item{\code{theta_Achaz.Watterson}:}{}
+    \item{\code{theta_Achaz.Tajima}:}{}
+    \item{\code{theta_Fay.Wu}:}{}
+    \item{\code{theta_Zeng}:}{}
+    \item{\code{Fu.Li.F}:}{}
+    \item{\code{Fu.Li.D}:}{}
+    \item{\code{Yach}:}{}
+    \item{\code{n.segregating.sites}:}{total number of segregating sites}
+    \item{\code{Rozas.R_2}:}{}
+    \item{\code{Fu.F_S}:}{}
+    \item{\code{Strobeck.S}:}{}
+    \item{\code{Kelly.Z_nS}:}{}
+    \item{\code{Rozas.ZZ}:}{}
+    \item{\code{Rozas.ZA}:}{}
+    \item{\code{Wall.B}:}{}
+    \item{\code{Wall.Q}:}{}
+    \item{\code{mult.Linkage}:}{Linkage disequilibrium between regions}
+    \item{\code{RM}:}{Minimum number of recombination events (Hudson)}
+    \item{\code{CL}:}{Composite Likelihood of SNPs (Nielsen et. al)}
+    \item{\code{CLmax}:}{Max. Composite Likelihood of SNPs (Nielsen et.al)}
+    \item{\code{MDSD}:}{}
+    \item{\code{MDG1}:}{}
+    \item{\code{MDG2}:}{}
+    \item{\code{genes}:}{}
+    \item{\code{region.data}:}{Detail information about the data}
+    \item{\code{region.stats}:}{Detail (site-specific) statistics}
   }
 }
 \section{Methods}{
   \describe{
-    \item{detail.stats}{\code{signature(object = "GENOME")}: Several Statistics}
-    \item{F_ST.stats.2}{\code{signature(object = "GENOME")}: ... }
-    \item{F_ST.stats}{\code{signature(object = "GENOME")}: Fixation Index }
-    \item{getBayes}{\code{signature(object = "GENOME")}: ... }
-    \item{get.detail}{\code{signature(object = "GENOME")}: ... }
-    \item{get.diversity}{\code{signature(object = "GENOME")}: ... }
-    \item{get.F_ST}{\code{signature(object = "GENOME")}: ... }
-    \item{get.linkage}{\code{signature(object = "GENOME")}: ... }
-    \item{get.MKT}{\code{signature(object = "GENOME")}: ... }
-    \item{getMS}{\code{signature(object = "GENOME")}: ... }
-    \item{get.neutrality}{\code{signature(object = "GENOME")}: ... }
-    \item{get.status}{\code{signature(object = "GENOME")}: ... }
-    \item{get.sum.data}{\code{signature(object = "GENOME")}: ... }
-    \item{linkage.stats}{\code{signature(object = "GENOME")}: Linkage Disequilibrium }
-    \item{MKT}{\code{signature(object = "GENOME")}: MKT Test}
-    \item{neutrality.stats}{\code{signature(object = "GENOME")}: Neutrality Statistics }
-    \item{popFSTN}{\code{signature(object = "GENOME")}: ... }
-    \item{set.populations}{\code{signature(object = "GENOME")}: Define the populations}
-    \item{show}{\code{signature(object = "GENOME")}: ... }
-    \item{show.slots}{\code{signature(object = "GENOME")}: ... }
-    \item{sliding.window.transform}{\code{signature(object = "GENOME")}: Sliding Window }
-    \item{usage}{\code{signature(object = "GENOME")}: ... }
-	 }
+    \item{detail.stats}{Several statistics}
+    \item{F_ST.stats.2}{Snn Hudson }
+    \item{F_ST.stats}{Fixation index }
+    \item{getBayes}{Get the input for BayeScanR}
+    \item{get.detail}{Get the results from the Detail module}
+    \item{get.diversity}{Get diversities from the FST module}
+    \item{get.F_ST}{Get FST values from the FST module}
+    \item{get.linkage}{Get the values from the Linkage module}
+    \item{get.MKT}{Mcdonald-Kreitman values}
+    \item{getMS}{---}
+    \item{get.neutrality}{Get the statistic-values from the Neutrality module}
+    \item{get.status}{Status of calculation}
+    \item{get.sum.data}{Get some data observed from the alignments}
+    \item{linkage.stats}{Linkage disequilibrium}
+    \item{mult.linkage.stats}{Linkage disequilibrium between regions }
+    \item{recomb.stats}{Recombination statistics }
+    \item{sweeps.stats}{Selective sweeps}
+    \item{Achaz.stats}{Achaz statistics}
+    \item{get.recomb}{Get the values from the Recombination module}
+    \item{get.sweeps}{Get the values frome the Selective Sweep module}
+    \item{set.ref.positions}{Set the SNP positions}
+    \item{set.synnonsyn}{Verifies synonymous positions}
+    \item{splitting.data}{Splits the data in subsites}
+    \item{MKT}{MKT Test}
+    \item{neutrality.stats}{Neutrality Statistics }
+    \item{popFSTN}{Internal function}
+    \item{set.populations}{Defines the populations}
+    \item{region.as.fasta}{Extract the region as a fasta file}
+    \item{show}{---}
+    \item{show.slots}{Show slots of the class \code{GENOME}}
+    \item{sliding.window.transform}{Sliding window analysis}
+    \item{usage}{---}
+  }
 }
-\references{ ~put references to the literature/web site here ~ }
+
+\references{see documentation for each module}
 \author{Bastian Pfeifer}
-\note{ test test}
 
-
-
-\seealso{
-	bla bla
-        
-}
 \examples{
-showClass("GENOME")
+#GENOME.class <- readData("Alignments")
+#GENOME.class@n.sites
+#GENOME.class@region.names
 }
+
 \keyword{classes}

@@ -1,15 +1,155 @@
-get_data <- function(matr,include.unknown=TRUE,gff=FALSE){
+get_data <- function(matr,include.unknown=FALSE,gff=FALSE,FAST,SNP.DATA){
 
 
-#poly <- get.polymorph(matr)
-#matr <- matr[,poly,drop=FALSE]
+# poly <- get.polymorph(matr)
+# matr <- matr[,poly,drop=FALSE]
+# cat("Suche nach polymorphen Stellen ist fertig !")
+# GLOBAL is an evironment
 
-#cat("Suche nach polymorphen Stellen ist fertig !")
+if(FAST){
+ 
+  bialpos <- .Call("polyC",matr)
+  bialpos <- as.logical(bialpos)
+
+#RETURNLISTE <- list(n_site=n_site,transitions=matrix_sv, biallelic.matrix=matrix_pol,
+# biallelic.sites=matrix_pos,matrix_codonpos=matrix_codonpos,n.singletons=unic,totalmis=NaN,s_sites=NaN,mvbp=mvbp
+#,trans.transv.ratio=(transitions/transversions),n.valid.sites=algsites,n.biallelic.sites=bial_sites,
+#polyallelic.sites=mhitbp,n.nucleotides=sum_sam,biallelic.compositions=TCGA,ROUGH=erg,matrix_freq=matrix_freq,syn=syn,
+#nonsyn=nonsyn,synonymous=!as.logical(synnonsyn),biallelic.substitutions=subst,minor.alleles=mutations,codons=Codons,
+#CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,ExonSNPS=ExonSNPS,GeneSNPS=GeneSNPS,Coding_region_length=Coding_region_length,
+#UTR_region_length=UTR_region_length,Intron_region_length=Intron_region_length,Exon_region_length=Exon_region_length, #Gene_region_length=Gene_region_length, sites.with.gaps=gaps,sites.with.unknowns=unknown) 
+
+ 
+ biallelic.sites <- which(bialpos)
+ SUBMAT          <- matr[,bialpos,drop=FALSE]
+
+ ## very fast ---------------
+ res <- .Call("makeBialMatrix",SUBMAT)
+ 
+ Bial.Mat                <- res[[1]]
+ transitions             <- as.logical(res[[2]])
+ biallelic.substitutions <- res[[3]]
+ rownames(biallelic.substitutions) <- c("minor","major")
+ n.transitions           <- sum(transitions)
+ n.transversions         <- length(biallelic.sites) - n.transitions
+ tt.ratio                <- n.transitions/n.transversions 
+
+if(length(biallelic.sites)==0){
+# print("No biallelic positions !")
+return(NA)
+}
+
+## GFF-File
+# GFF
+#if(is.list(gff)){
+#features <- parse_gff(gff)
+#}
+
+## GFF
+if(is.list(gff)){
+
+features <- gff
+
+   if(length(features$Gene)>0){
+    Gene_region        <- as.vector(unlist(apply(features$Gene,1,function(x){return(x[1]:x[2])})))
+    GeneSNPS           <- is.element(biallelic.sites,Gene_region)
+    Gene_region_length <- length(Gene_region)
+    #IntronSNPS    <- matrix_pos[IntronSNPS]
+   }else{GeneSNPS<-NaN;Gene_region_length <- 0} 
+
+   if(length(features$Intron)>0){
+    Intron_region <- as.vector(unlist(apply(features$Intron,1,function(x){return(x[1]:x[2])})))
+    IntronSNPS    <- is.element(biallelic.sites,Intron_region)
+    Intron_region_length <- length(Intron_region)
+    #IntronSNPS    <- matrix_pos[IntronSNPS]
+   }else{IntronSNPS<-NaN;Intron_region_length <- 0}
+
+   if(length(features$UTR)>0){	
+    UTR_region        <- as.vector(unlist(apply(features$UTR,1,function(x){return(x[1]:x[2])})))
+    UTRSNPS           <- is.element(biallelic.sites,UTR_region)
+    UTR_region_length <- length(UTR_region) 
+    #UTRSNPS       <- matrix_pos[UTRSNPS]
+   }else{UTRSNPS<-NaN;UTR_region_length <- 0}
+
+   if(length(features$Exon)>0){
+    Exon_region        <- as.vector(unlist(apply(features$Exon,1,function(x){return(x[1]:x[2])})))
+    ExonSNPS           <- is.element(biallelic.sites,Exon_region)
+    Exon_region_length <- length(Exon_region)
+   }else{ExonSNPS<-NaN;Exon_region_length<-0}
+   
+   if(length(features$Coding)>0){ 
+    Coding_region  <- as.vector(unlist(apply(features$Coding,1,function(x){return(x[1]:x[2])})))
+    CodingSNPS     <- is.element(biallelic.sites,Coding_region)
+    Coding_region_length <- length(Coding_region)
+   # CodingSNPS     <- biallelic.sites[CodingSNPS]
+   # size           <- length(CodingSNPS)
+   }else{CodingSNPS<-NaN;Coding_region_length <- 0}
+
+ }else{CodingSNPS<- NaN;IntronSNPS <- NaN; UTRSNPS <- NaN;ExonSNPS <- NaN;GeneSNPS<-NaN;
+Coding_region_length<-NaN;Intron_region_length<-NaN;UTR_region_length<-NaN;Exon_region_length<-NaN;Gene_region_length<-NaN}
+  
+
+return(list(biallelic.matrix=Bial.Mat,biallelic.sites=biallelic.sites,
+transitions=transitions,n.valid.sites=NaN,synonymous=rep(NaN,length(biallelic.sites)),
+trans.transv.ratio=tt.ratio,biallelic.substitutions=biallelic.substitutions,CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,
+ExonSNPS=ExonSNPS,GeneSNPS=GeneSNPS,Coding_region_length=Coding_region_length,
+Gene_region_length=Gene_region_length, Exon_region_length=Exon_region_length, Intron_region_length=Intron_region_length,UTR_region_length=UTR_region_length))
+ ## end of very fast
+
+#############################################################################
+ 
+
+######################################################################
+ num.rows        <- dim(matr)[1]       
+
+ 
+ pyrimid         <- c(1,2)
+ purin           <- c(3,4)
+ XXX             <- new.env()
+ XXX$transitions <- vector(,length(biallelic.sites))
+ XXX$count       <- 1
+ ret.vek         <- integer(num.rows)
+
+  Bial.Mat <- 
+       apply(SUBMAT,2,function(x){
+       nucs     <- unique(x)
+       nuc1     <- x[1]
+       nuc2     <- x[2]
+       trans1   <- setequal(nucs,pyrimid) # pyrimid
+       trans2   <- setequal(nucs,purin)   # purin 
+       if(trans1 | trans2){XXX$transitions[XXX$count]<-TRUE}
+       XXX$count <- XXX$count + 1 
+       nuc1.id   <- nuc1==x
+       nuc2.id   <- nuc2==x
+       num.nuc1  <- sum(nuc1.id)
+       num.nuc2  <- sum(nuc2.id)
+       if(num.nuc1<=num.nuc2){
+          ret.vek[nuc1.id] <- 1
+       }else{
+          ret.vek[nuc2.id] <- 1
+       }
+  return(ret.vek)
+  })
+
+# Transitions
+  transitions        <- XXX$transitions
+  n.transitions      <- sum(transitions)
+  n.transversions    <- length(biallelic.sites) - n.transitions
+  tt.ratio           <- n.transitions/n.transversions 
+
+return(list(biallelic.matrix=Bial.Mat,biallelic.sites=biallelic.sites,
+transitions=transitions,n.valid.sites=NaN,synonymous=rep(NaN,length(biallelic.sites)),
+trans.transv.ratio=tt.ratio,Coding_region_length=NaN,Gene_region_length=NaN,Exon_region_length=NaN,
+Intron_region_length=NaN,UTR_region_length=NaN))
+}
+
+#############################################################################
+# END OF FAST
 
 # GFF
-if(is.list(gff)){
-features <- parse_gff(gff)
-}
+# if(is.list(gff)){
+# features <- gff
+#}
 
 
 
@@ -93,7 +233,7 @@ erg <- apply(matr,2,function(check){
          nuc12      <- c(nuc1,nuc2)
          # transition/transversion
          trans1        <- setequal(nuc12,pyrimid) # pyrimid
-         trans2        <- setequal(nuc12,purin) # purin        
+         trans2        <- setequal(nuc12,purin)   # purin        
          ifelse(trans1 | trans2,RETURN[1] <- 1,RETURN[1] <- 0) # matrix_sv
          
          countnuc1  <- sum(check == nuc1)
@@ -245,8 +385,10 @@ colnames(matrix_pol) <- matrix_pos
 ### Generate codonpositions from matrix_pos
 ###----------------------------------------
 
-if(!is.list(gff)){
- 
+#if(!is.list(gff)){
+
+if(!SNP.DATA){ 
+
   y <- 1
   matrix_codonpos <- vector(,3*bial_sites)
   
@@ -271,29 +413,51 @@ if(!is.list(gff)){
 
 ## GFF
 if(is.list(gff)){
+   
+features <- gff
+   
+   if(length(features$Gene)>0){
+    Gene_region        <- as.vector(unlist(apply(features$Gene,1,function(x){return(x[1]:x[2])})))
+    GeneSNPS           <- is.element(matrix_pos,Gene_region)
+    Gene_region_length <- length(Gene_region)
+    #IntronSNPS    <- matrix_pos[IntronSNPS]
+   }else{GeneSNPS<-NaN;Gene_region_length <- 0} 
 
-   Coding_region <- as.vector(unlist(apply(features$Coding,1,function(x){return(x[1]:x[2])})))
-   Intron_region <- as.vector(unlist(apply(features$Intron,1,function(x){return(x[1]:x[2])})))
-   UTR_region    <- as.vector(unlist(apply(features$UTR,1,function(x){return(x[1]:x[2])})))
+   if(length(features$Intron)>0){
+    Intron_region <- as.vector(unlist(apply(features$Intron,1,function(x){return(x[1]:x[2])})))
+    IntronSNPS    <- is.element(matrix_pos,Intron_region)
+    Intron_region_length <- length(Intron_region)
+    #IntronSNPS    <- matrix_pos[IntronSNPS]
+   }else{IntronSNPS<-NaN;Intron_region_length <- 0}
+
+   if(length(features$UTR)>0){	
+    UTR_region        <- as.vector(unlist(apply(features$UTR,1,function(x){return(x[1]:x[2])})))
+    UTRSNPS           <- is.element(matrix_pos,UTR_region)
+    UTR_region_length <- length(UTR_region) 
+    #UTRSNPS       <- matrix_pos[UTRSNPS]
+   }else{UTRSNPS<-NaN;UTR_region_length <- 0}
+
+   if(length(features$Exon)>0){
+    Exon_region        <- as.vector(unlist(apply(features$Exon,1,function(x){return(x[1]:x[2])})))
+    ExonSNPS           <- is.element(matrix_pos,Exon_region)
+    Exon_region_length <- length(Exon_region)
+   }else{ExonSNPS<-NaN;Exon_region_length<-0}
    
+   if(length(features$Coding)>0){ 
+    Coding_region  <- as.vector(unlist(apply(features$Coding,1,function(x){return(x[1]:x[2])})))
+    CodingSNPS     <- is.element(matrix_pos,Coding_region)
+    Coding_region_length <- length(Coding_region)
+    CodingSNPS2     <- matrix_pos[CodingSNPS]
+    size            <- length(CodingSNPS2)
+   }else{CodingSNPS<-NaN;size<-0;Coding_region_length <- 0}
    
-   IntronSNPS    <- is.element(matrix_pos,Intron_region)
-   UTRSNPS       <- is.element(matrix_pos,UTR_region)
-   CodingSNPS    <- is.element(matrix_pos,Coding_region)
-   
-   IntronSNPS    <- matrix_pos[IntronSNPS]
-   UTRSNPS       <- matrix_pos[UTRSNPS]
-   CodingSNPS    <- matrix_pos[CodingSNPS]
-   
-   size          <- length(CodingSNPS)
-   
-if(size>0){  # wenn SNPS in den codierenden regionen existieren
+if(size>0 & !SNP.DATA){  # wenn SNPS in den codierenden regionen existieren
 
    y <- 1 
    matrix_codonpos <- vector(,3*size)
   
  for(xx in 1:size){
-  x  <- CodingSNPS[xx]
+  x  <- CodingSNPS2[xx]
   if(x%%3==0){matrix_codonpos[y:(y+2)] <- c(x-2,x-1,x);y <- y+3;next;}
   if(x%%3==1){matrix_codonpos[y:(y+2)] <- c(x,x+1,x+2);y <- y+3;next;}
   if(x%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
@@ -307,8 +471,11 @@ if(size>0){  # wenn SNPS in den codierenden regionen existieren
     
  } # Schmeisse das letzte codon raus ! Kommt nur vor wenn die Original Matrix # #  
  
-}else{matrix_codonpos <- NaN;CodingSNPS<- NaN;IntronSNPS <- NaN; UTRSNPS <- NaN}# if size >0 
-}else{CodingSNPS<- NaN;IntronSNPS <- NaN; UTRSNPS <- NaN}# if (bial_sites!=0 & is.list(gff))
+}else{matrix_codonpos <- NaN;CodingSNPS<- NaN;Coding_region_length <- NaN}# if size >0 
+}else{CodingSNPS<- NaN;IntronSNPS <- NaN; UTRSNPS <- NaN;ExonSNPS <- NaN;GeneSNPS<-NaN;
+Coding_region_length<-NaN;Intron_region_length<-NaN;UTR_region_length<-NaN;Exon_region_length<-NaN;Gene_region_length<-NaN}
+
+# if (bial_sites!=0 & is.list(gff))
 # END GFF
 
 
@@ -342,7 +509,9 @@ colnames(TCGA) <- c("T","C","G","A","unknown","GAP")
 
 synnonsyn            <- rep(NaN,bial_sites)
 
-if(!is.na(matrix_codonpos[1]) ){
+if(!SNP.DATA){
+
+ if(!is.na(matrix_codonpos[1]) ){
 
  # GFF 
  testmatrix           <- matr[,matrix_codonpos,drop=FALSE]
@@ -359,6 +528,7 @@ if(!is.na(matrix_codonpos[1]) ){
  synnonsyn[synid]     <- 0 
  synnonsyn[nonsynid]  <- 1 
 
+ }else{syn  <- NaN;nonsyn <- NaN; Codons <- as.list(NaN)}
 }else{syn  <- NaN;nonsyn <- NaN; Codons <- as.list(NaN)}
 #####################################
  
@@ -428,13 +598,17 @@ unic         <- rowSums(unicmatrix,na.rm=TRUE)
 ############################################
 
 #cat("singletons")
- 
+  #
+  
+ #print(IntronSNPS)
+  
 RETURNLISTE <- list(n_site=n_site,transitions=matrix_sv, biallelic.matrix=matrix_pol,
  biallelic.sites=matrix_pos,matrix_codonpos=matrix_codonpos,n.singletons=unic,totalmis=NaN,s_sites=NaN,mvbp=mvbp
 ,trans.transv.ratio=(transitions/transversions),n.valid.sites=algsites,n.biallelic.sites=bial_sites,
 polyallelic.sites=mhitbp,n.nucleotides=sum_sam,biallelic.compositions=TCGA,ROUGH=erg,matrix_freq=matrix_freq,syn=syn,
 nonsyn=nonsyn,synonymous=!as.logical(synnonsyn),biallelic.substitutions=subst,minor.alleles=mutations,codons=Codons,
-CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,sites.with.gaps=gaps,sites.with.unknowns=unknown)
+CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,ExonSNPS=ExonSNPS,GeneSNPS=GeneSNPS,Coding_region_length=Coding_region_length,
+UTR_region_length=UTR_region_length,Intron_region_length=Intron_region_length,Exon_region_length=Exon_region_length, Gene_region_length=Gene_region_length, sites.with.gaps=gaps,sites.with.unknowns=unknown)
 
 
 return(RETURNLISTE)

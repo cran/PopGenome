@@ -1,5 +1,5 @@
 
-calc_hwhafsth <- function(matrix_pol,populations,outgroup=FALSE,simulation=FALSE){
+calc_hwhafsth <- function(matrix_pol,populations,outgroup=FALSE,simulation=FALSE,only.haplotype.counts=FALSE){
 
 
 # Imprtant for Coalescent Simulation
@@ -34,14 +34,18 @@ init2   <- matrix(0,npops,npops)
 
 rowcol <- which(is.na(matrix_pol),arr.ind=TRUE)
 if(length(rowcol)!= 0){
- col <- unique(rowcol[,"col"])
+
+ col         <- unique(rowcol[,"col"])
  matrix_hap  <- matrix_pol[,-col,drop=FALSE]
  numvec      <- as.numeric(matrix_hap)
  matrix_hap  <- matrix(numvec,ncol=dim(matrix_hap)[2],nrow=dim(matrix_hap)[1])
+
 }else{
+
  matrix_hap <- matrix_pol
  matrix_hap <- as.numeric(matrix_hap)
  matrix_hap <- matrix(matrix_hap,dim(matrix_pol)[1] , dim(matrix_pol)[2])
+
 }
  
 
@@ -83,7 +87,7 @@ rownames(matrix_hap) <- NULL
  }
 
 # If there is only one Haplotype in the whole Population
-if(nhgesamt==1){return(list(matrix_hap=as.matrix(NaN),hapw=0,nhgesamt=nhgesamt,nh=nh,hapa=as.matrix(0),hapamatrix=as.matrix(NaN),hapw1all=NaN,hapa1all=NaN,
+if(nhgesamt==1||only.haplotype.counts){return(list(matrix_hap=as.matrix(NaN),hapw=0,nhgesamt=nhgesamt,nh=nh,hapa=as.matrix(0),hapamatrix=as.matrix(NaN),hapw1all=NaN,hapa1all=NaN,
 fsth1all=NaN,fsth=as.matrix(NaN),fsthmatrix=as.matrix(NaN),fsthALL=NaN,sfreqh=sfreqh,Gst=as.matrix(NaN),Gstmatrix=as.matrix(NaN),GstAll=NaN,PIW_nei=0,
 PIA_nei=as.matrix(NaN),HST=NaN,HSTpair=as.matrix(NaN),Gst_Hudson=NaN,Gst_Hudson_pair=as.matrix(NaN),KST=NaN,fstnALL= NaN))}
 #-------------------------------------------
@@ -657,9 +661,13 @@ apply(matrix_a,1,function(x){
      freq   <- 0
      for (yy in 1:dim(matrix_b)[1]){
          comp_b <- matrix_b[yy,]
-         if(all(comp_a==comp_b)){
-            freq <- freq + 1      
-         }        
+        # if(all(comp_a==comp_b)){
+        #    freq <- freq + 1      
+        # }
+	  
+ 	  if(.Call("Ccompare",comp_a,comp_b)){
+		freq <- freq + 1
+	  }    
      }
  return(freq)
      }) 
