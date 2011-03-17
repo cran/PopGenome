@@ -1,3 +1,6 @@
+
+useDynLib(PopGenome)
+
 exportClass(GENOME)
 exportMethods(neutrality.stats)
 exportMethods(linkage.stats)
@@ -8,6 +11,8 @@ exportMethods(sliding.window.transform)
 exportMethods(show.slots)
 exportMethods(get.status)
 exportMethods(MKT)
+
+
 
 exportMethods(get.sum.data)
 exportMethods(get.neutrality)

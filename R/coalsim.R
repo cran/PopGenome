@@ -447,6 +447,8 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 		
 		mscall <- paste(mscall, nsam[cloci], niter, " -t", theta[cloci], param)#-------------------------------------- rufe ms auf !!!!!!
                 output <- system(mscall, intern=TRUE)
+                
+
   	  	# process/save ms input parameters (i.e. first line)
   		line1 <- unlist(strsplit(output[1], " "))
 	
@@ -535,6 +537,7 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                                    # haplotypes is the biallelic matrix
 					           # analyse sample
 					                                      
+
                                                ## STATISTICS ########################################
                                                if(neutrality){
                                                  obj       <- calc_freqstats(haplotypes,Populations)

@@ -5,13 +5,13 @@ methods <- "DATA"
 
 
 ########################
- if (.Platform$OS.type == "unix") {
- path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.so")
- }else{
- ## muss je nach 32 64 Win geändert werden !
- path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.dll")
- }
- dyn.load(path_C_code,PACKAGE="PopGenome")
+# if (.Platform$OS.type == "unix") {
+# path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.so")
+# }else{
+# ## muss je nach 32 64 Win geändert werden !
+# path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.dll")
+# }
+# dyn.load(path_C_code,PACKAGE="PopGenome")
 ########################
   
  

@@ -1,8 +1,10 @@
-# .First.lib <- function(lib,pkg){
+#.onLoad <- function(lib,pkg){
 
-# library.dynam("readdnacpp.o",package="PopGenome")
+#.First.lib <- function(lib,pkg){
 
-# library.dynam("readdnapp",package="PopGenome")
+  #library.dynam("PopGenome.so",package="PopGenome")
 
-# }
+ # library.dynam("PopGenome",package="PopGenome")
+
+#}
 

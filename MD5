@@ -1,5 +1,5 @@
-3ba8a6361c28774f57bf3e55333582fd *DESCRIPTION
-0d3d1190c6b55134bdc1b27c3452810f *NAMESPACE
+419f2225bbc44e6231186a8f8d540a2c *DESCRIPTION
+821afee5da23ba8a3a53de3e4ccdffb9 *NAMESPACE
 e5026cfb8a9e82e0dcd479535015a2ce *R/DATA.R
 2284dfd6c7fe59bc51dc9c9c73210016 *R/DsDn.R
 fab185a839eab0f111ef5fedd79b0a11 *R/DsPsDnPn.R
@@ -17,7 +17,7 @@ fc765ee9edc47c6c60ae6088fc57e1be *R/calc_FS.R
 0c5bfdb4d59994b5ca40c046b1db2254 *R/calc_hwhafsth.R
 cbb012ad4638b88beedf5f176e2b0314 *R/calc_sxsfss.R
 b8a9a9dc3e95153488ad62e032440c5c *R/checkpoppairs.R
-dbbceffe786eb4b26393e8623394f0e2 *R/coalsim.R
+ea2cdd23636685f430f26b57affded8d *R/coalsim.R
 3d03f456c4bd3b8d27b9fc0e0db8f34d *R/codonise64.R
 212c80a8ceb970c0c1cba797a384ba18 *R/codontable.R
 7dfd0eb8af68b0135d2f0d74f8c21485 *R/counthaplotype.R
@@ -52,14 +52,13 @@ cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 49ea24d18764eee1272535c944864be9 *R/popgen.R
 50d308a74383b8a8670e49f31c8290df *R/probabilities.R
 189b38a65cdddf9aca2c02069d64c679 *R/progress.R
-cb5ae429c54137779396284391d4dc31 *R/readData.R
+386a3e8594e1c69518c4b00c13f14c7a *R/readData.R
 9a186b3d39f7a161662fa738874c6a02 *R/slidingWindow.R
-68ebc85d518e44cd9ddb23ce68e41acc *R/snn.R
 97e742ce1482b9ce08d52c019d0bc445 *R/sortmatrix.R
 113ab2f159203de9eb5e15a7abddbd0a *R/testparamsClass.R
 95b69822023aaeebdb1dbec19aa5048c *R/tn93.R
 97f120ae0313b21b53fd9b1bcaf51b46 *R/wall99bq.R
-4c44379a17b7a5bdd44a0f0b476ca5bb *R/zzz.R
+39437ab5e77aac260fa7a513ad30556c *R/zzz.R
 a2688390ef4ffed511cfff87bc37bd33 *man/F_ST.stats-methods.Rd
 4541bacd31b1e830c5cc275b79d03995 *man/GENOME-class.Rd
 1bcaf0383b0c28a50230bb3c4bfed083 *man/MKT-methods.Rd
