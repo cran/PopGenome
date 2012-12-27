@@ -71,7 +71,13 @@ for (xx in 1:length(liste)){
  # Split by chromosomes
  chr             <- f.data[[xx]][,2]
  individuals[xx] <- as.character(f.data[[xx]][1,1])
+
+ if(nchar(chr[1])>1){
  chr.pos         <- match(1:5,substr(chr,4,4))
+ }else{
+ chr.pos         <- match(1:5,chr)
+ }
+
  chromosomes     <- which(!is.na(chr.pos))    # which chromosomes are in the file ?
  chr.pos         <- chr.pos[!is.na(chr.pos)]
  chr.pos         <- c(chr.pos,length(chr))

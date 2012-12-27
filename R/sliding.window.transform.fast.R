@@ -3,15 +3,26 @@
 ##################################################################################
 
 
-setGeneric("sliding.window.transform.fast", function(object,width=7,jump=5,type=1) standardGeneric("sliding.window.transform.fast"))
+setGeneric("sliding.window.transform.fast", function(object,width=7,jump=5,type=1,start.pos=FALSE, end.pos=FALSE) standardGeneric("sliding.window.transform.fast"))
  setMethod("sliding.window.transform.fast", "GENOME",
 
- function(object,width,jump,type){
+ function(object,width,jump,type,start.pos,end.pos){
   
 
 ## PROGRESS #########################
  progr <- progressBar()
 #####################################
+
+
+# When you want to scan a specific region
+
+if(start.pos[1]!=FALSE){
+  object     <- splitting.data(object, positions=list(start.pos:end.pos), type=type)
+  cat("\n")
+}else{
+  start.pos  <- 0
+}
+
 
 genomeobj               <-  new("GENOME") 
 ddatt                   <-  new("region.data")
@@ -19,8 +30,12 @@ XXX                     <-  object@region.data
 
 
  if(object@big.data){
-  #bial <- object@region.data@biallelic.matrix[[1]]
-   open(object@region.data@biallelic.matrix[[1]])
+  # bial <- object@region.data@biallelic.matrix[[1]]
+
+   if(is(object@region.data@biallelic.matrix[[1]])=="ff_matrix"){
+      open(object@region.data@biallelic.matrix[[1]]) # FIXME
+   }
+ 
    genomeobj@BIG.BIAL[[1]] <- object@region.data@biallelic.matrix[[1]] 
    bial                    <- object@region.data@biallelic.matrix[[1]]
    #close(object@region.data@biallelic.matrix[[1]])
@@ -55,11 +70,12 @@ XXX                     <-  object@region.data
         
         start      <- ((zz-1) * jump + 1)
         end 	   <- ((zz-1) * jump + width) 
-        NAMES[zz]  <- paste(start,"-",end,":")
+        
         
 
        if(type==1){
      
+         NAMES[zz]   <- paste(start,"-",end,":")
          window	     <- start:end   
          n.sites[zz] <- XXX@biallelic.sites[[1]][end] -  XXX@biallelic.sites[[1]][start] + 1     
     
@@ -86,16 +102,19 @@ XXX                     <-  object@region.data
         
              
         if(type==2){
-      
-             n.sites[zz]          <- end - start + 1       
+      	    	    
+             n.sites[zz]          <- (end + start.pos) - (start + start.pos) + 1       
+
+             NAMES[zz]            <- paste(( start + start.pos ),"-", (end + start.pos) ,":")
 
              # ids            <- (bial.sites >= start) & (bial.sites<=end) 
              # bialpos        <- which(ids)
              # if(length(bialpos)==0){next}
 
+            
  
              # FASTER ! but check if runs correctly again  !
-                bialpos            <- .Call("find_windowC",bial.sites,start,end,MERKEN)
+                bialpos            <- .Call("find_windowC",bial.sites,(start+start.pos),(end+start.pos),MERKEN)
                 if(length(bialpos)>0){
                    bialpos        <- bialpos[1]:bialpos[2] 
                    MERKEN         <- bialpos[1] 

@@ -279,7 +279,15 @@ if(obj@big.data){
 
   rows_bial        <- dim(obj@region.data@biallelic.matrix[[1]])[1]
   cols_bial        <- sum(obj@n.biallelic.sites)
-  biallelic.matrix <- ff(0,dim=c(rows_bial,cols_bial))
+
+  if(rows_bial*cols_bial>.Machine$integer.max){
+    print("Warning: Matrix too big for ff package --> using the bigmemory package! ")
+    options(bigmemory.allow.dimnames=TRUE)
+    biallelic.matrix <- filebacked.big.matrix(backingfile="BIGBIAL",ncol=cols_bial,nrow=rows_bial, type="double")
+  }else{
+    biallelic.matrix <- ff(0,dim=c(rows_bial,cols_bial))
+  }
+
   rownames(biallelic.matrix) <- rownames(obj@region.data@biallelic.matrix[[1]])
 
   # init the gff informations
@@ -358,8 +366,11 @@ if(snp.data){
   ADD.SITES <- obj@n.sites
 } 
 
+
+cat("\n")
+cat("Concatenate regions \n")
 ### Progress
-# progr <- progressBar()
+ progr <- progressBar()
 ###
 
 
@@ -630,10 +641,11 @@ stat      <- obj@region.stats
       #region.names        <- c(region.names,obj@region.names[xx]) 	
 
 ## Progress
-# progr <- progressBar(xx,n.chunks, progr)
+ progr <- progressBar(xx,n.chunks, progr)
 ####
 
 }
+cat("\n")
 
 # FILL THE NEW OBJECT OF CLASS GENOME
 

@@ -1,13 +1,23 @@
-setGeneric("sliding.window.transform.new", function(object,width=7,jump=5,type=1) standardGeneric("sliding.window.transform.new"))
+setGeneric("sliding.window.transform.new", function(object,width=7,jump=5,type=1,start.pos=FALSE,end.pos=FALSE) standardGeneric("sliding.window.transform.new"))
  setMethod("sliding.window.transform.new", "GENOME",
 
- function(object,width,jump,type){
+ function(object,width,jump,type,start.pos,end.pos){
 
 n.region.names  <- length(object@region.names)
 
 ## PROGRESS #########################
  progr <- progressBar()
 #####################################
+
+
+if(start.pos[1]!=FALSE){
+  object     <- splitting.data(object, positions=list(start.pos:end.pos), type=type)
+  cat("\n")
+}else{
+  start.pos  <- 0
+}
+
+
 
 genomeobj               <-  new("GENOME") 
 ddatt                   <-  new("region.data")
@@ -86,10 +96,10 @@ for(xx in 1:n.region.names){
         
        
         if(type==2){
-      
-                 bialpos            <- .Call("find_windowC",bial.sites,start,end,MERKEN)
+                   
+                 bialpos            <- .Call("find_windowC",bial.sites,(start + start.pos),(end + start.pos),MERKEN)
                  
-                 n.sites[count]     <- end - start + 1
+                 n.sites[count]     <- (end + start.pos) - (start + start.pos) + 1
                  
                 #if(length(bialpos)>0){
                 #   bialpos        <- bialpos[1]:bialpos[2] 

@@ -43,12 +43,14 @@ for (int i = 0; i < J; i++){
 
  for (int j = 0; j < I; j++){
 
-   value2 = Rval[j +I*i];
+   value2 = Rval[j + I*i];
   
    //printf("%f",value1);
   
    if(value2==6){break;}
-   if(value2==5){break;}  
+
+   if(value2==5){break;}
+  
    if(value1!=value2){
         //printf("Treffer");
 	INTEGER(ret)[i]=1; // polymorphic

@@ -33,6 +33,7 @@ exportMethods(get.sweeps)
 exportMethods(region.as.fasta)
 
 export(create.PopGenome.method)
+export(concatenate_to_whole_genome)
 export(get_gff_info)
 export(popGetBial)
 export(BayeScanR)

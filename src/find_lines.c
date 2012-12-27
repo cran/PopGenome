@@ -149,6 +149,7 @@ SEXP find_lines_SNP (SEXP RRfilename, SEXP RRchromosome) {
                          
 
              while((ch = fgetc(fp))!='\t');
+
              ch = fgetc(fp);
              
              if(ch=='c' || ch=='C'){  

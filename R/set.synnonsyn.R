@@ -29,14 +29,18 @@ Coding.matrix            <- Coding.matrix
 #START                   <- START[ids]
 #Coding.matrix           <- Coding.matrix[ids,,drop=FALSE]
 
+# define an evironment
+synGLOBAL <- new.env() 
 
 # Create Region and save size of region 
-SIZE  <<- numeric(dim(Coding.matrix)[xyz])
-count <<- 1
+synGLOBAL$SIZE  <- numeric(dim(Coding.matrix)[xyz])
+synGLOBAL$count <- 1
+
 erg  <- apply(Coding.matrix,1,function(xx){
- region        <- xx[1]:xx[2] 
- SIZE[count]   <<- length(region)
- count         <<- count + 1 
+
+ region                            <- xx[1]:xx[2] 
+ synGLOBAL$SIZE[synGLOBAL$count]   <- length(region)
+ synGLOBAL$count                   <- synGLOBAL$count + 1 
  return(region)
 
 })
@@ -48,11 +52,13 @@ erg  <- apply(Coding.matrix,1,function(xx){
  #return(bial.pos)
  bial.pos    <- biallelic.sites[bial.pos]
 
+
 # Create Start Vector
- count <<- 1
+ synGLOBAL$count <- 1
  vec <- sapply(START,function(x){
-      gg    <- rep(x,SIZE[count])       
-      count <<- count + 1
+      gg              <- rep(x,synGLOBAL$SIZE[synGLOBAL$count])       
+      synGLOBAL$count <- synGLOBAL$count + 1
+
  return(gg)
  })
 

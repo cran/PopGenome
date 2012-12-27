@@ -1,21 +1,31 @@
+Changes in PopGenome 1.2.1
+=========================
+
+BUGS FIXED:
+
+- sliding.window.transform(): BUG in concatenating the regions 
+- readSNP(): chromosome-ids like "1","2" ... are also accepted.
+- the functon concatenate_to_whole_genome() is now visible
+- load.session()
+
+
+NEW FEATURES:
+
+- scan the data now from a start to an end-position (sliding.window.transform())
+- using the bigmemory package for HUGE data sets
+- vignettes on CRAN
+
 
 Changes in PopGenome 1.2.0
 =========================
 
-- new implented C++ functions to read alignments in several formats
-
+- new implemented C++ functions to read alignments in several formats
 - using the ff-package to handle big data
-
 - reading SNP data from 1000/1001 Genome project
-
 - new features (create.PopGenome.method, region.as.fasta ...)
-
 - set.synnonsyn() to verify synonymous/non-synonymous sites of SNP-data 
-
 - new methods (Achaz, ...)
-
 - speed up calculations (C++ functions, multicore computation)
-
 - splitting.data() to analyse subsites like exon, gene, intron ...
 
  

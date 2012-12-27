@@ -35,7 +35,7 @@ individuals * (number of SNPs) <= .Machine$integer.max \cr
 Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr 
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
 to get the individual names. \cr
-
+Otherwise PopGenome will use the bigmemory package.
 }
 
 \value{

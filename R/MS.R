@@ -276,6 +276,9 @@ if(length(popGetBial(GENO,xx))!=0){
 }else{locusData        <- c(locusData,NA)}  # Wenn überhaupt Segregating Sites existieren
 
 
+    if(nloci > 1000){
+    cat(xx ," of ,", nloci, "\n" )
+    }
 
 # PROGRESS #######################################################
     progr <- progressBar(xx,nloci, progr)

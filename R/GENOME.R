@@ -923,7 +923,7 @@ popGetBial <- function( XX , bialmatNr )
      bial <- XX@region.data@biallelic.matrix[[bialmatNr]][,,drop=FALSE]
      if(XX@big.data){close(XX@region.data@biallelic.matrix[[bialmatNr]])}# da zuviele ff files open... muss nich !
     }else{ 
-     #if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss kurioserweise nich !
+      if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss nur wegen BIGMEMORY package !
      # open(XX@BIG.BIAL[[1]])
      bial <- XX@BIG.BIAL[[1]][,XX@SLIDE.POS[[bialmatNr]],drop=FALSE]
     }
@@ -2770,31 +2770,34 @@ return(pops1)
 ##################################################################################
 
 
-setGeneric("sliding.window.transform", function(object,width=7,jump=5,type=1,whole.data=TRUE) standardGeneric("sliding.window.transform"))
+setGeneric("sliding.window.transform", function(object,width=7,jump=5,type=1,start.pos=FALSE,end.pos=FALSE,whole.data=TRUE) standardGeneric("sliding.window.transform"))
  setMethod("sliding.window.transform", "GENOME",
 
- function(object,width,jump,type,whole.data){
+function(object,width,jump,type,start.pos,end.pos,whole.data){
 
 n.region.names  <- length(object@region.names)
 
 if(whole.data){
 
-  if(n.region.names > 1 && length(object@BIG.BIAL[[1]])==0){
+  if(n.region.names > 1 && length(object@BIG.BIAL)==0){ # check BIG.BIAL when you split the data before
 
     object         <- concatenate_to_whole_genome(object,n.region.names)
     n.region.names <- 1
-
+  
   }
 
- SPLIT <- sliding.window.transform.fast(object,width,jump,type)
+
+ SPLIT <- sliding.window.transform.fast(object,width,jump,type,start.pos,end.pos)
+
  return(SPLIT)
+
 
 }else{
  
  if(object@snp.data){
   RETURN <- slide.snp.sep(object,width,jump,type) 
  }else{
-  RETURN <- sliding.window.transform.new(object,width,jump,type)
+  RETURN <- sliding.window.transform.new(object,width,jump,type,start.pos,end.pos)
  }
  return(RETURN)
 

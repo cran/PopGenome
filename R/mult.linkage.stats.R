@@ -40,12 +40,14 @@ setGeneric("mult.linkage.stats", function(object,new.populations="list",lower.bo
 
 # End of checking populations ---------------------------------
 
+ # define an evironment
+ multGLOBAL <- new.env()
 
+ pairs      <- combn(length(object@region.names),2)
+ n.pairs    <- dim(pairs)[2]
 
- pairs    <- combn(length(object@region.names),2)
- n.pairs  <- dim(pairs)[2]
- res      <<- vector("list",n.pairs)
- iter     <<- 1
+ multGLOBAL$res        <- vector("list",n.pairs)
+ multGLOBAL$iter       <- 1
 
 #### NAMES ----------------------------------------
 pp <- pairs
@@ -68,8 +70,8 @@ exx <- apply(pairs,2,function(xx){
 	bial1 <- popGetBial(object,xx[1])
 	bial2 <- popGetBial(object,xx[2])
 
-        if(length(bial1)==0){iter <<- iter + 1;return(0)}
-	if(length(bial2)==0){iter <<- iter + 1;return(0)}
+        if(length(bial1)==0){multGLOBAL$iter <- multGLOBAL$iter + 1;return(0)}
+	if(length(bial2)==0){multGLOBAL$iter <- multGLOBAL$iter + 1;return(0)}
 
 	# Get the frequencies
         freq1 <- jointfreqdist(bial1,populations) 
@@ -85,20 +87,20 @@ exx <- apply(pairs,2,function(xx){
         bial1 <- bial1[,subsites1,drop=FALSE]
         bial2 <- bial2[,subsites2,drop=FALSE]
 
- 	res[[iter]]   <<- pair_linkdisequ(bial1,bial2,populations)
+ 	multGLOBAL$res[[multGLOBAL$iter]]   <- pair_linkdisequ(bial1,bial2,populations)
      
-
  # PROGRESS #######################################################
-    progr <- progressBar(iter,dim(pairs)[2], progr)
- ###################################################################   
+    progr <- progressBar(multGLOBAL$iter,n.pairs, progr)
+ ################################################################### 
 
-        iter          <<- iter + 1
+        multGLOBAL$iter          <- multGLOBAL$iter + 1
 
- 
+   
+
 
  })
 
-res           <- as.matrix(res)
+res           <- as.matrix(multGLOBAL$res)
 rownames(res) <- nn
 colnames(res) <- "region-pairwise Linkage"
 object@mult.Linkage <- res

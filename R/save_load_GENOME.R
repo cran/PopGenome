@@ -121,10 +121,8 @@ change     <- object@region.data
     for(xx in 1:length(object@region.data@biallelic.matrix)){
       
       file.name      <-  paste("bial_",xx,sep="")
-      ffload(file.name)
-      ls()
-      ff.object      <-  get("bial")
-      rm(.GlobalEnv$bial)
+      ffload(file.name)     
+      ff.object      <-  get("bial")  
       change@biallelic.matrix[[xx]] <- ff.object
       open(change@biallelic.matrix[[xx]])
       

@@ -27,7 +27,7 @@ get_gff_info(object=FALSE,gff.file,chr,position)
 }  
 
 \details{
-coming soon !
+This function extract annotation informations from a gtf/gff file.
 }
 
 

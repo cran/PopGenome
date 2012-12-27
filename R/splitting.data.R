@@ -4,9 +4,9 @@ setGeneric("splitting.data", function(object,subsites=FALSE, positions=FALSE, ty
  function(object,subsites,positions,type,whole.data){
 
 
-if(subsites[1]!=FALSE & !object@gff.info){
-stop("No GFF/GTF informations !")
-}
+# if(subsites[1]!=FALSE & !object@gff.info){
+# stop("No GFF/GTF informations !")
+# }
 
 ## SNP DATA SCAN DATA SEPERATELY !
 if(whole.data==FALSE){
@@ -261,14 +261,28 @@ ddatt@biallelic.substitutions <- biallelic.substitutions
 
 
 ## NEW --
-if(length(genomeobj@BIG.BIAL[[1]])>0){
+
+if(length(genomeobj@BIG.BIAL)>0){
 
   ffpos                       <- unlist(SLIDE.POS)
   if(length(ffpos)==0){stop("No SNPs in this region !")}
-  open(genomeobj@BIG.BIAL[[1]])
+   
+  if(object@big.data){
+     if(is(genomeobj@BIG.BIAL[[1]])=="ff_matrix"){
+        open(genomeobj@BIG.BIAL[[1]])
+     }
+
+  }
+
+  
   newbial                     <- genomeobj@BIG.BIAL[[1]][,ffpos]
   ddatt@biallelic.matrix[[1]] <- ff(newbial , dim=c( dim(newbial)[1], length(ffpos) ) )
-  close(ddatt@biallelic.matrix[[1]])
+
+  if(object@big.data){
+   if(is(genomeobj@BIG.BIAL[[1]])=="ff_matrix"){
+      close(ddatt@biallelic.matrix[[1]])
+   }
+  }
 
 }
 ### -----

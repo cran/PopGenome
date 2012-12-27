@@ -20,7 +20,15 @@ if(FAST){
 #UTR_region_length=UTR_region_length,Intron_region_length=Intron_region_length,Exon_region_length=Exon_region_length, #Gene_region_length=Gene_region_length, sites.with.gaps=gaps,sites.with.unknowns=unknown) 
 
  
- biallelic.sites <- which(bialpos)
+biallelic.sites <- which(bialpos)
+
+
+if(length(biallelic.sites)==0){
+# print("No biallelic positions !")
+return(NA)
+}
+
+
  SUBMAT          <- matr[,bialpos,drop=FALSE]
 
  ## very fast ---------------
@@ -34,10 +42,7 @@ if(FAST){
  n.transversions         <- length(biallelic.sites) - n.transitions
  tt.ratio                <- n.transitions/n.transversions 
 
-if(length(biallelic.sites)==0){
-# print("No biallelic positions !")
-return(NA)
-}
+
 
 ## GFF-File
 # GFF

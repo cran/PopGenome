@@ -181,6 +181,13 @@ res         <- readData(outdir,populations = FALSE, outgroup=FALSE, include.unkn
                 parallized=FALSE,progress_bar_switch=TRUE,
                 FAST=TRUE,big.data=TRUE,SNP.DATA=TRUE)
 
+
+if(res@genelength>1){
+
+ res <- concatenate_to_whole_genome(res,res@genelength)
+
+}
+
 # Delete
 unlink("SNPRObjects", recursive=TRUE)
 if(GFF){unlink("GFFRObjects", recursive=TRUE)}

@@ -76,7 +76,7 @@ big.data: \cr \cr
 SNP.DATA: \cr \cr
 
 - should be switched to \code{TRUE}, if you use SNP-data in alignment format. \cr \cr
-- no synonymous/nonsynonymous positions ! Coming soon. \cr \cr
+- for synonymous/nonsynonymous positions ! see set.synnonsyn(). \cr \cr
 
 }
 

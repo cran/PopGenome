@@ -610,12 +610,12 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                              ## STATISTICS ########################################
                                                if(neutrality){
 
-                                                 obj      <- calc_freqstats(haplotypes,Populations)
-                                                 SEG      <- obj$THETA["S",]
-                                                 thetaT   <- obj$THETA["thetaT",]
-                                                 thetaS   <- obj$THETA["thetaS",]
+                                                 obj      <- calc_freqstats_FAST(haplotypes,Populations)
+                                                 SEG      <- obj$THETA[1,]
+                                                 thetaT   <- obj$THETA[3,]
+                                                 thetaS   <- obj$THETA[2,]
                                                  TD       <- obj$taj_D
-                                                 R2       <- calcR2(haplotypes,Populations,thetaT,SEG)
+                                                 # R2       <- calcR2(haplotypes,Populations,thetaT,SEG)
                                                  FuLi_F   <- obj$FuLi_F
                                                  FuLi_D   <- obj$FuLi_D
                                                  HnFw     <- obj$HnFw
@@ -623,8 +623,10 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                                  nix      <- rep(NaN,npop)
                                                  FS       <- nix
                                                  Strobeck <- nix
+                                                 R2       <- nix
 
                                                if(detail){
+
                                                 obj2     <- calc_FS(haplotypes,Populations,thetaT) 
                                                 FS       <- obj2$FS
                                                 Strobeck <- obj2$Strobeck
