@@ -13,7 +13,7 @@
 \usage{
 
 readVCF(filename, numcols, tid, frompos, topos,
-        samplenames=NA, gffpath = FALSE )
+        samplenames=NA, gffpath = FALSE, include.unknown=FALSE )
 
 }
 
@@ -26,16 +26,19 @@ readVCF(filename, numcols, tid, frompos, topos,
   \item{topos}{end of the region}
   \item{samplenames}{a vector of individuals}
   \item{gffpath}{the corresponding GFF-file}
+  \item{include.unknown}{including unknown positions}
 }
 
 \details{
 
 The ff-package we use to store the SNP informations is limited by \cr
 individuals * (number of SNPs) <= .Machine$integer.max \cr
+Otherwise the bigmemory package will be applied. (slower) \cr
 Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr 
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
 to get the individual names. \cr
-Otherwise PopGenome will use the bigmemory package.
+See also readData(..., format="VCF") !
+
 }
 
 \value{

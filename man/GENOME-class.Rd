@@ -8,6 +8,7 @@
 \alias{F_ST.stats}
 \alias{F_ST.stats.2}
 \alias{detail.stats}
+\alias{diversity.stats}
 \alias{MKT}
 \alias{recomb.stats}
 \alias{sweeps.stats}
@@ -57,6 +58,7 @@
     \item{\code{outgroup}:}{A vector of outgroup sequences}
     \item{\code{region.names}:}{Names/identifier of each region}
     \item{\code{genelength}:}{Number of regions }
+    \item{\code{keep.start.pos}:}{position of start for sliding window}
     \item{\code{n.sites}:}{Total number of sites calculated}
     \item{\code{n.sites2}:}{Total number of sites calculated}
     \item{\code{n.biallelic.sites}:}{Number of biallelic sites (SNPs) }
@@ -101,6 +103,7 @@
     \item{\code{Hudson.H_ST}:}{HST from Hudson}
     \item{\code{Hudson.K_ST}:}{KST from Hudson}
     \item{\code{Hudson.Snn}:}{Snn from Hudson}
+    \item{\code{Phi_ST}:}{Fixation index from Excoffier}
     \item{\code{hap.pair.F_ST}:}{---}
     \item{\code{MKT}:}{Mcdonald-Kreitman values}
     \item{\code{Tajima.D}:}{Tajima D statistic}
@@ -141,6 +144,7 @@
 \section{Methods}{
   \describe{
     \item{detail.stats}{Several statistics}
+    \item{diversity.stats}{Haplotype and Nucleotide Diversities}
     \item{F_ST.stats.2}{Snn Hudson }
     \item{F_ST.stats}{Fixation index }
     \item{getBayes}{Get the input for BayeScanR}

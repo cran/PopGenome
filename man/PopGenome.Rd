@@ -11,7 +11,7 @@
 }
 \description{
 
-R-package for Population genetic analysis
+R-package for Population genetic & genomic analysis
 
 }
 \details{
@@ -19,6 +19,7 @@ R-package for Population genetic analysis
 Index:
 \preformatted{
 F_ST.stats               Fixation index
+diversity.stats          Diversities
 MKT                      McDonald & Kreitman test
 MS                       Coalescent simulation
 detail.stats             Several statistics

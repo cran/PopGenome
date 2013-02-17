@@ -14,7 +14,7 @@
 
 \usage{
 
-\S4method{F_ST.stats.2}{GENOME}(object,new.populations="list",snn=TRUE)
+\S4method{F_ST.stats.2}{GENOME}(object,new.populations="list",subsites=FALSE,snn=TRUE,Phi_ST=FALSE)
 
 }
 
@@ -22,7 +22,22 @@
 
   \item{object}{An object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default=\code{FALSE}}
-  \item{snn}{Snn statistic fron Hudson}
+  \item{subsites}{ 
+
+                  \code{"transitions"}: SNPs which are transitions. \cr
+                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"syn"}: synonymous sites. \cr
+                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"exon"}: SNPs in exon regions. \cr
+                  \code{"intron"}: SNPs in intron regions. \cr
+                  \code{"coding"}: SNPs in coding regions (CDS). \cr
+                  \code{"utr"}:  SNPs in UTR regions. \cr
+                  \code{"gene"}: SNPs in genes. \cr
+		  \code{"intergenic"} : SNPs in intergenic regions. \cr
+  } 
+
+  \item{snn}{Snn statistic from Hudson}
+  \item{Phi_ST}{Statistic from Excoffier et al}
 
 }
 
@@ -37,12 +52,17 @@ Following slots will be modified in the \code{"GENOME"}  object \cr
 \tabular{rlll}{
             \tab Slot                	\tab Reference   \tab Description\cr
           1.\tab \code{Hudson.Snn}	\tab [1]         \tab Snn statistic from Hudson (2000) \cr
+          2.\tab \code{Phi_ST}	        \tab [2]         \tab Phi_ST from Excoffier(1992)      \cr 
           }
 
 }
 
 \references{
-[1] Hudson, R. R. (2000).\emph{A new statistic for detecting genetic differentiation.} Genetics 155: 2011-2014.
+[1] Hudson, R. R. (2000).\emph{A new statistic for detecting genetic differentiation.} Genetics 155: 2011-2014.\cr
+
+[2] Excoffier, L., Smouse, P., Quattro, J. (1992),\emph{Analysis of molecular variance inferred from met- \cr
+    ric distances among DNA haplotypes: application to human mitochondrial DNA restriction data.} \cr
+    Genetics 131: 479-91
 }
 
 \examples{

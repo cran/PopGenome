@@ -50,7 +50,8 @@ If there is no gff-file specified, an alignment in the right reading frame is ex
 format: \cr \cr 
 
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
-\code{"MAF"},\code{"MEGA"},\code{"HapMap"}, \cr
+\code{"MAF"},\code{"MEGA"},\code{"HapMap"},\code{"VCF"}, 
+\code{"VCFhap"} (haploid), \cr
 \code{"RData"} \cr \cr
 
 parallized: \cr \cr
@@ -60,8 +61,8 @@ parallized: \cr \cr
 
 FAST:   \cr \cr
 
-- fast computation of biallelic sites and transversions/transitions \cr
-- information about gap/unknown positions are ignored \cr \cr
+- fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
+  and biallelic substitutions                    
 
 
 big.data: \cr \cr
@@ -76,7 +77,6 @@ big.data: \cr \cr
 SNP.DATA: \cr \cr
 
 - should be switched to \code{TRUE}, if you use SNP-data in alignment format. \cr \cr
-- for synonymous/nonsynonymous positions ! see set.synnonsyn(). \cr \cr
 
 }
 

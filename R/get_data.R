@@ -8,8 +8,15 @@ get_data <- function(matr,include.unknown=FALSE,gff=FALSE,FAST,SNP.DATA){
 
 if(FAST){
  
+  
+  if(include.unknown){
+  bialpos <- .Call("polyCinclude",matr)
+  }else{  
   bialpos <- .Call("polyC",matr)
-  bialpos <- as.logical(bialpos)
+  }
+
+
+  # bialpos <- as.logical(bialpos)
 
 #RETURNLISTE <- list(n_site=n_site,transitions=matrix_sv, biallelic.matrix=matrix_pol,
 # biallelic.sites=matrix_pos,matrix_codonpos=matrix_codonpos,n.singletons=unic,totalmis=NaN,s_sites=NaN,mvbp=mvbp
@@ -20,7 +27,11 @@ if(FAST){
 #UTR_region_length=UTR_region_length,Intron_region_length=Intron_region_length,Exon_region_length=Exon_region_length, #Gene_region_length=Gene_region_length, sites.with.gaps=gaps,sites.with.unknowns=unknown) 
 
  
-biallelic.sites <- which(bialpos)
+biallelic.sites    <- which(bialpos==1)
+polyallelic.sites  <- which(bialpos==4)
+
+# gaps            <- which(bialpos==2)
+# unknowns        <- which(bialpos==3)
 
 
 if(length(biallelic.sites)==0){
@@ -29,12 +40,20 @@ return(NA)
 }
 
 
- SUBMAT          <- matr[,bialpos,drop=FALSE]
+ SUBMAT          <- matr[,biallelic.sites,drop=FALSE]
 
  ## very fast ---------------
- res <- .Call("makeBialMatrix",SUBMAT)
- 
- Bial.Mat                <- res[[1]]
+ if(include.unknown){
+ res          <- .Call("makeBialMatrixinclude",SUBMAT)
+ Bial.Mat     <- res[[1]]
+ Bial.Mat[Bial.Mat==-1] <- NaN
+ }else{
+ res           <- .Call("makeBialMatrix",SUBMAT)
+ Bial.Mat      <- res[[1]]
+ }
+
+
+
  transitions             <- as.logical(res[[2]])
  biallelic.substitutions <- res[[3]]
  rownames(biallelic.substitutions) <- c("minor","major")
@@ -94,7 +113,7 @@ features <- gff
 Coding_region_length<-NaN;Intron_region_length<-NaN;UTR_region_length<-NaN;Exon_region_length<-NaN;Gene_region_length<-NaN}
   
 
-return(list(biallelic.matrix=Bial.Mat,biallelic.sites=biallelic.sites,
+return(list(biallelic.matrix=Bial.Mat,biallelic.sites=biallelic.sites,polyallelic.sites=polyallelic.sites,
 transitions=transitions,n.valid.sites=NaN,synonymous=rep(NaN,length(biallelic.sites)),
 trans.transv.ratio=tt.ratio,biallelic.substitutions=biallelic.substitutions,CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,
 ExonSNPS=ExonSNPS,GeneSNPS=GeneSNPS,Coding_region_length=Coding_region_length,

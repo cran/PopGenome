@@ -1,4 +1,6 @@
-readSNP <- function(folder, populations=FALSE,outgroup=FALSE, gffpath=FALSE, CHR=FALSE, ref.chr=FALSE, snp.window.size=FALSE, parallized=FALSE){
+readSNP <- function(folder, populations=FALSE,outgroup=FALSE, gffpath=FALSE, CHR=FALSE, ref.chr=FALSE, snp.window.size=FALSE, parallized=FALSE, ffpackagebool=TRUE, include.unknown=FALSE)
+
+{
 
 
 if(!file.exists(folder)){stop("Cannot find folder !")}
@@ -18,10 +20,8 @@ if(file.exists("SNPRObjects")){unlink("SNPRObjects",recursive=TRUE)}
 if(file.exists("GFFRObjects")){unlink("GFFRObjects",recursive=TRUE)}
 
 
-
-
 ### DEFAULT VALUES for readData()
-include.unknown     <- FALSE
+# include.unknown     <- FALSE
 # parallized          <- FALSE
 progress_bar_switch <- TRUE
 FAST                <- TRUE
@@ -65,13 +65,13 @@ for (xx in 1:length(liste)){
    #f.data[[xx]]    <- read.table.ffdf(file=liste[[xx]])
     f.data[[xx]]    <- read.table(file=liste[[xx]],
                        sep="\t",colClasses=col.specify)
-
  }
 
  # Split by chromosomes
  chr             <- f.data[[xx]][,2]
  individuals[xx] <- as.character(f.data[[xx]][1,1])
 
+ # chr ids like chr1 or 1
  if(nchar(chr[1])>1){
  chr.pos         <- match(1:5,substr(chr,4,4))
  }else{
@@ -85,16 +85,25 @@ for (xx in 1:length(liste)){
  f.split.data    <- vector("list",length(chr.pos)-1)
  ids             <- 1
 
+ 
+
  for (yy in 1:(length(chr.pos)-1)){
  
    block              <- ids:chr.pos[yy + 1]
    ref_alt            <- as.matrix(f.data[[xx]][block,4:5])
    ref_alt            <- .Call("code_nucs",ref_alt)
    reference.pos      <- f.data[[xx]][block,3]
-   f.split.data[[yy]] <- ff(cbind(ref_alt,reference.pos),dim=c(dim(ref_alt)[1],3)) 
+
+     #if(ffpackagebool){
+     f.split.data[[yy]] <- ff(cbind(ref_alt,reference.pos),dim=c(dim(ref_alt)[1],3)) 
+     #}else{
+     #f.split.data[[yy]] <- cbind(ref_alt,reference.pos)   
+     #}
+
    ids                <- chr.pos[yy+1]+1
 
  }
+
  
 f.data2[[xx]] <- f.split.data # seperated by chromosomes
 
@@ -107,6 +116,9 @@ if(CHR[1]==FALSE){
 ###################################################################
 }
 
+# RAM freischaufeln !
+rm(ref_alt)
+rm(reference.pos)
 rm(f.data)
 rm(f.split.data)
 gc()
@@ -121,57 +133,66 @@ SNP.POS      <- vector("list",length(chr.pos)-1)
 cat("\n")
 cat("Prepare ... \n")
 
-# Create SNP Matrix for each Chromosome
-## PROGRESS #########################
- progr <- progressBar()
-#####################################
-for (yy in 1:(length(chr.pos)-1)){
 
+ # Create SNP Matrix for each Chromosome
+ ## PROGRESS #########################
+ progr <- progressBar()
+ #####################################
+
+## FOR LOOP START over Chromosomes
+for (yy in 1:(length(chr.pos)-1)){
    
    # get positions ------------------------------------
    for(xx in 1:length(liste)){   
        POS              <- c(POS,f.data2[[xx]][[yy]][,3])
+       # for saving memory space
+       if(!xx%%50){
+        POS             <- unique(POS)
+       }
    }
    # --------------------------------------------------
-     
-
+  
+    
       POS           <- sort(unique(POS))
      
-
+      if(ffpackagebool){     
       SNP.MATRIX    <- ff (NA,dim=c(length(liste),length(POS)), vmode="integer")
+      }else{
+      SNP.MATRIX    <- matrix(NA,length(liste),length(POS))  
+      }
+
       SNP.POS[[yy]] <- POS
   
    # check what Positions are currently unvisited
    # fill reference first !!!
  
      visited <- vector(,length(POS))
-     
+   
      for(xx in 1:length(liste)){ 
-
-        
-
+    
         # -- neu
-	#IDS                <- .Call("my_match_C",f.data2[[xx]][[yy]][,3],POS) 
-        #not.na             <- IDS!=-1
-        #Keep               <- IDS
-        #IDS                <- IDS[not.na]
+	# IDS                <- .Call("my_match_C",f.data2[[xx]][[yy]][,3],POS) 
+        # not.na             <- IDS!=-1
+        # Keep               <- IDS
+        # IDS                <- IDS[not.na]
         # -- neu ende
 
-        #---alt
-        IDS                <- match(f.data2[[xx]][[yy]][,3],POS) 
-               
+        # ---alt
 
-        not.na             <- !is.na(IDS)
-        Keep               <- IDS
-        IDS                <- IDS[not.na]
-        #--- alt ende	
+         IDS                <- match(f.data2[[xx]][[yy]][,3],POS) 
+               
+         not.na             <- !is.na(IDS)
+         Keep               <- IDS
+         IDS                <- IDS[not.na]
+
+        # --- alt ende	
 
         # welche POS noch nicht besucht 
         IDS                <- IDS[!visited[IDS]]
+
         if(length(IDS)==0){next}
 
-        IDS2               <- match(IDS,Keep)
-            
+        IDS2               <- match(IDS,Keep)          
         fill.mat           <- f.data2[[xx]][[yy]][,1][IDS2]
         fill.mat           <- matrix(rep(fill.mat,length(liste)),length(liste),length(fill.mat),byrow=TRUE)        
         SNP.MATRIX[,IDS]   <- fill.mat 
@@ -180,12 +201,14 @@ for (yy in 1:(length(chr.pos)-1)){
 
      }
 
+   rm(fill.mat)
+   rm(visited)
+   gc()
 
    # fill subsitution !
 
     for(xx in 1:length(liste)){ 
  
-
       # -- neu
       #  IDS                <- .Call("my_match_C",f.data2[[xx]][[yy]][,3],POS) 
       #  not.na             <- IDS!=-1
@@ -197,13 +220,19 @@ for (yy in 1:(length(chr.pos)-1)){
        not.na             <- !is.na(IDS)
        IDS                <- IDS[not.na]
      # alt ende   
-
-     SNP.MATRIX[xx,IDS] <- f.data2[[xx]][[yy]][,2] # fill substitution 
+             
+       SNP.MATRIX[xx,IDS] <- f.data2[[xx]][[yy]][,2] # fill substitution 
      
     }
  
+rm(POS)
+rm(IDS)
+gc()  
+  
 rownames(SNP.MATRIX)  <- individuals
 SNP.MATRICES[[yy]]    <- SNP.MATRIX
+rm(SNP.MATRIX)
+
 POS                   <- NULL   
 
 # PROGRESS #######################################################
@@ -211,6 +240,7 @@ POS                   <- NULL
 ###################################################################
 
 }
+### FOR LOOP END over all Chromosomes
 
 
 #----------------------------------------- Create R Objects ----------------------------------------
@@ -236,20 +266,27 @@ for ( qq in 1:length(SNP.MATRICES) ) {
 
    o_b_j_sub    <- list(matrix=CHUNK.MATRIX,
                    reference=NaN,positions=SNP.POS[[qq]][snp.regions[xx]:(snp.regions[xx+1]-1)])
-   save(o_b_j_sub,file=file.path(getwd(),"SNPRObjects",paste(xx,"chunk_","chr",chromosomes[qq],sep=""))) 
+   save(o_b_j_sub,file=file.path(getwd(),"SNPRObjects",paste(xx,"chunk_","chr",chromosomes[qq],sep="")))
+ 
   }  
-  delete.ff(SNP.MATRICES[[qq]])
+
+  # delete.ff(SNP.MATRICES[[qq]])
+    SNP.MATRICES[[qq]] <- NULL   
+    gc()    
 
  }else{
 
   o_b_j_sub    <- list(matrix=SNP.MATRICES[[qq]][,],reference=NaN,positions=SNP.POS[[qq]])
   save(o_b_j_sub,file=file.path(getwd(),"SNPRObjects",paste("chr",chromosomes[qq],sep="")))
-  delete.ff(SNP.MATRICES[[qq]])
-
+  # delete.ff(SNP.MATRICES[[qq]])
+  SNP.MATRICES[[qq]] <- NULL
  }
 }
 
 #####--------------- corresponding GFF- File ------------------------#
+rm(o_b_j_sub)
+gc()
+
 
 if(gffpath[1]!=FALSE){
 
@@ -354,6 +391,7 @@ cat("\n")
 res <- set.synnonsyn(res,ref.chr=ref.chr)
 }
 
+gc()
 
 return(res)
 

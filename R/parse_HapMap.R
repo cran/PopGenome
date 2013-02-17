@@ -5,33 +5,52 @@ cat("\n")
 
 block         <- scan(file=filepath,nlines=500,what=character())
 sub           <- substr(block,1,2)
-ind           <- sub=="NA"
 
+# ind         <- sub=="NA" # FIXME 
+startind      <- grep("QC",block)[1]
+endind        <- grep("rs",block[2:length(block)])[1] # 2 da res auch ganz am Anfang, [1] nur erstes rs !
+
+pp            <- (startind + 1):(endind)
 
 # first position
-pp              <- which(ind)
-pp_x            <- pp[length(pp)]
+# pp              <- which(ind)
+pp_x            <- pp[length(pp)] 
 first_pos       <- block[pp_x+4]
 first_ref       <- block[pp_x+1]
 first_type      <- block[pp_x+2]
 first_chr       <- block[pp_x+3]
 
+# print(first_pos)
+# print(first_ref)
+# print(first_type)
+# print(first_chr)
 
 # individuals
-individuals   <- block[ind]
+# individuals   <- block[ind]
+individuals   <- block[pp]
+# print(individuals)
 n.individuals <- length(individuals)
 
 # first block
-num.nucs      <- nchar(block)
-nuc           <- match(2,num.nucs)
+# num.nucs      <- nchar(block)
+# nuc           <- match(2,num.nucs)
+
+nuc <- grep("^[A-Z]{2,2}$",block)[1]
+
 first.block   <- block[nuc:(nuc+(n.individuals-1))]
 sub_sub       <- block[(nuc+n.individuals):length(sub)]
 
-# print(first.block)
-# stop("")
+ # print(length(first.block))
+ # print(length(individuals))
+ # print(sub_sub)
+ # stop("")
 # intermediate stuff
-stuff         <- match(2,nchar(sub_sub))
+# stuff         <- match(2,nchar(sub_sub))
+
+stuff         <- grep("^[A-Z]{2,2}$",sub_sub)[1]
 inter         <- stuff - 1
+
+
 # ---------------------------------------------------
 
 # BLOCK       <- scan(file=filepath,skip=(nuc+(n.individuals-1)),what=character())
@@ -53,7 +72,7 @@ yy            <- 1
   chr            <- init
   pos            <- init # ff(0,length(scan),vmode="double")
 
-  cat("Scanning ... \n")
+  cat("Scan Data ... \n")
 
 for(xx in scan){
    #print(BLOCK[xx])

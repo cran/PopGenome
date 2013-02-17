@@ -14,7 +14,7 @@ This generic function writes a FASTA file of the observed biallelic positions to
 
 \usage{
 
-\S4method{region.as.fasta}{GENOME}(object,region.id=FALSE,filename=FALSE)
+\S4method{region.as.fasta}{GENOME}(object,region.id=FALSE,filename=FALSE,type=1,ref.chr=FALSE)
 
 }
 
@@ -23,6 +23,8 @@ This generic function writes a FASTA file of the observed biallelic positions to
   \item{object}{an object of class \code{"GENOME"}}
   \item{region.id}{region of the genome}
   \item{filename}{name of the FASTA file}
+  \item{type}{1: extract SNPs 2: extract all nucleotides}
+  \item{ref.chr}{reference sequence}
 }
 
 

@@ -1,9 +1,30 @@
-get_gff_info <- function(object=FALSE, gff.file, chr, position){
+get_gff_info <- function(object=FALSE, gff.file, chr, position, feature=FALSE){
 
+chr <- as.character(chr)
+
+if(nchar(chr)==1){
+   chr <- c(chr,"z") # for find_lines_GFF_Human
+}else{
+   chr <- strsplit(chr,split="")[[1]]
+}
+
+if(feature[1]!=FALSE){
+
+ 
+ region      <- .Call("find_lines_GFF_Human",gff.file,chr)
+ start       <- region[1]
+ end         <- region[2]
+ gff.table   <- read.table(gff.file,sep="\t",colClasses=c(rep("NULL",2),"character",rep("integer",2),rep("NULL",4)),
+                           skip = start - 1, nrows = end - start + 1)
+ featids     <- which(gff.table[,1]==feature)
+ poslist     <- apply(gff.table[featids,2:3],1,function(x){return(x[1]:x[2])})
+
+return(poslist)
+}
 
 if(is(object)=="logical"){
  chr    <- as.character(chr)
- region <- .Call("find_lines_GFF",gff.file,chr)
+ region <- .Call("find_lines_GFF_Human",gff.file,chr)
  start  <- region[1]
  end    <- region[2]
  info   <- .Call("get_gff_info_C",start,end,gff.file,position)
@@ -13,7 +34,7 @@ return(info)
 if(is(object)=="GENOME"){
 
  chr    <- as.character(chr)
- region <- .Call("find_lines_GFF",gff.file,chr)
+ region <- .Call("find_lines_GFF_Human",gff.file,chr)
  start  <- region[1]
  end    <- region[2]
 

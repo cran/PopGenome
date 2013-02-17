@@ -1,5 +1,5 @@
 
-readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE )
+readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE )
 {
 
 frompos <- as.integer(frompos)
@@ -22,7 +22,12 @@ cat("\n")
 cat("GFF information ...")
 cat("\n")
   
-   if(nchar(tid)==1){CHR <- c(tid,"z")}else{CHR <- tid}
+   tid2 <- tid
+   if(length(grep("Chr",tid2))==1 | length(grep("chr",tid2))==1){
+   tid2 <- substr(tid2,4,nchar(tid2))
+   }
+   if(nchar(tid2)==1){CHR <- c(tid2,"z")}else{CHR <- tid2}
+   
    my_pos      <- .Call("find_lines_GFF_Human", gffpath, CHR)
    gff.table   <- read.table(gffpath,sep="\t",colClasses=c(rep("character",3),rep("integer",2),rep("character",2),"character","NULL"),
                              skip = my_pos[1], nrows = my_pos[2] - my_pos[1]
@@ -163,9 +168,13 @@ gffpath <- "GFFRObjects"
                 if(GFF){
 
                   SUB_GFF      <- split.GFF(gff.table,cn[1],cn[numusedcols])
-                  o_b_j_sub    <- SUB_GFF
-                  fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
-                  save( file = fullfilename , o_b_j_sub  )
+                  
+                 
+                   o_b_j_sub    <- SUB_GFF
+                  
+                   fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+                   save( file = fullfilename , o_b_j_sub  )
+                  
 
                 }
 
@@ -177,16 +186,20 @@ gffpath <- "GFFRObjects"
 	# print(fileprefix)
 
 
-res         <- readData(outdir,populations = FALSE, outgroup=FALSE, include.unknown=FALSE, gffpath=gffpath,format="RData",
+res         <- readData(outdir,populations = FALSE, outgroup=FALSE, include.unknown=include.unknown, gffpath=gffpath,format="RData",
                 parallized=FALSE,progress_bar_switch=TRUE,
                 FAST=TRUE,big.data=TRUE,SNP.DATA=TRUE)
 
 
 if(res@genelength>1){
 
- res <- concatenate_to_whole_genome(res,res@genelength)
+ res              <- concatenate_to_whole_genome(res,res@genelength)
 
 }
+ 
+ res@region.names   <- paste(tid,":",frompos,"-",topos,sep=" ")
+ res@n.sites        <- as.numeric((topos - frompos + 1))
+ res@keep.start.pos <- frompos
 
 # Delete
 unlink("SNPRObjects", recursive=TRUE)

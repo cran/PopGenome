@@ -82,12 +82,14 @@ if(!is.list(positions)){
   biallelic.substitutions <- init
   
    SPLITGENE        <- FALSE
+
   if(subsites=="gene"){
 
    SPLITGENE        <- TRUE
    CodingSNPS       <- init
    ExonSNPS         <- init
-  
+   IntronSNPS       <- init
+ 
   }
   #-------------------------------------------------------------
 
@@ -100,7 +102,8 @@ if(!is.list(positions)){
      for(zz in 1:dim(Gene.matrix)[1]){
    
         bialpos                       <- Gene.matrix[zz,1]:Gene.matrix[zz,2]
-        bialpos                       <- is.element(XXX@biallelic.sites[[1]],bialpos)
+        bialpos                       <- is.element(XXX@biallelic.sites[[1]],bialpos) # wird hier der Vek neu erzeugt ?
+        #bialpos                      <- is.element(object@region.data@biallelic.sites[[1]],bialpos)
         bialpos                       <- which(bialpos)
    
 
@@ -109,6 +112,7 @@ if(!is.list(positions)){
         SLIDE.POS[[zz]]               <- bialpos
         outgroup[[zz]]                <- XXX@outgroup[[1]]
         populations[[zz]]             <- XXX@populations[[1]]
+       # popmissing[[zz]]             <- XXX@popmissing[[1]]
         synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
         transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
         biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos]  
@@ -155,6 +159,7 @@ if(!is.list(positions)){
         SLIDE.POS[[zz]]               <- bialpos
         outgroup[[zz]]                <- XXX@outgroup[[1]]
         populations[[zz]]             <- XXX@populations[[1]]
+       # popmissing[[zz]]              <- XXX@popmissing[[1]]
         synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
         transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
         biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos]  
@@ -164,6 +169,7 @@ if(!is.list(positions)){
 
         CodingSNPS[[zz]]                    <- XXX@CodingSNPS[[1]][bialpos]        
         ExonSNPS[[zz]]                      <- XXX@ExonSNPS[[1]][bialpos]
+        IntronSNPS[[zz]]                    <- XXX@IntronSNPS[[1]][bialpos]
 
         }
  
@@ -182,6 +188,14 @@ if(!is.list(positions)){
      ### Progress
      progr <- progressBar()
      ###
+    
+    if(object@gff.info){
+     SPLITGENE        <- TRUE
+     CodingSNPS       <- init
+     ExonSNPS         <- init
+     IntronSNPS       <- init  
+    }
+    
 
       for(zz in 1:length(positions)){
 
@@ -190,13 +204,19 @@ if(!is.list(positions)){
         SLIDE.POS[[zz]]               <- bialpos
         outgroup[[zz]]                <- XXX@outgroup[[1]]
         populations[[zz]]             <- XXX@populations[[1]]
+       # popmissing[[zz]]              <- XXX@popmissing[[1]]
         synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
         transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
         biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos] 
         n.sites[zz]                   <- biallelic.sites[[zz]][length(biallelic.sites[[zz]])] - biallelic.sites[[zz]][1] + 1
         biallelic.substitutions[[zz]] <- XXX@biallelic.substitutions[[1]][, bialpos, drop=FALSE]
-
-      
+ 
+     # GFF stuff
+      if(SPLITGENE){
+        CodingSNPS[[zz]]                    <- XXX@CodingSNPS[[1]][bialpos]        
+        ExonSNPS[[zz]]                      <- XXX@ExonSNPS[[1]][bialpos]
+        IntronSNPS[[zz]]                    <- XXX@IntronSNPS[[1]][bialpos]
+      }       
 
      ## Progress
      progr <- progressBar(zz,length(positions), progr)
@@ -211,21 +231,37 @@ if(!is.list(positions)){
      progr <- progressBar()
      ###
    
+      if(object@gff.info){
+       SPLITGENE        <- TRUE
+       CodingSNPS       <- init
+       ExonSNPS         <- init
+       IntronSNPS       <- init  
+      }
+    
+
+     gc()
      for(zz in 1:length(positions)){
-     
-        bialpos                       <- positions[[zz]]
-        bialpos                       <- is.element(XXX@biallelic.sites[[1]],bialpos)
+            
+        bialpos                       <- is.element(XXX@biallelic.sites[[1]],positions[[zz]])
         bialpos                       <- which(bialpos)
-        
+                
         region.names[zz]              <- paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
         SLIDE.POS[[zz]]               <- bialpos
         outgroup[[zz]]                <- XXX@outgroup[[1]]
         populations[[zz]]             <- XXX@populations[[1]]
+       # popmissing[[zz]]              <- XXX@popmissing[[1]]
         synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
         transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
         biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos] 
         n.sites[zz]                   <- positions[[zz]][length(positions[[zz]])] - positions[[zz]][1] + 1 
         biallelic.substitutions[[zz]] <- XXX@biallelic.substitutions[[1]][, bialpos, drop=FALSE]
+
+        # GFF stuff
+	if(SPLITGENE){
+        CodingSNPS[[zz]]                    <- XXX@CodingSNPS[[1]][bialpos]        
+        ExonSNPS[[zz]]                      <- XXX@ExonSNPS[[1]][bialpos]
+        IntronSNPS[[zz]]                    <- XXX@IntronSNPS[[1]][bialpos]
+        }       
    
      ## Progress
      progr <- progressBar(zz,length(positions), progr)
@@ -234,6 +270,13 @@ if(!is.list(positions)){
      }
    } 
 
+
+# BUG vector("list",1)[[1]] <- NULL  => list()
+# if(length(popmissing)==0){
+##  popmissing <- vector("list",1)
+#}
+# also change in splitting.data.sep !
+#
 
 
 ddatt@UTR.matrix       <- object@region.data@UTR.matrix
@@ -255,39 +298,10 @@ ddatt@biallelic.substitutions <- biallelic.substitutions
 
   ddatt@CodingSNPS     <- CodingSNPS
   ddatt@ExonSNPS       <- ExonSNPS
+  ddatt@IntronSNPS     <- IntronSNPS
  
  }
  
-
-
-## NEW --
-
-if(length(genomeobj@BIG.BIAL)>0){
-
-  ffpos                       <- unlist(SLIDE.POS)
-  if(length(ffpos)==0){stop("No SNPs in this region !")}
-   
-  if(object@big.data){
-     if(is(genomeobj@BIG.BIAL[[1]])=="ff_matrix"){
-        open(genomeobj@BIG.BIAL[[1]])
-     }
-
-  }
-
-  
-  newbial                     <- genomeobj@BIG.BIAL[[1]][,ffpos]
-  ddatt@biallelic.matrix[[1]] <- ff(newbial , dim=c( dim(newbial)[1], length(ffpos) ) )
-
-  if(object@big.data){
-   if(is(genomeobj@BIG.BIAL[[1]])=="ff_matrix"){
-      close(ddatt@biallelic.matrix[[1]])
-   }
-  }
-
-}
-### -----
-
-
 
 genomeobj@SLIDE.POS                 <- SLIDE.POS
 genomeobj@populations               <- object@populations
@@ -306,8 +320,14 @@ genomeobj@Pop_Detail$calculated     <- FALSE
 genomeobj@big.data                  <- object@big.data
 genomeobj@snp.data                  <- object@snp.data
 
+rm(object)
+gc()
 
 return(genomeobj)
 
 })
   
+## SUBFUNCTIONS
+my_chunk <- function(x,n) split(x, factor(sort(rank(x)%%n)))
+#------------------------------------------------------------
+

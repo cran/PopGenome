@@ -1,37 +1,8 @@
-setGeneric("SNPFST", function(object,new.populations=FALSE,subsites=FALSE,detail=TRUE,mode="ALL",only.haplotype.counts=FALSE) standardGeneric("SNPFST"))
+setGeneric("diversity.stats", function(object,new.populations=FALSE,subsites=FALSE,pi=FALSE) standardGeneric("diversity.stats"))
 
-setMethod("SNPFST","GENOME",function(object,new.populations,subsites,detail,mode,only.haplotype.counts){
+setMethod("diversity.stats","GENOME",function(object,new.populations,subsites,pi){
   
- # mode nur wegen Progress Balken !
-
- 
- # also calculate popFSTN
- if(mode[1]=="ALL"){
-
-   cat("nucleotide \n")
-   if(!missing(new.populations)){
-         object <- popFSTN(object,new.populations,subsites=subsites,detail=detail,mode=mode)
-   }else{
-         object <- popFSTN(object,subsites=subsites,detail=detail,mode=mode)
-   }
-   cat("\n")
-   cat("haplotype \n")
-
- }
-
-
- if(mode[1]=="nucleotide"){
-   
-    if(!missing(new.populations)){
-         object  <- popFSTN(object,new.populations,subsites=subsites,detail=detail,mode=mode)
-    }else{object <- popFSTN(object,subsites=subsites,detail=detail,mode=mode)
-    }
- 
- return(object)
- }
- #
- 
-  region.names                  <- object@region.names
+  region.names                 <- object@region.names
   n.region.names               <- length(region.names)
   if(object@big.data){region.names <- NULL} # because of memory space
  
@@ -77,11 +48,10 @@ else{poppairs <- 1;nn <- "pop1"}
 
   nam    <- paste("pop",1:npops)
   init1  <- matrix(0,n.region.names,npops)
-  init2  <- matrix(,n.region.names,1)
   
-  FSTH   <- init2
   Pi     <- init1
   hapw   <- init1
+  nucw   <- init1
   haplotype.counts      <- vector("list",n.region.names) # region stats
  
   change    <- object@region.stats
@@ -90,12 +60,12 @@ else{poppairs <- 1;nn <- "pop1"}
 #--------------------------------------------------
 
   # Names ----------------------------------------
-  rownames(FSTH)     <- region.names
-  colnames(FSTH)     <- "FST (Haplotype)"
   rownames(Pi)       <- region.names
   colnames(Pi)       <- nam
   rownames(hapw)     <- region.names
   colnames(hapw)     <- nam
+  rownames(nucw)     <- region.names
+  colnames(nucw)     <- nam
   # ----------------------------------------------
 
 
@@ -224,7 +194,7 @@ if(subsites=="intergenic"){
     # if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden \FCberhaupt berechnet
     # if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
    
-      res                    <- calc_hwhafsth_FAST(bial,populations)
+      res                    <- calc_diversities(bial,populations,pi)
 
 
       Pop_FSTH[[xx]]        <-  list(Populations=populations,Outgroup=NULL)   
@@ -235,12 +205,13 @@ if(subsites=="intergenic"){
     
    # fill detailed Slots --------------------------------#
      haplotype.counts[[xx]]              <- res$sfreqh  
-  # ----------------------------------------------------# 
-    
-    FSTH[xx]          <- res$fsthALL
+   # ----------------------------------------------------# 
+    if(pi){
     Pi[xx,respop]     <- res$PIW_nei
+    }
+
     hapw[xx,respop]   <- res$hapw
-   
+    nucw[xx,respop]   <- res$nucw   
 
   # PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
@@ -252,12 +223,10 @@ if(subsites=="intergenic"){
  change@haplotype.counts      <- haplotype.counts
  change@Pop_FSTH              <- Pop_FSTH
  object@region.stats          <- change
-
  rm(change)
  gc()
-
  object@hap.diversity.within  <- hapw
- object@haplotype.F_ST        <- FSTH
+ object@nuc.diversity.within  <- nucw
  object@Pi                    <- Pi
 
  return(object)

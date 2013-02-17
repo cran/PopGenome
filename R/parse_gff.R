@@ -65,7 +65,21 @@ if(length(GLOBAL.GFF$GFF)!=0){
  GLOBAL.GFF$Intron        <- CHECK[Intron_ids]
  GLOBAL.GFF$UTR           <- CHECK[UTR_ids]
  #GLOBAL.GFF$GFF          <- NULL
- READ                     <- cbind(GLOBAL.GFF$start[Coding_ids],tab[Coding_ids,8])
+
+ 
+ # When GFF3 --> vorletzte Zeile bearbeiten ! für READ
+ vorl       <- tab[,8]
+ punkte     <- which(vorl==".")
+ if(length(punkte)>0){
+  vorl[punkte]  <- 0
+  vorl          <- as.integer(vorl) 
+ }else{
+  vorl          <- as.integer(vorl)
+ }
+ #---------------
+
+
+ READ                     <- cbind(GLOBAL.GFF$start[Coding_ids],vorl[Coding_ids])
  if(dim(READ)[1]>0){
   READ                    <- ff(READ,dim=dim(READ))
  }
@@ -98,7 +112,7 @@ getAttributeField <- function (x, field, attrsep = ";") {
 
 gffRead <- function(gffFile, nrows = -1) {
      #cat("Reading ", gffFile, ": ", sep="")
-     gff = read.table(gffFile, sep="\t", as.is=TRUE, quote="",
+     gff = read.table(gffFile, sep="\t", as.is=TRUE, # quote="",
      header=FALSE, comment.char="#", nrows = nrows,
      colClasses=c("character", "character", "character", "integer",  
     "integer",
@@ -113,7 +127,6 @@ gffRead <- function(gffFile, nrows = -1) {
 }
 
 #Now you can do stuff like
-
 #gff <- gffRead(gfffile)
 #gff$Name <- getAttributeField(gff$attributes, "Name")
 #gff$ID <- getAttributeField(gff$attributes, "ID")

@@ -23,7 +23,7 @@ apply(perm,2,function(x){
         seq1 <- bial[x[1],]
         seq2 <- bial[x[2],]
         diff <- sum(seq1!=seq2,na.rm=TRUE)
-	      MAT[x[1],x[2]] <<- diff
+	MAT[x[1],x[2]] <<- diff
         MAT[x[2],x[1]] <<- diff 
 })
 

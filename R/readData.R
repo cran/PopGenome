@@ -3,7 +3,12 @@ readData <- function(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE
 FAST=FALSE,big.data=FALSE,SNP.DATA=FALSE){
 
 
+## CHECK INPUT
 if(!file.exists(path)){stop("Cannot find path !")}
+if(!file.info(path)[2]){stop("Put your file/files in a folder !")}
+if(format=="HapMap"){SNP.DATA=TRUE}
+if(format=="VCF")   {SNP.DATA=TRUE}
+if(format=="VCFhap"){SNP.DATA=TRUE}
 
 # Parallized version of readData
 
@@ -171,7 +176,8 @@ require(ape)
  # Get the alignments
  liste    <- list.files(path,full.names=TRUE)
  liste2   <- list.files(path)
- liste3   <- gsub(".fas","",liste2)
+ liste3   <- gsub("\\.[a-zA-Z]*","",liste2)
+ 
 
  # sort the list -------------
  ordered            <- as.numeric(gsub("\\D", "", liste))
@@ -197,7 +203,7 @@ require(ape)
     GFF.BOOL     <- TRUE
     gff_liste    <- list.files(gffpath,full.names=TRUE)
     gff_liste2   <- list.files(gffpath)
-    gff_liste3   <- gsub(".gff","",gff_liste2)
+    gff_liste3   <- gsub("\\.[a-zA-Z]*","",gff_liste2)
     # print(gff_liste3)
     # print("-------------")
     # print(liste3)             
@@ -355,6 +361,8 @@ if(progress_bar_switch){ ### wegen parallized
     gen <- CCC$matrix
     pos <- CCC$positions
     ref <- CCC$reference 
+
+# GFF stuff ----------------------------------------------------------------------
      
  gff.object.exists    <- FALSE
  FIT                  <- FALSE
@@ -362,17 +370,23 @@ if(progress_bar_switch){ ### wegen parallized
  if(GFF.BOOL){
 
     gff.object.exists <- TRUE
-    if(length(grep("GFFRObjects",gffpath))!=0){
+    # if(length(grep("GFFRObjects",gffpath))!=0){
+ 
+    if(SNP.DATA){
+     
+       if(length(grep("GFFRObjects",gffpath))!=0){
+        
+          Robj                       <- load(gff_liste[xx])
+          gff_object                 <- get(Robj[1])
+       }else{
+          gff_object                 <- gffRead(gff_liste[xx])        
+       }
 
-       Robj                       <- load(gff_liste[xx])
-       gff_object                 <- get(Robj[1])
-       gff_object_fit             <- fitting_gff_fast(pos,gff_object)
-       FIT                        <- TRUE
-
+          gff_object_fit             <- fitting_gff_fast(pos,gff_object)              
+          FIT                        <- TRUE
+      
     }else{
-       #if(SNP.DATA){
-       # gff_object               <- fitting_gff_fast(pos,gff_object)  
-       #}
+      
         if(!is.na(gff_liste[xx])){
          gff_object                  <- gffRead(gff_liste[xx])
         }else{gff.object.exists <- FALSE}
@@ -395,6 +409,7 @@ if(progress_bar_switch){ ### wegen parallized
 
  }else{gff_object <- FALSE;gff_object_fit <- FALSE}
 
+# GFF stuff END -------------------------------------------------
 
     if(is.matrix(gen)){
     
@@ -436,11 +451,13 @@ if(progress_bar_switch){ ### wegen parallized
       
      
       if(is.na(pos[1])){
-      biallelic.sites[[xx]]     <- datt$biallelic.sites   # matrix_pos
+       biallelic.sites[[xx]]     <- datt$biallelic.sites   # matrix_pos
+       polyallelic.sites[[xx]]   <- datt$polyallelic.sites
       }else{
-      biallelic.sites2[[xx]]    <- datt$biallelic.sites
-      biallelic.sites[[xx]]     <- pos[datt$biallelic.sites]
-      nsites[xx]                <- biallelic.sites[[xx]][length(biallelic.sites[[xx]])]           
+       biallelic.sites2[[xx]]    <- datt$biallelic.sites
+       biallelic.sites[[xx]]     <- pos[datt$biallelic.sites]
+       nsites[xx]                <- biallelic.sites[[xx]][length(biallelic.sites[[xx]])] 
+       polyallelic.sites[[xx]]   <- pos[datt$polyallelic.sites] # mhitbp          
       }
 
       if(!big.data){
@@ -519,7 +536,7 @@ if(progress_bar_switch){ ### wegen parallized
       synonymous[[xx]]          <- datt$synonymous        # synnonsyn
       matrix_freq[[xx]]         <- datt$matrix_freq
       n.singletons[[xx]]        <- datt$n.singletons      # unic
-      polyallelic.sites[[xx]]   <- datt$polyallelic.sites # mhitbp
+     
       n.nucleotides[[xx]]       <- datt$n.nucleotides     # sum_sam
       biallelic.compositions[[xx]]  <- datt$biallelic.compositions # TCGA
       biallelic.substitutions[[xx]] <- datt$biallelic.substitutions# subst
@@ -634,6 +651,7 @@ genome@Pop_Detail$calculated     <- FALSE
 
 if(FAST){genome@Pop_Slide$calculated <- TRUE}
 if(GFF.BOOL){genome@gff.info<-TRUE}else{genome@gff.info <- FALSE}
+
 genome@snp.data <- SNP.DATA
 
 cat("\n")

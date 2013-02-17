@@ -2,6 +2,23 @@ PopGenread <- function(filepath,format) {
 
 # require(ape)
 
+if(format=="VCF"){
+ res  <- readVCFchunk(filepath)
+ mat  <- res$matrix
+ ref  <- res$reference
+ pos  <- res$positions
+ return(list(matrix=mat,reference=ref,positions=pos)) 
+}
+
+if(format=="VCFhap"){
+ res  <- readVCFchunkHap(filepath)
+ mat  <- res$matrix
+ ref  <- res$reference
+ pos  <- res$positions
+ return(list(matrix=mat,reference=ref,positions=pos)) 
+}
+
+
 if(format=="HapMap"){
  res  <- parse_HapMap(filepath)
  mat  <- res$matrix

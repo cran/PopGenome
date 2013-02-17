@@ -54,11 +54,12 @@ rownames(matrix_hap) <- rownames(matrix_pol)
 matrix_hap_sub       <- matrix_hap[unique(unlist(populations)),,drop=FALSE]#### Wegen sfreq !!!!
 
 
-uniquematrix         <- unique(matrix_hap_sub)
-
+# uniquematrix         <- unique(matrix_hap_sub)
+ duplids               <- .Call("my_unique_C", matrix_hap_sub)
+ uniquematrix          <- matrix_hap_sub[!duplids,,drop=FALSE]
 
 nhgesamt             <- dim(uniquematrix)[1]
-sfreqh               <- matrix(NaN,npops,nhgesamt)
+sfreqh               <- matrix(0,npops,nhgesamt)
  
 rownames(sfreqh)     <- nam
 colnames(sfreqh)     <- rownames(uniquematrix)
@@ -85,35 +86,37 @@ return(list(hapw=0,fsthALL=NaN,PIW_nei=0,sfreqh=sfreqh))
 
 # Create happairs ! perhaps there is a better internal R - Function !!!
 
-if(npops > 1){
+#if(npops > 1){
 
- happairsbetween <- NULL
- vek             <- 1:dim(uniquematrix)[1]
+# happairsbetween <- NULL
+# vek             <- 1:dim(uniquematrix)[1]
 
- for(xx in 1:dim(uniquematrix)[1]){
+# for(xx in 1:dim(uniquematrix)[1]){
 
- com <- vek[-xx]
- val <- rep(xx,length(com))
- mat <- rbind(val,com)
+# com <- vek[-xx]
+# val <- rep(xx,length(com))
+# mat <- rbind(val,com)
 
- happairsbetween <- cbind(happairsbetween,mat) 
- }
+# happairsbetween <- cbind(happairsbetween,mat) 
+# }
 
-}
+#}
 
-happairswithin      <- combn(dim(uniquematrix)[1],2)
+# happairswithin      <- combn(dim(uniquematrix)[1],2)
 
 #-------------------------------------------------------------------------
 
 
 for(xx in 1:npops){
   
-     div     <- apply(happairswithin,2,function(hap){
-                freq       <- sfreqh[xx,]
-                return(freq[hap[1]]*freq[hap[2]])
-     }) 
+  #   div     <- apply(happairswithin,2,function(hap){
+  #              freq       <- sfreqh[xx,]
+  #              return(freq[hap[1]]*freq[hap[2]])
+  #   }) 
                      
-  hapwvek[xx] <- sum(div,na.rm=TRUE)
+  # hapwvek[xx] <- sum(div,na.rm=TRUE)
+
+  hapwvek[xx] <- .Call("combnsum_C", sfreqh[xx,,drop=FALSE]) 
   p_size      <- length(populations[[xx]])
   
 
@@ -135,19 +138,21 @@ if(npops > 1){
  # Apply
  hapavek     <- apply(pairs,2,function(x){
      
-     hapa <- NaN
+      hapa <- NaN
      
       m1_size <- length(populations[[ x[1] ]]) # size of population 1
       m2_size <- length(populations[[ x[2] ]]) # size of population 2     
      
-     freqpop1 <- sfreqh[x[1],]
-     freqpop2 <- sfreqh[x[2],]
+     freqpop1 <- sfreqh[x[1],,drop=FALSE]
+     freqpop2 <- sfreqh[x[2],,drop=FALSE]
      
-            div     <-  apply(happairsbetween,2,function(hap){
-                        return(freqpop1[hap[1]]*freqpop2[hap[2]])
-            })
+          #  div     <-  apply(happairsbetween,2,function(hap){
+          #              return(freqpop1[hap[1]]*freqpop2[hap[2]])
+          #  })
                        
-     hapa  <- sum(div)   
+     #hapa  <- sum(div)
+     hapa  <- .Call("combnsum2_C",freqpop1,freqpop2)
+         
      hapa  <- hapa/(m1_size*m2_size)
      hapamatrix[x[1],x[2]]  <<- hapa
   
@@ -218,6 +223,7 @@ PIW_nei              <- rep(NaN,npops)
 
 #}
 # end comment -----
+
 
 return(list(hapw=hapwvek,fsthALL=fsthALL,sfreqh=sfreqh,PIW_nei=PIW_nei))
 

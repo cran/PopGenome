@@ -13,7 +13,7 @@
 \usage{
 
 readSNP(folder,populations=FALSE,outgroup=FALSE,gffpath=FALSE,CHR=FALSE,
-        ref.chr=FALSE,snp.window.size=FALSE,parallized=FALSE)
+        ref.chr=FALSE,snp.window.size=FALSE,parallized=FALSE,ffpackagebool=TRUE,include.unknown=FALSE)
 
 }
 
@@ -27,6 +27,8 @@ readSNP(folder,populations=FALSE,outgroup=FALSE,gffpath=FALSE,CHR=FALSE,
   \item{ref.chr}{reference chromosome (to verfiy synonymous positions)}
   \item{snp.window.size}{scan SNP chunks}
   \item{parallized}{multicore computation}
+  \item{ffpackagebool}{using the ff-package to save memory space. (slower)}
+  \item{include.unknown}{including unknown positions}
 }
 
 \details{
@@ -35,9 +37,6 @@ individuals * (number of SNPs) <= .Machine$integer.max \cr
 The text-files containing the SNP-information of each individuell have to be stored in one folder. \cr
 The slots \code{transitions}, \code{biallelic.sites} and \code{biallelic.substitutions} of the class \cr
 \code{"regions.data"} will be filled. \cr
-Synonymous and non-synonymous positions are not considered. Thus, the McDonald-Kreitman test will not work correctly. \cr
-Use the function \code{set.synnonsyn} to set the syn/nonsyn sites.
-
 }
 
 \value{
@@ -50,8 +49,8 @@ Use the function \code{set.synnonsyn} to set the syn/nonsyn sites.
 
             \tabular{rll}{
             \tab Slot                	        \tab Description\cr
-          1.\tab \code{n.sites}                        \tab total number of sites\cr
-          2.\tab \code{n.biallelic.sites}          	\tab number of biallelic sites \cr
+          1.\tab \code{n.sites}                 \tab total number of sites\cr
+          2.\tab \code{n.biallelic.sites}       \tab number of biallelic sites \cr
           3.\tab \code{region.data}            	\tab some detail data informations\cr
           4.\tab \code{region.names}            \tab names of each region \cr 
         }
@@ -63,8 +62,8 @@ Use the function \code{set.synnonsyn} to set the syn/nonsyn sites.
 \examples{
 
 # GENOME.class <- readSNP("...\SNPData")
-# GENOME.class <- readSNP("...\SNPData", CHR="1")
-# GENOME.class <- readSNP("...\SNPData", CHR="1", gffpath="Gff_file.gff")
+# GENOME.class <- readSNP("...\SNPData", CHR=1)
+# GENOME.class <- readSNP("...\SNPData", CHR=1, gffpath="Gff_file.gff")
 # GENOME.class
 # GENOME.class <- neutrality.stats(GENOME.class,FAST=TRUE)
 # show the result:

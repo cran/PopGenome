@@ -1,10 +1,43 @@
+Changes in PopGenome 1.2.3
+==========================
+
+
+
+
+Changes in PopGenome 1.2.2
+=========================
+
+BUGS FIXED:
+
+- readVCF with GFF-file, when chrosomeID includes "Chr"
+- readVCF (GENOME.class@region.names)
+- readData (..., FAST=TRUE) # small BUG in computing biallelic.sites
+- readData (..., format="HapMap")
+
+NEW FEATURES:
+
+- Phi_ST in the F_ST.stats.2 module
+- readSNP and readData(..,FAST=TRUE)  
+  calculate now also polyallelic positions (see get.sum.data and 
+  GENOME.class@region.stats@polyallelic.sites)
+- set.populations() also for diploid data.
+- readData(..., format="VCF").
+- speed up haplotype-based statistics (unique() now in C )
+- diversity.stats()
+- get_gff_info() # searching for features
+
+THX:
+
+- Pierre
+- Polina
+
 Changes in PopGenome 1.2.1
 =========================
 
 BUGS FIXED:
 
 - sliding.window.transform(): BUG in concatenating the regions 
-- readSNP(): chromosome-ids like "1","2" ... are also accepted.
+- readSNP(): identifier "1" ... is now also accepted.
 - the functon concatenate_to_whole_genome() is now visible
 - load.session()
 
@@ -15,17 +48,23 @@ NEW FEATURES:
 - using the bigmemory package for HUGE data sets
 - vignettes on CRAN
 
-
 Changes in PopGenome 1.2.0
 =========================
 
 - new implemented C++ functions to read alignments in several formats
+
 - using the ff-package to handle big data
+
 - reading SNP data from 1000/1001 Genome project
+
 - new features (create.PopGenome.method, region.as.fasta ...)
+
 - set.synnonsyn() to verify synonymous/non-synonymous sites of SNP-data 
+
 - new methods (Achaz, ...)
+
 - speed up calculations (C++ functions, multicore computation)
+
 - splitting.data() to analyse subsites like exon, gene, intron ...
 
  

@@ -17,10 +17,32 @@ setGeneric("sliding.window.transform.fast", function(object,width=7,jump=5,type=
 # When you want to scan a specific region
 
 if(start.pos[1]!=FALSE){
+
+  # Suche beg. SNP of original data
+  if(type==2){
+  snp.begin  <- .Call("whichbigger_C",start.pos,object@region.data@biallelic.sites[[1]])
+  snp.begin  <- snp.begin - 1
+  }else{#type=1
+  snp.begin  <- start.pos - 1 
+  }
+ 
+  start.pos <- start.pos - 1
+ 
+  # split the data 
   object     <- splitting.data(object, positions=list(start.pos:end.pos), type=type)
   cat("\n")
+   
+
 }else{
+
+  if(length(object@keep.start.pos)!=0){ # wenn bei readVCF z.b nur ne bestimmte region !
+  start.pos  <- object@keep.start.pos
+  }else{
   start.pos  <- 0
+  }
+
+snp.begin <- 0
+
 }
 
 
@@ -32,22 +54,37 @@ XXX                     <-  object@region.data
  if(object@big.data){
   # bial <- object@region.data@biallelic.matrix[[1]]
 
-   if(is(object@region.data@biallelic.matrix[[1]])=="ff_matrix"){
+   if(is(object@region.data@biallelic.matrix[[1]])[1]=="ff_matrix"){
       open(object@region.data@biallelic.matrix[[1]]) # FIXME
    }
  
-   genomeobj@BIG.BIAL[[1]] <- object@region.data@biallelic.matrix[[1]] 
-   bial                    <- object@region.data@biallelic.matrix[[1]]
+     if(length(object@BIG.BIAL)==0){
+     genomeobj@BIG.BIAL[[1]]   <- object@region.data@biallelic.matrix[[1]]
+     }else{
+     genomeobj@BIG.BIAL[[1]]   <- object@BIG.BIAL[[1]] # when splitting the data before
+     }     
+
+     colsbial                  <- length(object@region.data@biallelic.sites[[1]])
+    
+   
    #close(object@region.data@biallelic.matrix[[1]])
+
  }else{
-   bial <- popGetBial(object,1)
+
+   colsbial                  <-  length(object@region.data@biallelic.sites[[1]])
+  
+    if(length(object@BIG.BIAL)==0){
+     bial   <- object@region.data@biallelic.matrix[[1]]
+     }else{
+     bial   <- object@BIG.BIAL[[1]] # when splitting the data before
+    }    # when big.data is FALSE --> copy biallelic matrix to each region !    
  }
 
  bial.sites        <- object@region.data@biallelic.sites[[1]] 
 
                     
   # Calculate type 3 = reference Biallelic Matrix. type 5 = reference GEN   
-  if(type==1){repeatlength <- ceiling( (dim(bial)[2]-width+1)/jump)}
+  if(type==1){repeatlength <- ceiling( (colsbial-width+1)/jump)}
   if(type==2){repeatlength <- ceiling( (object@n.sites[1]-width+1)/jump)} 
       
   # init -------------------------------------------------------
@@ -75,8 +112,8 @@ XXX                     <-  object@region.data
 
        if(type==1){
      
-         NAMES[zz]   <- paste(start,"-",end,":")
-         window	     <- start:end   
+         NAMES[zz]   <- paste(start + snp.begin ,"-",end + snp.begin ,":")
+         window	     <- start:end
          n.sites[zz] <- XXX@biallelic.sites[[1]][end] -  XXX@biallelic.sites[[1]][start] + 1     
     
         #genomeobj@DATA[[count]] <- new("DATA")
@@ -84,16 +121,18 @@ XXX                     <-  object@region.data
 
          if(object@big.data){
 
-                SLIDE.POS[[zz]]         <- window
+                SLIDE.POS[[zz]]         <- window + snp.begin
 #               biallelic.matrix[[zz]]  <- ff(bial[,window,drop=FALSE],dim=dim(bial#[,window,drop=FALSE]))
                
          }else{
-               biallelic.matrix[[zz]]  <- bial[,window,drop=FALSE]
+
+               biallelic.matrix[[zz]]  <- bial[,window + snp.begin,drop=FALSE]
+
          }
 
         outgroup[[zz]]         <- XXX@outgroup[[1]]
         populations[[zz]]      <- XXX@populations[[1]]
-        # popmissing[[zz]]       <- XXX@popmissing[[1]]
+        #popmissing[[zz]]       <- XXX@popmissing[[1]]
         synonymous[[zz]]       <- XXX@synonymous[[1]][window]
         transitions[[zz]]      <- XXX@transitions[[1]][window]
         biallelic.sites[[zz]]  <- XXX@biallelic.sites[[1]][window]
@@ -125,15 +164,15 @@ XXX                     <-  object@region.data
               
 
               if(object@big.data){
-              SLIDE.POS[[zz]]         <- bialpos        
+              SLIDE.POS[[zz]]         <- bialpos + snp.begin       
        #biallelic.matrix[[zz]]  <- ff(bial[,bialpos,drop=FALSE],dim=dim(bial[,bialpos,drop=FALSE]))               
               }else{
-               biallelic.matrix[[zz]]  <- bial[,bialpos,drop=FALSE]
+               biallelic.matrix[[zz]]  <- bial[,bialpos + snp.begin,drop=FALSE]
               }
 
               outgroup[[zz]]          <- XXX@outgroup[[1]]
               populations[[zz]]       <- XXX@populations[[1]]
-            #  popmissing[[zz]]        <- XXX@popmissing[[1]]
+              #popmissing[[zz]]        <- XXX@popmissing[[1]]
               synonymous[[zz]]        <- XXX@synonymous[[1]][bialpos]
               transitions[[zz]]       <- XXX@transitions[[1]][bialpos]
               biallelic.sites[[zz]]   <- XXX@biallelic.sites[[1]][bialpos]

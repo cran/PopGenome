@@ -48,6 +48,7 @@ FAST=FALSE
                   \code{"coding"}: SNPs in coding regions (CDS). \cr
                   \code{"utr"}:  SNPs in UTR regions. \cr
                   \code{"gene"}: SNPs in genes. \cr
+                  \code{"intergenic"} : SNPs in intergenic regions. \cr
   } 
   \item{detail}{detail statistics. Note: slower!}
   \item{between}{\code{TRUE}: show between diversities. \code{FALSE}: show within diversities}
@@ -110,9 +111,9 @@ If \code{FAST} is switched on, this module only calculates \code{nuc.diversity.w
 
 # GENOME.class <- readData("\home\Alignments")
 # GENOME.class
-# GENOME.class <- FST_stats(GENOME.class)
-# GENOME.class <- FST_stats(GENOME.class,list(1:4,5:10),subsites="syn")
-# GENOME.class <- FST_stats(GENOME.class,list(c("seq1","seq5","seq3"),c("seq2","seq8")))
+# GENOME.class <- F_ST.stats(GENOME.class)
+# GENOME.class <- F_ST.stats(GENOME.class,list(1:4,5:10),subsites="syn")
+# GENOME.class <- F_ST.stats(GENOME.class,list(c("seq1","seq5","seq3"),c("seq2","seq8")))
 # show the result:
 # get.F_ST(GENOME.class)
 # get.F_ST(GENOME.class, pairwise=TRUE)

@@ -118,7 +118,7 @@ alle    = 0;
 
           // calculate an
           //an     = sum(1/1:(freq[1]-1)) // muss gemacht werden
-          an=0;
+          an=0.0;
           for(int xx=1; xx<alle; xx++){       
              an = an +  1.0/(double)xx;
 	  }	
@@ -161,7 +161,7 @@ alle    = 0;
 
 // fill the rest sfreq
 for(int yy=0; yy<I+1; yy++){
- REAL(ret)[(6+yy) +(7+I)*i]= sfreq[yy]; //(double) REAL(sfreq)[yy];  
+ REAL(ret)[(6+yy) +(7+I)*i]= (double)sfreq[yy]; //(double) REAL(sfreq)[yy];  
 }
 // End of filling sfeq
 

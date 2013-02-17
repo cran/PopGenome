@@ -16,7 +16,7 @@ The populations are set for each statistic module.
 
 \usage{
 
-\S4method{set.populations}{GENOME}(object,new.populations=FALSE)
+\S4method{set.populations}{GENOME}(object,new.populations=FALSE, diploid=FALSE)
 
 }
 
@@ -24,6 +24,7 @@ The populations are set for each statistic module.
 
   \item{object}{an object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default:\code{FALSE}}
+  \item{diploid}{if diploid data is present}
 }
 
 
