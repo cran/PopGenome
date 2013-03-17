@@ -299,7 +299,8 @@ else{poppairs <- 1;nn <- "pop1"}
       ExonSNPS          <- init
       GeneSNPS          <- init
   
-      reading.frame     <- init 
+      reading.frame     <- init
+      rev.strand        <- init 
       Coding.matrix     <- init
       Coding.matrix2    <- init
       UTR.matrix        <- init
@@ -488,6 +489,7 @@ if(progress_bar_switch){ ### because of parallized
       if(GFF.BOOL & gff.object.exists){
        
        reading.frame[[xx]]              <- gff_object$reading.frame
+       rev.strand[[xx]]                 <- gff_object$rev.strand
        Coding.matrix[[xx]]              <- gff_object$Coding
        UTR.matrix[[xx]]                 <- gff_object$UTR
        Intron.matrix[[xx]]              <- gff_object$Intron
@@ -518,6 +520,7 @@ if(progress_bar_switch){ ### because of parallized
 
         if(dim(gff_object_fit$Coding)[1]>0){
          reading.frame[[xx]]     <- gff_object_fit$reading.frame
+         rev.strand[[xx]]        <- gff_object_fit$rev.strand
          fill                    <- as.matrix(gff_object_fit$Coding)
          Coding.matrix2[[xx]]    <- ff(fill,dim=dim(fill)) # wegen set.synnonsyn
         }
@@ -599,6 +602,7 @@ if(progress_bar_switch){ ### because of parallized
       region.data@GeneSNPS         <- GeneSNPS
       
       region.data@reading.frame    <- reading.frame
+      region.data@rev.strand       <- rev.strand
       region.data@Coding.matrix    <- Coding.matrix
       region.data@Coding.matrix2   <- Coding.matrix2
       region.data@UTR.matrix       <- UTR.matrix

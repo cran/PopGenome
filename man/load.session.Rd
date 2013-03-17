@@ -4,12 +4,11 @@
 \alias{load.session}
 
 
-\title{Loading a PopGenome-session}
+\title{Loading a PopGenome session}
 
 
 \description{
-This function loads a PopGenome-session from the current workspace.
-Saving with save().
+This function loads a PopGenome session (more precisely: the corresponding \code{"GENOME"} object) from the current workspace.
 }
 
 \usage{
@@ -19,15 +18,16 @@ load.session()
 }
 
 \arguments{
-no arguments !
+no arguments
 }  
 
 \details{
-coming soon !
+This function has to be used in the same workspace (folder) where \cr
+the object of class \code{"GENOME"} was saved.
 }
 
 \value{
-coming soon !
+An object of class \code{"GENOME"}.
 }
 
 

@@ -4,19 +4,17 @@
 \alias{set.ref.positions-methods}
 
 
-\title{Sets reference positions for SNP data}
+\title{Set reference positions for SNP data}
 
 
 \description{
  This generic function sets the positions of the SNP data.
- Should be used if you use alignments to store SNP data. 
+ Should be used if you use alignment formats to store SNP data (i.e., data restricted to the polymorphic positions). 
 }
 
 \usage{
 
 \S4method{set.ref.positions}{GENOME}(object, positions)
-
-
 
 }
 
@@ -31,7 +29,7 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr 
+returned value is a modified object of class \code{"GENOME"} \cr 
   
   
 }

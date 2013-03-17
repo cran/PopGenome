@@ -4,12 +4,12 @@
 \alias{BayeScanR}
 
 
-\title{An R-version of BayeScan (Foll \& Gagiotti 2008)}
+\title{An R implementation of BayeScan (Foll \& Gagiotti 2008)}
 
 
 \description{
 
-BayeScanR is an R-version of BayeScan for codominant marker.
+BayeScanR is an R implementation of BayeScan for analysis of codominant markers.
 
 }
 
@@ -21,11 +21,11 @@ BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000, discard=5000
 
 \arguments{
 
-  \item{input}{textfile or an R-object returned from getBayes()}
+  \item{input}{textfile or an R-object returned by getBayes()}
   \item{nb.pilot}{number of pilot runs}
   \item{pilot.runtime}{length of pilot runs}
   \item{main.runtime}{length of main runs} 
-  \item{discard}{how many runs in the main.loop should be discarded ?} 
+  \item{discard}{how many runs in the main.loop should be discarded?} 
 
 } 
 
@@ -33,7 +33,7 @@ BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000, discard=5000
 
 returned value is an object of class \code{"BAYESRETURN"} \cr \cr
 -------------------------------------------------------------- \cr
-Following Slots will be filled \cr
+The following Slots will be filled \cr
 -------------------------------------------------------------- \cr
 
    \item{alpha}{alpha effects}

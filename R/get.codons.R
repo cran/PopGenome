@@ -1,9 +1,9 @@
 # ------------------------------------------------------------
 # get Codon Informations 
 # ------------------------------------------------------------
-setGeneric("get.codons", function(object, regionID, reading.start.pos, ref.chr, SNP.DATA=FALSE) standardGeneric("get.codons"))
+setGeneric("get.codons", function(object, regionID, reading.start.pos, ref.chr, SNP.DATA=FALSE, reverse.strand=FALSE) standardGeneric("get.codons"))
  setMethod("get.codons", "GENOME",
- function(object, regionID, reading.start.pos, ref.chr, SNP.DATA){
+ function(object, regionID, reading.start.pos, ref.chr, SNP.DATA, reverse.strand){
 
 if(!SNP.DATA){
 CodonInfo <- codontable()
@@ -100,10 +100,21 @@ cod.pos      <- (bial.pos - reading.start.pos) %%3
 # Generate Codon-Positions # Rows are SNP-positions
 codons <- matrix(,length(cod.pos),3)
 for (yy in 1:length(cod.pos)){
-    if(cod.pos[yy]==0){codons[yy,]=c(bial.pos[yy],bial.pos[yy]+1,bial.pos[yy]+2);next}
-    if(cod.pos[yy]==1){codons[yy,]=c(bial.pos[yy]-1,bial.pos[yy],bial.pos[yy]+1);next}
-    if(cod.pos[yy]==2){codons[yy,]=c(bial.pos[yy]-2,bial.pos[yy]-1,bial.pos[yy]);next}
+    if(reverse.strand){
+
+     if(cod.pos[yy]==0){codons[yy,]=c(bial.pos[yy]+2,bial.pos[yy]+1,bial.pos[yy]);next}
+     if(cod.pos[yy]==1){codons[yy,]=c(bial.pos[yy]+1,bial.pos[yy],bial.pos[yy]-1);next}
+     if(cod.pos[yy]==2){codons[yy,]=c(bial.pos[yy],bial.pos[yy]-1,bial.pos[yy]-2);next}	
+
+    }else{
+
+     if(cod.pos[yy]==0){codons[yy,]=c(bial.pos[yy],bial.pos[yy]+1,bial.pos[yy]+2);next}
+     if(cod.pos[yy]==1){codons[yy,]=c(bial.pos[yy]-1,bial.pos[yy],bial.pos[yy]+1);next}
+     if(cod.pos[yy]==2){codons[yy,]=c(bial.pos[yy]-2,bial.pos[yy]-1,bial.pos[yy]);next}
+    
+    }
 }
+
 
 ## Reading the reference chromosome
 file.info <- .Call("get_dim_fasta",ref.chr)
@@ -117,9 +128,22 @@ ALT           <- Nuc.codons
 REF           <- Nuc.codons
 
 for(yy in 1: dim(Nuc.codons)[1]){
+
+ if(reverse.strand){
+
+ if(cod.pos[yy]==0){REF[yy,3] <- minor[yy];ALT[yy,3] <- major[yy];next}
+ if(cod.pos[yy]==1){REF[yy,2] <- minor[yy];ALT[yy,2] <- major[yy];next}
+ if(cod.pos[yy]==2){REF[yy,1] <- minor[yy];ALT[yy,1] <- major[yy];next}
+
+  
+ }else{ 
+
  if(cod.pos[yy]==0){REF[yy,1] <- minor[yy];ALT[yy,1] <- major[yy];next}
  if(cod.pos[yy]==1){REF[yy,2] <- minor[yy];ALT[yy,2] <- major[yy];next}
  if(cod.pos[yy]==2){REF[yy,3] <- minor[yy];ALT[yy,3] <- major[yy];next}
+
+ }
+
 } 
 
 # Character Codons

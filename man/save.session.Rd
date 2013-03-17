@@ -4,12 +4,12 @@
 \alias{save.session}
 
 
-\title{Saving a PopGenome-session}
+\title{Save the \code{"GENOME"} object of a PopGenome session}
 
 
 \description{
-This function saves the PopGenome-session in the current workspace.
-Can be loaded again with load.session()
+This function saves the \code{"GENOME"} object of a PopGenome session to the current workspace.
+The object can be loaded again with load.session().
 }
 
 \usage{

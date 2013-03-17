@@ -4,12 +4,13 @@
 \alias{sliding.window.transform,GENOME-method}
 \alias{sliding.window.transform-methods}
 
-\title{Sliding Window Transformation.}
+\title{Sliding Window Transformation}
 
 
 \description{
- This generic function transforms the existing object of class \code{"GENOME"} in another object of class \code{"GENOME"}, so that 
- sliding window calculations become possible without loosing the method-capacity of the PopGenome environment.   
+ This generic function transforms an existing object of class \code{"GENOME"} into another object of class \code{"GENOME"}, 
+ in which each region corresponds to one window. This allows to apply the full spectrum of PopGenome methods to 
+ sliding window data.   
  
 }
 
@@ -29,18 +30,18 @@
   \item{width}{window size. default:\code{7}}
   \item{jump}{jump size. default:\code{5}}
   \item{type}{\code{1} scan only biallelic positions (SNPs), \code{2} scan the genome. default:\code{1}}
-  \item{start.pos}{start position !}
-  \item{end.pos}{end position !}
-  \item{whole.data}{scanning the whole data by concatenating the regions. If FALSE, the regions are scaned seperately}
+  \item{start.pos}{start position}
+  \item{end.pos}{end position}
+  \item{whole.data}{scan the complete data by concatenating the regions in "object". If FALSE, each region is scanned seperately.}
 }
 
 \value{
-The function creates an transformed object of class \code{"GENOME"} 
+The function creates a transformed object of class \code{"GENOME"}.
 }
 
 \note{
-You should not use the big.data option in the readData function, if you want to scan regions seperately.
-PopGenome will scan the data from position 1 to the last observed SNP, when a start or an end-position is not specified. 
+If you want to scan regions seperately (whole.data=FALSE), you may not use the big.data option in the readData function.
+PopGenome will scan the data from position 1 to the last observed SNP if start or end-positions are not specified. 
 }
 
 

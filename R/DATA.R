@@ -7,6 +7,7 @@ outgroup         = "list",
 outgroup2        = "list",
 
 reading.frame    = "list",
+rev.strand       = "list",
 Coding.matrix    = "list",
 Coding.matrix2   = "list",
 UTR.matrix       = "list",

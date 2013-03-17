@@ -3,7 +3,7 @@
 \docType{methods}
 \alias{readMS}
 
-\title{Reading data from MS and MSMS output}
+\title{Read output data from MS and MSMS}
 
 
 \description{

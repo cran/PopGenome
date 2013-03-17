@@ -10,7 +10,7 @@
 
 
 \description{
- This module contains some statistics to detect selective sweeps.
+ This module calculates some statistics to detect selective sweeps.
 }
 
 \usage{
@@ -26,10 +26,10 @@
   \item{new.populations}{list of populations. default:\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
-                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"nonsyn"}:  non-synonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
                   \code{"intron"}: SNPs in intron regions. \cr
                   \code{"coding"}: SNPs in coding regions (CDS). \cr
@@ -45,9 +45,9 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr \cr
+The return value is a modified object of class \code{"GENOME"} \cr \cr
 -------------------------------------------------------------- \cr
-Following Slots will be modified in the \code{"GENOME"} object \cr
+The following slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
    \item{CL}{Composite Likelihood of SNPs}
@@ -74,10 +74,12 @@ Genome Res. 2005 15: 1566-1575 \cr \cr
 \examples{
 
 # Reading one alignment stored in the folder Aln
-# CL
 # GENOME.class <- readData("\home\Aln")
+#
+# CL
 # GENOME.class <- sweeps.stats(GENOME.class)
 # GENOME.class@CL
+#
 # CLR
 # create global set
 # GENOME.class  <- detail.stats(GENOME.class)

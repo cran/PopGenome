@@ -2,7 +2,7 @@
 \docType{methods}
 \alias{MS}
 
-\title{Coalescent Simulation with or without selection}
+\title{Coalescent simulation with or without selection}
 
 
 \description{
@@ -21,13 +21,13 @@ neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE,big.data=FALSE)
 \arguments{
 
   \item{GENO}{an object of class \code{"GENOME"}}
-  \item{niter}{number of samples per loci}
+  \item{niter}{number of samples per locus}
   \item{thetaID}{\code{"Tajima"},\code{"Watterson"} or \code{"user"}. default:\code{"user"}}
   \item{neutrality}{Calculate neutrality tests. default=\code{FALSE}}
   \item{linkage}{Calculate linkage disequilibrium. default=\code{FALSE}}
   \item{F_ST}{Calculate fixation index. default=\code{FALSE}}
   \item{params}{an object of class \code{"test.params"}. see \code{?test.params}}
-  \item{detail}{detail statistics. Note:slower! default=\code{FALSE}}
+  \item{detail}{detailed statistics. Note: slower computations! default=\code{FALSE}}
   \item{MSMS}{specify parameter for MSMS simulation with selection (has to be specified as a string)}
   \item{big.data}{if \code{TRUE} the ff-package is used}
 
@@ -41,14 +41,14 @@ When \code{thetaID="user"}, you have to define the theta values in an object of 
 The \code{"test.params"} class can also be used to specify some additional parameter like migration 
 and/or recombination rates... (\code{?test.params}). \cr \cr 
 
-Please read the MSMS documentation for a correct use in the PopGenome framework.
+Please read the MSMS documentation for the correct use of coalescent simulations to assess statistical significance.
  
 }
 
-\note{The executable file ms has to be stored in the current workspace. \cr If you want to use the MSMS application, put the msms folder including the corresponding executable files in the current workspace.}
+\note{The executable file ms has to be stored in the current workspace. \cr If you want to use the MSMS application, put the msms folder including the corresponding executable files in the current workspace.\cr
+Both programs can be obtained from their websites (see references).}
 
 \value{
-
 
   The function creates an object of class \code{"cs.stats"} 
 
@@ -80,7 +80,4 @@ Gregory Ewing and Joachim Hermisson, \emph{MSMS: A Coalescent Simulation Program
 
 }
 
-\note{
-The executable file ms from Hudson have to be stored in the current workspace.
-}
 \keyword{methods}

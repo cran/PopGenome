@@ -1,5 +1,7 @@
-
 useDynLib(PopGenome)
+
+import(methods)
+import(ff)
 
 exportClass(GENOME)
 exportMethods(neutrality.stats)

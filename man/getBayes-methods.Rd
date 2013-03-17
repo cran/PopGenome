@@ -9,7 +9,7 @@
 \title{Get values for BayeScanR}
 
 \description{
-This function returns the values, that are necessary for BayeScanR.
+This function returns the values that are necessary to run BayeScanR.
 }
 
 \usage{

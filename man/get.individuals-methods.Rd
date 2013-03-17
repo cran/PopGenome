@@ -5,11 +5,11 @@
 \alias{get.individuals-methods}
 
 
-\title{Print the individual names}
+\title{Print the names/IDs of individuals}
 
 
 \description{
-Extract the individual names.
+Extract the names/IDs of individuals.
 }
 
 \usage{

@@ -9,7 +9,7 @@
 \title{Diversities}
 
 \description{
- A generic function to calculate some nucleotide & haplotype diversities.
+ A generic function to calculate nucleotide & haplotype diversities.
 }
 
 \usage{
@@ -24,8 +24,8 @@
   \item{new.populations}{list of populations. default=\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -36,29 +36,29 @@
 		  \code{"intergenic"} : SNPs in intergenic regions. \cr
   } 
 
-  \item{pi}{Nei's pi calculation}
+  \item{pi}{Nei's calculation of pi}
 
 }
 
 
 \value{
 
-Returned value is an modified object of class \code{"GENOME"} \cr  \cr
+Returned value is a modified object of class \code{"GENOME"} \cr  \cr
 --------------------------------------------------------- \cr
-Following slots will be modified in the \code{"GENOME"}  object \cr
+The following slots will be modified in the \code{"GENOME"}  object \cr
 --------------------------------------------------------- \cr
 
 \tabular{rlll}{
             \tab Slot                	    \tab Reference   \tab Description\cr
           1.\tab \code{nuc.diversity.within}	\tab [1]         \tab Nucleotide diversity (within the population) \cr
-          2.\tab \code{Pi}	                \tab [2]         \tab Diversity from Nei  (within the population)    \cr 
+          2.\tab \code{Pi}	                \tab [2]         \tab Diversity from Nei (within the population)    \cr 
           3.\tab \code{hap.diversity.within}	\tab [1]         \tab Haplotype diversity (within the population)\cr
           }
 
 }
 
 \details{
-The nucleotide diversity have to be devided by \code{GENOME.class@n.sites}
+The nucleotide diversities have to be devided by \code{GENOME.class@n.sites} to give diversities per site.
 }
 
 \references{

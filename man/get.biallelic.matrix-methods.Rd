@@ -21,7 +21,7 @@ This function returns the biallelic matrix of a specific region.
  \arguments{
 
   \item{object}{An object of class \code{"GENOME"}}
-  \item{region}{id of the region}
+  \item{region}{ID of the region}
 
 }
 
@@ -29,7 +29,7 @@ This function returns the biallelic matrix of a specific region.
 \value{
 
 Biallelic matrix \cr
-rows:    names of each individual \cr
+rows:    names of individuals \cr
 columns: biallelic sites \cr
 
 }

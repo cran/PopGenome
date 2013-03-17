@@ -26,8 +26,8 @@
   \item{new.populations}{list of populations. default:\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -44,9 +44,9 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr \cr
+The return value is a modified object of class \code{"GENOME"} \cr \cr
 -------------------------------------------------------------- \cr
-Following Slots will be modified in the \code{"GENOME"} object \cr
+The following slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
    \item{Hudson.RM}{Four-gamete test}

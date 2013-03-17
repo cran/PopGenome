@@ -7,7 +7,7 @@
 
 
 \description{
- This function concatenates the regions/chunks. 
+ This function concatenates the regions/chunks contained in one \code{GENOME} object. 
 }
 
 \usage{
@@ -24,7 +24,7 @@ concatenate.regions(object)
 
 
 \value{
-  The function creates an object of class "GENOME"  
+  The function creates an object of class "GENOME".
 }
 
 

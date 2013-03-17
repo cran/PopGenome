@@ -30,10 +30,10 @@ subsites=FALSE,detail=FALSE, FAST=FALSE, do.R2=FALSE)
   \item{new.outgroup}{vector of outgroup sequences. default:\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
-                  \code{"nonsyn"}:  nonsynonymous sites. \cr
+                  \code{"nonsyn"}:  non-synonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
                   \code{"intron"}: SNPs in intron regions. \cr
                   \code{"coding"}: SNPs in coding regions (CDS). \cr
@@ -42,9 +42,9 @@ subsites=FALSE,detail=FALSE, FAST=FALSE, do.R2=FALSE)
           default:\code{FALSE}}
 
   
-  \item{detail}{default:\code{FALSE}, \code{TRUE} for some detail statistics. Note:slower!}  
+  \item{detail}{default:\code{FALSE}, \code{TRUE} for some detailed statistics. Note: slows down calculations!}  
   \item{FAST}{Fast computation. only works if there is no outgroup defined.}
-  \item{do.R2}{Rozas R2}
+  \item{do.R2}{Ramos-Onsins' & Rozas' R2}
   \item{stats}{show the results of each statistic. default:\code{TRUE}}
   \item{theta}{show the theta values. default:\code{FALSE}}
 }
@@ -52,22 +52,22 @@ subsites=FALSE,detail=FALSE, FAST=FALSE, do.R2=FALSE)
 \value{
 
 
-  Returned value is an modified object of class "GENOME" \cr \cr
+  The return value is a modified object of class \code{"GENOME"} \cr \cr
   --------------------------------------------------------- \cr
-  Following slots will be modified in the "GENOME" object \cr
+  The following slots will be modified in the \code{"GENOME"} object \cr
   --------------------------------------------------------- \cr
 
   \tabular{rlll}{
             \tab Slot                	\tab Reference       \tab Description\cr
           1.\tab \code{n.segregating.sites} 	\tab             \tab Total number of segregating sites\cr
-          2.\tab \code{Tajima.D}            	\tab [1]         \tab Tajima D statistic 1989\cr
-          3.\tab \code{Fu.Li.F}             	\tab [3]         \tab Fu & Li F* statistic 1993\cr
-          4.\tab \code{Fu.Li.D}             	\tab [3]         \tab Fu & Li D* statistic 1993\cr
-          5.\tab \code{Fay.Wu.H}            	\tab [6]         \tab Fay & Wu H statistic 2000\cr
-          6.\tab \code{Zeng.E}              	\tab [7]         \tab Zeng E statistic 2006\cr
-          7.\tab \code{Strobeck.S}          	\tab [5]         \tab Strobeck S statistic 1987 (if detail==\code{TRUE})\cr
+          2.\tab \code{Tajima.D}            	\tab [1]         \tab Tajima's' D statistic 1989\cr
+          3.\tab \code{Fu.Li.F}             	\tab [3]         \tab Fu & Li's' F* statistic 1993\cr
+          4.\tab \code{Fu.Li.D}             	\tab [3]         \tab Fu & Li's D* statistic 1993\cr
+          5.\tab \code{Fay.Wu.H}            	\tab [6]         \tab Fay & Wu's H statistic 2000\cr
+          6.\tab \code{Zeng.E}              	\tab [7]         \tab Zeng's E statistic 2006\cr
+          7.\tab \code{Strobeck.S}          	\tab [5]         \tab Strobeck's S statistic 1987 (if detail==\code{TRUE})\cr
           8.\tab \code{Fu.F_S}              	\tab [4]         \tab Fu's F$_{S}$ statistic 1997 (if detail==\code{TRUE})   \cr
-          9.\tab \code{Rozas.R_2}          	\tab [2]         \tab Rozas $R_{2}$ statistic 2002\cr
+          9.\tab \code{Rozas.R_2}          	\tab [2]         \tab Ramos-Onsins' & Rozas' $R_{2}$ statistic 2002\cr
           10.\tab \code{theta_Tajima}       	\tab [1]        \tab \cr
           11.\tab \code{theta_Watterson}       \tab          \tab \cr
           12.\tab \code{theta_Fu.Li}           \tab [3]         \tab \cr

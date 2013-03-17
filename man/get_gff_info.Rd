@@ -8,7 +8,7 @@
 
 
 \description{
-This function extract annotation informations from a gtf/gff file.
+This function extracts annotation information from a GTF/GFF file.
 }
 
 \usage{
@@ -20,7 +20,7 @@ get_gff_info(object=FALSE,gff.file,chr,position,feature=FALSE,extract.gene.names
 \arguments{
 
   \item{object}{object of class \code{GENOME}} 
-  \item{gff.file}{basepath of the gtf/gff file}
+  \item{gff.file}{basepath of the GTF/GFF file}
   \item{chr}{the chromosome}
   \item{position}{reference positions or region id (when \code{object} is specified)}
   \item{feature}{feature to search for in the gff-file. returns a list of positions}
@@ -28,7 +28,7 @@ get_gff_info(object=FALSE,gff.file,chr,position,feature=FALSE,extract.gene.names
 }  
 
 \details{
-This function extract annotation informations from a gtf/gff file.
+This function extracts annotation information from a GTF/GFF file.
 }
 
 

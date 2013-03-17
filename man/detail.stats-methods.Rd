@@ -39,8 +39,8 @@
   \item{new.outgroup}{outgroup sequences.}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -52,7 +52,7 @@
 
   \item{biallelic.structure}{fixed and shared polymorphisms (stored in \code{GENOME.class@region.stats}).}
   \item{mismatch.distribution}{statistics based on mismatch distribution}
-  \item{site.spectrum}{minor-allele frequency of each SNP}
+  \item{site.spectrum}{minor allele frequency of each SNP}
   
 }
 
@@ -61,10 +61,10 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr \cr
--------------------------------------------------------------- \cr
-Following Slots will be modified in the \code{"GENOME"} object \cr
--------------------------------------------------------------- \cr
+The return value is a modified object of class \code{"GENOME"} \cr \cr
+------------------------------------------------------------------ \cr
+The following Slots will be modified in the \code{"GENOME"} object \cr
+------------------------------------------------------------------ \cr
 
    \item{MDSD}{...}
    \item{MDG1}{...}
@@ -72,13 +72,13 @@ Following Slots will be modified in the \code{"GENOME"} object \cr
    \item{region.stats}{the slot  \code{biallelic.structure} and \code{minor.allele.freqs} will be filled} \cr
 
 The function \code{get.detail(GENOME.class, biallelic.structure=TRUE)} \cr
-returns a matrix for each region where, \cr
+returns a matrix for each region, where \cr
 
-\item{0}{pop is polymorph rest is polymorph} \cr
-\item{1}{pop is polymorph rest is monomorph} \cr
-\item{2}{pop is monomorph rest is polymorph} \cr  
-\item{3}{pop is monomorph rest is monomorph with same value}  \cr  
-\item{4}{pop is monomorph rest is monomorph with different values} \cr
+\item{0}{population is polymorphic, the remaining individuals are polymorphic} \cr
+\item{1}{population is polymorphic, the remaining individuals are monomorphic} \cr
+\item{2}{population is monomorphic, the remaining individuals are polymorphic} \cr  
+\item{3}{population is monomorphic, the remaining individuals are monomorphic with the same value}  \cr  
+\item{4}{population is monomorphic, the remaining individuals are monomorphic with different values} \cr
 
   
 }

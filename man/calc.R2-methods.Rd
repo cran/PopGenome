@@ -21,8 +21,8 @@
 
   \item{object}{an object of class \code{"GENOME"}}
   \item{subsites}{same as in the other modules}
-  \item{lower.bound}{sites with minor-allele-frequency=lower.bound are considered}
-  \item{upper.bound}{sites with minor-allele-frequency=upper.bound are considered}
+  \item{lower.bound}{sites with minor-allele-frequency>=lower.bound are considered}
+  \item{upper.bound}{sites with minor-allele-frequency<=upper.bound are considered}
 }
 
 
@@ -30,7 +30,7 @@
 \value{
 The slot GENOME.class@region.stats@linkage.disequilibrium will be filled.\cr 
 (R2,P-value,Distance) \cr  
-The Fisher-Exact-Test is used for the P-values.
+Fisher's Exact Test is used for the P-values.
 
 }
 

@@ -9,9 +9,9 @@
 
 
 \description{
-This generic function defines the populations. \cr
-The advantage of this function is, that you don't have to specify the populations for each calculation.
-The populations are set for each statistic module.  
+This generic function defines the populations.\cr
+Using this function obviates the need to specify the populations for each calculation separately.\cr
+The populations can be set differently for different PopGenome modules by applying the function between module calls.
 }
 
 \usage{

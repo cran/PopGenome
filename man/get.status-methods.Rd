@@ -5,10 +5,10 @@
 
 
 
-\title{State of Calculations}
+\title{State of calculations}
 
 \description{
-Some informations about the definitions of poulations and subsites.
+Some information about the definitions of populations and subsites.
 }
 
 \usage{

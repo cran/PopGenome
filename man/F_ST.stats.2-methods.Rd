@@ -24,8 +24,8 @@
   \item{new.populations}{list of populations. default=\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -37,7 +37,7 @@
   } 
 
   \item{snn}{Snn statistic from Hudson}
-  \item{Phi_ST}{Statistic from Excoffier et al}
+  \item{Phi_ST}{Statistic from Excoffier et al.}
 
 }
 
@@ -52,7 +52,7 @@ Following slots will be modified in the \code{"GENOME"}  object \cr
 \tabular{rlll}{
             \tab Slot                	\tab Reference   \tab Description\cr
           1.\tab \code{Hudson.Snn}	\tab [1]         \tab Snn statistic from Hudson (2000) \cr
-          2.\tab \code{Phi_ST}	        \tab [2]         \tab Phi_ST from Excoffier(1992)      \cr 
+          2.\tab \code{Phi_ST}	        \tab [2]         \tab Phi_ST from Excoffier (1992)      \cr 
           }
 
 }

@@ -8,7 +8,7 @@
 
 
 \description{
-This function extracts the simulated values out of the class \code{cs.stats}
+This function extracts the simulated values from the class \code{cs.stats}
 }
 
 \usage{
@@ -19,13 +19,13 @@ MS_getStats(object,locus=1,population=1)
 
 \arguments{ 
  \item{object}{object of class \code{"cs.stats"}}
- \item{locus}{the locus id}
- \item{population}{the population id}
+ \item{locus}{the locus ID}
+ \item{population}{the population ID}
 }  
 
 
 \value{
-The returned value is a matrix containing 
+The return value is a matrix containing 
 the simulation results of different statistical tests.\cr
 (see MS())
 }

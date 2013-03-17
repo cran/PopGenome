@@ -14,6 +14,7 @@ Coding.matrix            <- object@region.data@Coding.matrix2[[xyz]][,] # weil f
 biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]
 biallelic.sites          <- object@region.data@biallelic.sites[[xyz]]
 START                    <- object@region.data@reading.frame[[xyz]][,] # weil ff object
+REV                      <- object@region.data@rev.strand[[xyz]][,] #  reverse strand information #---
 CodingSNPS               <- object@region.data@CodingSNPS[[xyz]]
 
 START                    <- START[,1] + START[,2]
@@ -62,27 +63,48 @@ erg  <- apply(Coding.matrix,1,function(xx){
  return(gg)
  })
 
+# Create REV Vector #----
+ synGLOBAL$count <- 1
+ vec_rev <- sapply(REV,function(x){
+      gg              <- rep(x,synGLOBAL$SIZE[synGLOBAL$count])       
+      synGLOBAL$count <- synGLOBAL$count + 1
+
+ return(gg)
+ })
+
+
  START.vec   <- unlist(vec)
+ REV.vec     <- unlist(vec_rev) #---
+
  cod.pos     <- (bial.pos - START.vec)%%3
  
 
- # Schmeisse NaNs raus
+ # Delete NaNs 
  cod.pos     <- cod.pos[!is.na(bial.pos)]
  bial.pos    <- bial.pos[!is.na(bial.pos)]
+ rev.pos     <- REV.vec[!is.na(bial.pos)] #----
  
  ids         <- !duplicated(bial.pos)
  cod.pos     <- cod.pos[ids]
  bial.pos    <- bial.pos[ids]
-
+ rev.pos     <- rev.pos[ids] #----
 
 # Create the codons
 # bial.pos and cod.pos
 
 codons <- matrix(,length(cod.pos),3)
 for (xx in 1:length(cod.pos)){
-    if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx],bial.pos[xx]+1,bial.pos[xx]+2);next}
-    if(cod.pos[xx]==1){codons[xx,]=c(bial.pos[xx]-1,bial.pos[xx],bial.pos[xx]+1);next}
-    if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx]-2,bial.pos[xx]-1,bial.pos[xx]);next}
+   
+    if(rev.pos[xx]){# reverse strand 
+     if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx]+2,bial.pos[xx]+1,bial.pos[xx]);next}
+     if(cod.pos[xx]==1){codons[xx,]=c(bial.pos[xx]+1,bial.pos[xx],bial.pos[xx]-1);next}
+     if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx],bial.pos[xx]-1,bial.pos[xx]-2);next}
+    }else{
+     if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx],bial.pos[xx]+1,bial.pos[xx]+2);next}
+     if(cod.pos[xx]==1){codons[xx,]=c(bial.pos[xx]-1,bial.pos[xx],bial.pos[xx]+1);next}
+     if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx]-2,bial.pos[xx]-1,bial.pos[xx]);next}
+    }
+
 }
 
 ## Reading the reference chromosome
@@ -101,9 +123,17 @@ minor         <- Subst[1,CodingSNPS]
 major         <- Subst[2,CodingSNPS]
 
 for(xx in 1: dim(Nuc.codons)[1]){
- if(cod.pos[xx]==0){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
- if(cod.pos[xx]==1){REF[xx,2] <- minor[xx];ALT[xx,2]<-major[xx];next}
- if(cod.pos[xx]==2){REF[xx,3] <- minor[xx];ALT[xx,3]<-major[xx];next}
+ 
+ if(rev.pos[xx]){
+  if(cod.pos[xx]==0){REF[xx,3] <- minor[xx];ALT[xx,3]<-major[xx];next}
+  if(cod.pos[xx]==1){REF[xx,2] <- minor[xx];ALT[xx,2]<-major[xx];next}
+  if(cod.pos[xx]==2){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
+ }else{
+  if(cod.pos[xx]==0){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
+  if(cod.pos[xx]==1){REF[xx,2] <- minor[xx];ALT[xx,2]<-major[xx];next}
+  if(cod.pos[xx]==2){REF[xx,3] <- minor[xx];ALT[xx,3]<-major[xx];next}
+ }
+
 } 
 
 # Coding Codons ...

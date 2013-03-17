@@ -88,6 +88,7 @@ stat <- obj[[xx]]@region.stats
       GeneSNPS                     <- c(GeneSNPS,dat@GeneSNPS)
       Gene.matrix                  <- c(Gene.matrix,dat@Gene.matrix)
       reading.frame                <- c(reading.frame,dat@reading.frame)
+      rev.strand                   <- c(rev.strand,dat@rev.strand)
 
       transitions      		<- c(transitions,dat@transitions) 
 
@@ -158,6 +159,7 @@ region.data@Gene.matrix                 <- Gene.matrix
 region.data@ExonSNPS                    <- ExonSNPS
 region.data@Exon.matrix                 <- Exon.matrix
 region.data@reading.frame               <- reading.frame
+region.data@rev.strand                  <- rev.strand
 region.data@transitions  		<- transitions
 region.data@biallelic.matrix            <- biallelic.matrix 
 region.data@biallelic.sites             <- biallelic.sites  
@@ -244,6 +246,7 @@ transitions  		<- NULL
 biallelic.substitutions <- NULL
 biallelic.matrix        <- NULL
 reading.frame           <- NULL
+rev.strand              <- NULL
 Coding.matrix           <- NULL
 Coding.matrix2          <- NULL
 Intron.matrix           <- NULL
@@ -304,11 +307,12 @@ if(obj@big.data){
   if(obj@gff.info){
 
    if(obj@snp.data){
-   # reading.frame
+   # reading.frame + rev.strand
     cols.reading     <- sapply(obj@region.data@reading.frame,function(x){if(length(x)==0){return(0)};return(dim(x)[1])})
     R.reading        <- sum(cols.reading)
     if(R.reading>0){
     reading.frame    <- ff(0,dim=c(R.reading,2))
+    rev.strand       <- ff(0,R.reading)
     start.reading    <- 1
     }
    }
@@ -422,12 +426,13 @@ stat      <- obj@region.stats
        if(obj@gff.info){
 	  
         if(obj@snp.data){
-          # reading.frame
+          # reading.frame + rev.strand
          if(obj@snp.data){
           if(R.reading){
            if(cols.reading[xx]!=0){
             end.reading                               <- start.reading + cols.reading[xx] - 1       
             reading.frame[start.reading:end.reading,] <- dat@reading.frame[[xx]][,] # + ADD.GFF6
+            rev.strand[start.reading:end.reading]     <- dat@rev.strand[[xx]][,]
             start.reading  <- end.reading + 1
             # ADD.GFF      <- end
             # ADD.GFF6       <- ADD.GFF6 + obj@n.sites[xx]
@@ -506,6 +511,7 @@ stat      <- obj@region.stats
            if(cols.reading[xx]!=0){
             end.reading                               <- start.reading + cols.reading[xx] - 1       
             reading.frame[start.reading:end.reading,] <- dat@reading.frame[[xx]][,] # + ADD.GFF6
+            rev.strand[start.reading:end.reading]     <- dat@rev.strand[[xx]][,] # + ADD.GFF6
             start.reading  <- end.reading + 1
             # ADD.GFF      <- end
             # ADD.GFF6       <- ADD.GFF6 + obj@n.sites[xx]
@@ -684,7 +690,8 @@ region.data@Intron.matrix                <- list(Intron.matrix)
 region.data@UTR.matrix                   <- list(UTR.matrix)
 region.data@Gene.matrix                  <- list(Gene.matrix)
 if(obj@snp.data){
- region.data@reading.frame                <- list(reading.frame)
+ region.data@reading.frame               <- list(reading.frame)
+ region.data@rev.strand                  <- list(rev.strand)  
 }
 #region.data@matrix_codonpos         <- matrix_codonpos 
 #region.data@synonymous              <- synonymous 

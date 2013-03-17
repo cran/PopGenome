@@ -5,7 +5,7 @@
 \alias{region.as.fasta-methods}
 
 
-\title{Extract a region as a FASTA file}
+\title{Extract a region and write it to a FASTA file}
 
 
 \description{
@@ -23,7 +23,7 @@ This generic function writes a FASTA file of the observed biallelic positions to
   \item{object}{an object of class \code{"GENOME"}}
   \item{region.id}{region of the genome}
   \item{filename}{name of the FASTA file}
-  \item{type}{1: extract SNPs 2: extract all nucleotides}
+  \item{type}{1: extract SNPs; 2: extract all nucleotides}
   \item{ref.chr}{reference sequence}
 }
 

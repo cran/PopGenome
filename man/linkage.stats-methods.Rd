@@ -29,8 +29,8 @@
   \item{new.populations}{list of populations. default=\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -41,18 +41,18 @@
           default:\code{FALSE}}
   
   
-  \item{detail}{if you want to calculate some detail statistics. slower! default:\code{FALSE}}  
-  \item{include.unknown}{TRUE, if unknown positions should be considered. Slower !  see readData()}
-  \item{do.ZnS}{ZnS, ZA and ZZ} 
-  \item{do.WALL}{Wall B/Q}
+  \item{detail}{if you want to calculate some detailed statistics. This can be considerably slower! default:\code{FALSE}}  
+  \item{include.unknown}{TRUE if unknown positions should be considered. Slower !  see readData()}
+  \item{do.ZnS}{calculate ZnS, ZA and ZZ} 
+  \item{do.WALL}{calculate Wall's B/Q}
 }
 
 
 \value{
 
-Returned value is an modified object of class \code{"GENOME"} \cr  \cr
+The return value is a modified object of class \code{"GENOME"} \cr  \cr
 --------------------------------------------------------- \cr 
-Following slots will be modified in the \code{"GENOME"}  object \cr 
+The following slots will be modified in the \code{"GENOME"}  object \cr 
 --------------------------------------------------------- \cr 
 
 \tabular{rlll}{

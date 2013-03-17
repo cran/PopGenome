@@ -18,7 +18,7 @@ PopGplot(values,colors=FALSE,span=0.1)
 }
 
 \arguments{
-\item{values}{the statistical values (matrix) columns=populations}
+\item{values}{the statistical values (matrix); columns=populations}
 \item{colors}{the colors for each population (character vector)}
 \item{span}{the degree of smoothing} 
 }  

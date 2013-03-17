@@ -7,7 +7,7 @@
 
 
 \description{
- This function concatenates the objects of class GENOME
+ This function concatenates objects of class GENOME, allowing to stitch together larger datasets from smaller objects.
 }
 
 \usage{
@@ -24,7 +24,7 @@ concatenate.classes(classlist)
 
 
 \value{
-  The function creates an object of class "GENOME"  
+  The function creates an object of class "GENOME".
 }
 
 

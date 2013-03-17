@@ -39,8 +39,8 @@ FAST=FALSE
   \item{new.populations}{list of populations. default:\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -51,10 +51,10 @@ FAST=FALSE
                   \code{"intergenic"} : SNPs in intergenic regions. \cr
   } 
   \item{detail}{detail statistics. Note: slower!}
-  \item{between}{\code{TRUE}: show between diversities. \code{FALSE}: show within diversities}
+  \item{between}{\code{TRUE}: show between-diversities. \code{FALSE}: show within-diversities}
   \item{mode}{mode=\code{"haplotype"} or mode=\code{"nucleotide"}}
   \item{only.haplotype.counts}{only calculate the haplotype counts}
-  \item{FAST}{if \code{TRUE} only calculate a subset of statistics. see details !}
+  \item{FAST}{if \code{TRUE} only calculate a subset of statistics. see details!}
   \item{pairwise}{show paiwise comparisons. default:\code{FALSE}}
 }
 
@@ -71,15 +71,15 @@ FAST=FALSE
           6.\tab \code{Hudson.K_ST}             \tab [3]         \tab see reference ... \cr
           7.\tab \code{nuc.diversity.within}    \tab [1]         \tab Nucleotide diversity (within the population)\cr
           8.\tab \code{hap.diversity.within}    \tab [1]         \tab Haplotype diversity (within the population) \cr
-          9.\tab \code{Pi}          	        \tab [4]         \tab Diversity from Nei (within the population)  \cr
-          10.\tab \code{hap.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against the rest (haplotype)\cr
-          11.\tab \code{nuc.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against the rest (nucleotide)\cr
+          9.\tab \code{Pi}          	        \tab [4]         \tab Nei's diversity (within the population)  \cr
+          10.\tab \code{hap.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against all other individuals (haplotype)\cr
+          11.\tab \code{nuc.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against tall other individuals (nucleotide)\cr
           12.\tab \code{hap.diversity.between}  \tab [1]         \tab Haplotype diversities between populations\cr
           13.\tab \code{nuc.diversity.between}  \tab [1]         \tab Nucleotide diversities between populations\cr
-          14.\tab \code{nuc.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of population (nucleotide)\cr
-          15.\tab \code{hap.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of population (haplotype)\cr
-          16.\tab \code{Nei.G_ST.pairwise}      \tab [2]         \tab Fixation Index for every pair of population (Nei)\cr
-          17.\tab \code{region.stats}           \tab             \tab an object of class "region.stats" for detail statistics\cr
+          14.\tab \code{nuc.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of populations (nucleotide)\cr
+          15.\tab \code{hap.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of populations (haplotype)\cr
+          16.\tab \code{Nei.G_ST.pairwise}      \tab [2]         \tab Fixation Index for every pair of populations (Nei)\cr
+          17.\tab \code{region.stats}           \tab             \tab an object of class "region.stats" for detailed statistics\cr
        }
 
 }
@@ -94,14 +94,14 @@ FAST=FALSE
 If \code{FAST} is switched on, this module only calculates \code{nuc.diversity.within}, \code{hap.diversity.within}, \code{haplotype.F_ST},
 \code{nucleotide.F_ST} and \code{pi}.
 Note: \cr 
-The nucleotide diversity have to be devided by \code{GENOME@n.sites}
+The nucleotide diversities have to be devided by \code{GENOME@n.sites} to give diversities per site.
  
 
 }
 
 \references{
 
-[1] Hudson, R. R., M. Slatkin, and W.P. Maddison (1992). \emph{Estimating of levels of gene flow from DNA sequence data.} Gentics 13(2),583-589 \cr \cr
+[1] Hudson, R. R., M. Slatkin, and W.P. Maddison (1992). \emph{Estimating levels of gene flow from DNA sequence data.} Gentics 13(2),583-589 \cr \cr
 [2] Nei, M. (1973). \emph{Analysis of gene diversity in subdivided populations.} Proc.Natl. Acad. Sci. USA 70: 3321-3323 \cr \cr
 [3] Hudson, R. R., Boos, D.D. and N. L. Kaplan (1992). \emph{A statistical test for detecting population subdivison.} Mol. Biol. Evol. 9: 138-151. \cr \cr
 [4] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr

@@ -28,7 +28,9 @@ if(length(data)!=0){
 }else{ # no data defined
   samplesize <- numeric(npops)
   for(xx in 1:npops){
-     samplesize[xx] <- length(populations[[xx]])
+     #samplesize[xx] <- length(populations[[xx]])
+     #correct in case there are NaNs in the biallelic.matrix (SNP data, sliding windows) 
+      samplesize[xx] <- sum(!is.na(matrix[populations[[xx]],,drop=FALSE]))/dim(matrix)[2]
   }  
 }
 

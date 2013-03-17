@@ -24,8 +24,8 @@ Achaz statistic
   \item{new.outgroup}{outgroup vector. default:\code{FALSE}}
   \item{subsites}{ 
 
-                  \code{"transitions"}: SNPs which are transitions. \cr
-                  \code{"transversions"}: SNPs which are transversions. \cr
+                  \code{"transitions"}: SNPs that are transitions. \cr
+                  \code{"transversions"}: SNPs that are transversions. \cr
                   \code{"syn"}: synonymous sites. \cr
                   \code{"nonsyn"}:  nonsynonymous sites. \cr
                   \code{"exon"}: SNPs in exon regions. \cr
@@ -42,9 +42,9 @@ Achaz statistic
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr \cr
+returned value is a modified object of class \code{"GENOME"} \cr \cr
 -------------------------------------------------------------- \cr
-Following Slots will be modified in the \code{"GENOME"} object \cr
+The following Slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
    \item{Yach}{Achaz Y statistic}

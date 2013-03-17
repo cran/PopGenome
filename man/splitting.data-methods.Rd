@@ -3,12 +3,12 @@
 \alias{splitting.data,GENOME-method}
 \alias{splitting.data-methods}
 
-\title{Splitting data into subsites}
+\title{Split data into subsites}
 
 
 \description{
- This generic function splits the data in subsites, if gff/gtf information is present or 
- positions are defined.
+ This generic function splits the data into subsites, if GFF/GTF information is present or if
+ positions are defined accordingly.
  
 }
 
@@ -37,8 +37,8 @@
               \code{2}: Genome positions   
   }
   
- \item{whole.data}{scanning the whole data by concatenating the regions. 
-                   If FALSE, the regions are scaned seperately}
+ \item{whole.data}{Scan the whole data by concatenating the regions. 
+                   If FALSE, the regions are scanned seperately}
 }
 
 
@@ -46,15 +46,14 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr
+The return value is a modified object of class \code{"GENOME"}. \cr
 
   
 }
 
 \note{
 
-If there are more than one region defined, PopGenome tries to concatenate those regions.
-
+If there are more than one region defined, PopGenome tries to concatenate those regions unless whole.data=FALSE.
  
 }
 

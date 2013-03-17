@@ -471,6 +471,22 @@ features <- gff
    
    if(length(features$Coding)>0){ 
     Coding_region  <- as.vector(unlist(apply(features$Coding,1,function(x){return(x[1]:x[2])})))
+    start.pos      <- as.vector(unlist(apply(features$Coding,1,function(x){return(rep(x[1],x[2]-x[1]+1))})))
+    # pump reverse strand #FIXME Performance
+    JJJ            <- new.env()
+    JJJ$count      <- 1
+    rev.strand     <-  as.vector(unlist(apply(features$Coding,1,function(x){back <- rep(features$rev.strand[JJJ$count],x[2]-x[1]+1);JJJ$count <- JJJ$count+1;return(back)})))  
+    #---------------
+
+    ids            <- match(matrix_pos, Coding_region)
+    ids            <- ids[!is.na(ids)]
+    
+    # reverse strand
+    rev.strand     <- rev.strand[ids]
+
+ 
+    start.pos      <- start.pos[ids] - 1
+   
     CodingSNPS     <- is.element(matrix_pos,Coding_region)
     Coding_region_length <- length(Coding_region)
     CodingSNPS2     <- matrix_pos[CodingSNPS]
@@ -478,16 +494,27 @@ features <- gff
    }else{CodingSNPS<-NaN;size<-0;Coding_region_length <- 0}
    
 if(size>0 & !SNP.DATA){  # wenn SNPS in den codierenden regionen existieren
-
    y <- 1 
    matrix_codonpos <- vector(,3*size)
   
  for(xx in 1:size){
   x  <- CodingSNPS2[xx]
-  if(x%%3==0){matrix_codonpos[y:(y+2)] <- c(x-2,x-1,x);y <- y+3;next;}
-  if(x%%3==1){matrix_codonpos[y:(y+2)] <- c(x,x+1,x+2);y <- y+3;next;}
-  if(x%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
+  if(rev.strand[xx]){# reverse strand
+
+   if((x-start.pos[xx])%%3==0){matrix_codonpos[y:(y+2)] <- c(x,x-1,x-2);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==1){matrix_codonpos[y:(y+2)] <- c(x+2,x+1,x);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==2){matrix_codonpos[y:(y+2)] <- c(x+1,x,x-1);y <- y+3;next;}
+
+  }else{# non-reverse strand
+
+   if((x-start.pos[xx])%%3==0){matrix_codonpos[y:(y+2)] <- c(x-2,x-1,x);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==1){matrix_codonpos[y:(y+2)] <- c(x,x+1,x+2);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
+ 
+  }
+ 
  } 
+ 
  
   # matrix_codonpos <-  unique(matrix_codonpos) IMPORTANT ! CHECK !
    

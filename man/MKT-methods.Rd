@@ -27,9 +27,11 @@
 
 \details{
 
-This function assumes that in population genetic analysis the probability of two variants \cr
-in one codon is very small. Due to this only single nucleotide polymorphisms (SNPs) are examined. \cr 
-When there was no gff-file specified, an alignment in the right reading frame is expected. \cr
+This approximate version of the McDonald-Kreitman test assumes that the probability that \cr 
+two single nucleotide polymorphisms (SNPs) occur in the same codon is very small. Thus, \cr
+only codons with a single SNP are examined. \cr 
+If no gff-file was specified when the data was read in, it is assumed that the \cr
+alignment is in the correct reading frame (starting at a first codon position). \cr
 The outgroup has to be defined as a population !
 
 }
@@ -39,12 +41,12 @@ The outgroup has to be defined as a population !
 \value{
 
 
-  Returned value is an modified object of class "GENOME" \cr \cr
+  The return value is a modified object of class "GENOME" \cr \cr
   --------------------------------------------------------- \cr
-  Following slots will be modified in the "GENOME" object \cr
+  The following slots will be modified in the "GENOME" object \cr
   --------------------------------------------------------- \cr
 
-  \item{MKT}{a matrix which includes following values:}
+  \item{MKT}{a matrix which includes the following values:}
 
    \tabular{rll}{
             \tab Columns               	                 \tab Description\cr

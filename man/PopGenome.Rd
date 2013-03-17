@@ -11,7 +11,7 @@
 }
 \description{
 
-R-package for Population genetic & genomic analysis
+R-package for Population genetic & genomic analyses
 
 }
 \details{
@@ -21,17 +21,17 @@ Index:
 F_ST.stats               Fixation index
 diversity.stats          Diversities
 MKT                      McDonald & Kreitman test
-MS                       Coalescent simulation
-detail.stats             Several statistics
+MS                       Coalescent simulations
+detail.stats             Several misc. statistics
 linkage.stats            Linkage disequilibrium
 neutrality.stats         Neutrality statistics
 readData                 Reading alignments and calculating summary data
-readSNP                  Read data from the 1001 genome project
-readVCF                  Read data from the 1000 genome project
-readHapMap               Read HapMap data
-sliding.window.transform Sliding window transformation.
-splitting.data           Splitting data in subsites
-test.params              Set parameter for coalescent simulation.
+readSNP                  Read data in .SNP format (e.g., from the 1001 Arabidopsis Genomes project)
+readVCF                  Read data in VCF format (e.g., from the 1000 human Genomes project)
+readHapMap               Read data in HapMap format
+sliding.window.transform Sliding window transformation
+splitting.data           Split data into subsites
+test.params              Set parameters for coalescent simulations.
 
 }
 

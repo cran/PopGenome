@@ -4,11 +4,11 @@
 \alias{set.synnonsyn-methods}
 
 
-\title{Sets synonymous positions for SNP data}
+\title{Set synonymous positions for SNP data}
 
 
 \description{
- This generic function verifies which of the observed biallelic positions are synonymous.\cr
+ This generic function classifies the observed biallelic positions read from SNP data files into synonymous and non-synonymous SNPs.\cr
 }
 
 \usage{
@@ -30,13 +30,14 @@
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr 
+The return value is a modified object of class \code{"GENOME"} \cr 
   
   
 }
 
 \note{
-The data have to be read in with a corresponding GFF/GTF file (including the CDS fields !)
+The data has to be read in with a corresponding GFF/GTF file (including the CDS fields); 
+otherwise a correct classification is not possible.
 }
 
 \examples{

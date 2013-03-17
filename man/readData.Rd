@@ -7,11 +7,11 @@
 \alias{get.sum.data,GENOME-method}
 \alias{get.sum.data-methods}
 
-\title{Reading alignments and calculating summary data}
+\title{Read alignments and calculate summary data}
 
 
 \description{
- This function reads alignments/SNP-data in several formats and calculates some summary data. 
+ This function reads alignments/SNP data in several formats and calculates some summary data. 
 }
 
 
@@ -32,22 +32,23 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
   \item{object}{object of class \code{"GENOME"}}
   \item{path}{the basepath (folder) of the alignments}
   \item{outgroup}{vector of outgroup sequences}
-  \item{include.unknown}{if unknown positions should be considered.}
-  \item{populations}{list of populations.default:\code{FALSE}}
-  \item{gffpath}{the basepath of the corresponding gff-files. default:\code{FALSE}}
-  \item{format}{Data formats. \code{"fasta"} is default. See detail !}
-  \item{parallized}{parallele processing. see detail !}
+  \item{include.unknown}{if positions with unknown nucleotides should be considered.}
+  \item{populations}{list of populations. default:\code{FALSE}}
+  \item{gffpath}{the basepath of the corresponding GFF-files. default:\code{FALSE}}
+  \item{format}{data formats. \code{"fasta"} is default. See details !}
+  \item{parallized}{parallel processing to accelerate the reading process. See details !}
   \item{progress_bar_switch}{progress_bar}
-  \item{FAST}{Fast computation. See detail !}
-  \item{big.data}{using the ff-package}
-  \item{SNP.DATA}{important for reference positions, should be TRUE, if you use SNP-data in alignment format}
+  \item{FAST}{fast computation. See details !}
+  \item{big.data}{use the ff-package}
+  \item{SNP.DATA}{important for reference positions; should be TRUE if you use SNP-data in alignment format}
 
 }
 
 \details{
-The data (alignments or SNP-files) have to be stored in a folder. The folder is the input of this \cr 
-function. If there is no gff-file specified, an alignment in the right reading frame is expected. \cr
-Otherwise the examination of synonymous and nonsynonymous positions is useless. \cr \cr
+All data (alignments or SNP-files) has to be stored in one folder. The folder is the input of this \cr 
+function. If no GFF file is specified, an alignment in the correct reading frame \cr
+(starting at a first codon position) is expected. \cr
+Otherwise synonymous and non-synonymous positions are not identified correctly. \cr \cr
 
 format: \cr 
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
@@ -57,33 +58,33 @@ format: \cr
 Valid nucleotides are T,t,U,u,G,g,A,a,C,c,N,n,- \cr \cr
 
 parallized: \cr 
-- will speed up calculation if you use a huge amount of alignments \cr \cr
+- will speed up calculations if you use a very large amount of alignments \cr \cr
 
 FAST:   \cr 
-- will not calculate syn/nonsyn SNPs
+- will not classify synonymous/non-synonymous SNPs
 - fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
   and biallelic substitutions \cr
-- can be switched to \code{TRUE} in case of SNP-data without loosing informations \cr \cr                  
+- can be switched to \code{TRUE} in case of SNP data without loss of information \cr \cr                  
 
 big.data: \cr 
-- using the ff-package \cr 
-- ff mechanism for biallelic.matrix and gff/gtf information \cr 
-- is done automatically for readVCF or readSNP \cr
-- Note! should switch to TRUE, if you use big chunks \cr 
-  and you want to concatenate them in the PopGenome framework \cr
-  (for example: sliding window of the whole data).\cr \cr
+- use the ff-package \cr 
+- ff mechanism is used for biallelic.matrix and GFF/GTF information \cr 
+- is automatically activated for readVCF or readSNP \cr
+- Note! you should set this to TRUE if you use big chunks \cr 
+  and you want to later concatenate them in the PopGenome framework \cr
+  (for example: sliding windows of the whole dataset).\cr \cr
 
 SNP.DATA: \cr 
-- should be switched to \code{TRUE}, if you use SNP-data in alignment format. \cr 
-- the corresponding SNP position can be set via \code{set.ref.positions}
+- should be switched to \code{TRUE} if you use SNP-data in alignment format. \cr 
+- the corresponding SNP positions can be set via \code{set.ref.positions}
 }
 
 \value{
 
 
-  The function creates an object of class "GENOME" \cr \cr
+  The function creates an object of class \code{"GENOME"} \cr \cr
   --------------------------------------------------------- \cr
-  Following Slots will be filled in the "GENOME" object \cr
+  The following slots will be filled in the \code{"GENOME"} object \cr
   --------------------------------------------------------- \cr
 
             \tabular{rll}{
@@ -95,8 +96,8 @@ SNP.DATA: \cr
 	  5.\tab \code{n.valid.sites}            	\tab number of valid sites\cr
           6.\tab \code{n.polyallelic.sites}             \tab number of sites with >2 nucleotides \cr      
           7.\tab \code{trans.transv.ratio}          	\tab transition/transversion ratio of biallelic sites\cr
-          8.\tab \code{region.names}          	        \tab names of each region\cr
-	  9.\tab \code{region.data}            	        \tab some detail data informations\cr
+          8.\tab \code{region.names}          	        \tab names of regions\cr
+	  9.\tab \code{region.data}            	        \tab some detailed information about the data read\cr
           
         }
 

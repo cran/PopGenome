@@ -8,18 +8,19 @@
 \author{Bastian Pfeifer}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \maketitle 
 
 \section*{Accessing the class GENOME}
 The whole framework of PopGenome is based on a single class named \texttt{GENOME}.
-This object contains a huge amount of informations about the observed data and also stores the calculated statistic values. To ensure a whole genome perspective we use the ff-package (\url{http://cran.r-project.org/web/packages/ff/index.html}) to minimize memory space.
-Anyway, PopGenome provides an effortless access of the values stored in the class \texttt{GENOME}, what facilitates the integration of new methods and the reimplementation of existing methods become redundant.
-In the next sections we will discuss the integration of new methods on the basis of alignments. Note, this will also work for regions of whole genome SNP data. 
+A \texttt{GENOME} object contains virtually all information about the observed data, and also stores the results of calculations. To ensure a whole-genome perspective despite limited computer memory, we use the ff-package (\url{http://cran.r-project.org/web/packages/ff/index.html}).
+PopGenome provides an effortless access to the data stored in the class \texttt{GENOME}. This obviates the need to re-implement functions already included in PopGenome and thus facilitates the easy integration of new methods.
+In the next sections, we will discuss the integration of new methods on the basis of alignments. Note that the same approach also works for regions of whole genome SNP data. 
 \\
-Lets implement the Watterson's homozygosity test of neutrality: 
+Let us implement Watterson's homozygosity test of neutrality: 
 \\
-\[H=\sum^{k}_{i=1} x_{i}^{2} \]
-where $k$ is the total number of haplotypes and $x_{i}$ the frequency of the 
+\[H=\sum^{k}_{i=1} x_{i}^{2} \] ,
+where $k$ is the total number of haplotypes, and $x_{i}$ is the frequency of the 
 $i$-th haplotype with:
 
 \[\sum^{k}_{i=1} x_{i}=1\]
@@ -70,7 +71,7 @@ EW_Test(GENOME.class)
 \end{verbatim}
 \section*{Embedding new methods into the PopGenome framework}
 PopGenome provides a mechanism to fully integrate your own functions into the
-PopGenome framework. The next subsections will guide you through this meachanism.
+PopGenome framework. The next subsections will guide you through this mechanism.
 Let's integrate the Ewens Watterson Test.
 \subsection*{(1) Skeleton of a PopGenome function}
 Use the function \texttt{create.PopGenome.method} to generate the new function.
@@ -93,13 +94,12 @@ The script itself describes where to put your function.
 \end{center}
 
 \subsection*{(2) Writing your own function}
-Lets fully integrate the Ewens Watterson test described above in the PopGenome framework without accessing the slot \texttt{region.stats@haplotype.counts}.
-This can be neccessary if PopGenome for example would not calculate the haplotype counts.
-Following parameter are useful:
+Let's fully integrate the Ewens Watterson test described above in the PopGenome framework. To better illustrate the integration of new functions, we will do this without accessing the slot \texttt{region.stats@haplotype.counts}.
+The following variables are useful:
 
 \subsubsection*{bial}
-The parameter \texttt{bial} (Biallelic Matrix) contains the SNPs of the alignments.
-The rownames are the individuals and the columns the positions of the observed SNPs.(Manual:\texttt{popGetBial}) 
+The variable \texttt{bial} (short for biallelic matrix) contains the SNPs of the alignments.
+The rownames are the individuals, and the columns correspond to the positions of the observed SNPs. (Manual:\texttt{popGetBial}) 
 
 \begin{verbatim}
 
@@ -113,10 +113,10 @@ PER-1  0  0  0  0  0
 RI-0   0  1  0  0  0
 
 \end{verbatim}
-The Biallelic Matrix contains zeros (\textit{major allele}) and ones (\textit{minor allele}) regarding the whole population considered. Because of that the third SNP (position: 44) for example contains 3 minor alleles and 2 major alleles. PopGenome will manage this automatically and will redefine those values for every subset. Nevertheless, you should keep that in mind when yo write your own functions.
+The Biallelic Matrix contains zeros (\textit{major alleles}) and ones (\textit{minor alleles}) with respect to the whole dataset. Because of that, the third SNP (position: 44) contains 3 minor alleles and 2 major alleles. PopGenome will manage this automatically and will redefine those values for every subset. Nevertheless, you should keep that in mind when you write your own functions.
 
 \subsubsection*{populations}
-The R object \texttt{populations} contains the defined populations as rownumbers of the Biallelic Matrix. You should really use this parameter, because sometimes there are not all individuals present in an alignment. (\texttt{region.data@populations})
+The R object \texttt{populations} contains the defined populations as rownumbers of the Biallelic Matrix. We recommend using this object, as sometimes not all individuals are present in an alignment. (\texttt{region.data@populations})
 
 \begin{verbatim}
 populations[[2]][1:5]
@@ -138,7 +138,7 @@ EW_test <- function(bial,populations){
   frequencies      <- lapply(haplotype.counts,function(x){return((x/sum(x))^2)})
   EW_values        <- sapply(frequencies,sum)
 
-return(EW_values)
+  return(EW_values)
 }
 \end{verbatim}
 
@@ -155,17 +155,18 @@ return(EW_values)
 library(PopGenome)
 GENOME.class <- readData("Alignments")
 create.PopGenome.method("Ewens.Watterson")
-# editing
+# edit this new function as outlined above...
+# load the edited function into R and use it:
 source("Ewens.Watterson.R")
 EW_values <- Ewens.Watterson(GENOME.class)
 \end{verbatim}  
-Now, you have the whole capability of PopGenome for your function.
+Now, you can use your function with the full power of the PopGenome framework.
 
 
 \section{Parser for new input formats}
-PopGenome supports also R-objects as an input. Thus you can parse every
-text file you want and convert it into a special R-object.
-This R-object is type of a list and contains a matrix including the nucleotides and the individuals as well as the positions of the sites of the matrix.
+PopGenome also supports R-objects as input. You can use this capability to parse any
+text file and convert it into a special R-object readable by PopGenome.
+This R-object is a list, which contains a matrix of numerically encoded nucleotides, where each row corresponds to one individual, as well as the positions of the sites of the matrix.
 The positions are optional, but might be useful in case of SNP data.
 The nucleotides are coded as follows:
 
@@ -201,8 +202,8 @@ save(file="Aln", Robject)
 GENOME.class <- readData("Alignments", format="RData")
 
 \end{verbatim}
-You also can split huge data in chunks, PopGenome
-will concatenate them.
-
+You can split large datasets into chunks stored in a common folder; PopGenome
+will concatenate these.
 
 \end{document}
+

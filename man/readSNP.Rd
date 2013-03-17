@@ -3,11 +3,11 @@
 \docType{methods}
 \alias{readSNP}
 
-\title{Reading SNP data from the 1001 Genome-project}
+\title{Read data in .SNP format}
 
 
 \description{
- This function reads SNP data (quality_variant) from the 1001 Genome-project. 
+ This function reads data in .SNP (quality_variant) format, as distributed by the 1001 Genomes project (Arabidopsis). 
 }
 
 \usage{
@@ -25,37 +25,37 @@ readSNP(folder,populations=FALSE,outgroup=FALSE,gffpath=FALSE,
   \item{folder}{the basepath of the variant_calls}
   \item{outgroup}{vector of outgroup sequences}
   \item{populations}{list of populations}
-  \item{gffpath}{the corresponding gff-file}
+  \item{gffpath}{the corresponding GFF file}
   \item{CHR}{which chromosome ?, default: all chromosomes}
-  \item{ref.chr}{reference chromosome (to verfiy synonymous positions)}
+  \item{ref.chr}{reference chromosome (to classify synonymous/non-synonymous positions)}
   \item{snp.window.size}{scan SNP chunks}
   \item{parallized}{multicore computation}
-  \item{ffpackagebool}{using the ff-package to save memory space. (slower)}
-  \item{include.unknown}{including unknown positions}
+  \item{ffpackagebool}{use the ff-package to save memory space. (slower)}
+  \item{include.unknown}{include positions with unknown nucleotides}
 }
 
 \details{
-The ff-package we use to store the SNP informations is limited by \cr
+The ff-package we use to store the SNP information limits the data size to\cr
 individuals * (number of SNPs) <= .Machine$integer.max \cr
-The text-files containing the SNP-information of each individuell have to be stored in one folder. \cr
-The slots \code{transitions}, \code{biallelic.sites} and \code{biallelic.substitutions} of the class \cr
+The text files containing the SNP information of each individual have to be stored in one folder. \cr
+The slots \code{transitions}, \code{biallelic.sites}, and \code{biallelic.substitutions} of the class \cr
 \code{"regions.data"} will be filled. \cr
 }
 
 \value{
 
 
-  The function creates an object of class "GENOME" \cr \cr
+  The function creates an object of class \code{"GENOME"} \cr \cr
   --------------------------------------------------------- \cr
-  Following Slots will be filled in the "GENOME" object \cr
+  Following Slots will be filled in the \code{"GENOME"} object \cr
   --------------------------------------------------------- \cr
 
             \tabular{rll}{
             \tab Slot                	        \tab Description\cr
           1.\tab \code{n.sites}                 \tab total number of sites\cr
           2.\tab \code{n.biallelic.sites}       \tab number of biallelic sites \cr
-          3.\tab \code{region.data}            	\tab some detail data informations\cr
-          4.\tab \code{region.names}            \tab names of each region \cr 
+          3.\tab \code{region.data}            	\tab some detailed information about the data read\cr
+          4.\tab \code{region.names}            \tab names of regions \cr 
         }
 
 

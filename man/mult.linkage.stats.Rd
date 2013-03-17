@@ -20,14 +20,14 @@
 \arguments{
 
   \item{object}{an object of class \code{"GENOME"}}
-  \item{lower.bound}{sites with minor-allele-frequency=lower.bound are considered}
-  \item{upper.bound}{sites with minor-allele-frequency=upper.bound are considered}
+  \item{lower.bound}{sites with minor-allele-frequency>=lower.bound are considered}
+  \item{upper.bound}{sites with minor-allele-frequency<=upper.bound are considered}
   \item{pairs}{permutation matrix of pairwise comparisons}
 }
 
 \details{
 
-\code{pairs} is a matrix. Each column contains the pairwise comparison region-ids.\cr
+\code{pairs} is a matrix. Each column contains the pairwise comparison region IDs.\cr
 
 1 1 \cr
 2 3 \cr
@@ -41,14 +41,14 @@ compares region 1 with 2, and region 1 with 3.
 \value{
 
 
-returned value is an modified object of class \code{"GENOME"} \cr \cr
+The return value is a modified object of class \code{"GENOME"} \cr \cr
 -------------------------------------------------------------- \cr
-Following Slots will be modified in the \code{"GENOME"} object \cr
+The following slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
-   \item{mult.Linkage}{Some values about linkage for each pair of site (R2, P-value, Distance)}
+   \item{mult.Linkage}{Some linkage statistics for each pair of regions (R2, P-value, Distance)}
   
-The Fisher-Exact-Test is used for the P-values.
+The Fisher-Exact-Test is used to calculate the P-values.
 
 }
 

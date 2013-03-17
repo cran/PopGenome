@@ -23,6 +23,14 @@ Coding_ids  <- which(tab[,3]=="CDS")
 Coding      <- tab[Coding_ids,4:5,drop=FALSE]
 #Coding.info <- tab[Coding_ids,9]
 
+#NEW
+#strand       <- tab[Coding_ids,7]
+#reverse_ids  <- which(strand=="-")
+#if(length(reverse_ids)>0){
+# Coding[reverse_ids,] <- Coding[reverse_ids,c(2,1)]
+#}
+# END NEW
+
 if(!SNP.DATA){
 readframe   <- tab[Coding_ids,8]
 
@@ -33,8 +41,15 @@ if(length(readframe)>0){
      if(readframe[xx]==1){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 1}
      if(readframe[xx]==2){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 2}
  }
+
+# store reverse strand information
+rev.strand <- vector(,length(Coding_ids))
+rev.strand[tab[Coding_ids,7]=="-"] <- TRUE
+
 }
 }# END SNP
+
+
 
 
 Exon_ids   <- which(tab[,3]=="exon")
@@ -85,7 +100,15 @@ if(length(GLOBAL.GFF$GFF)!=0){
  }
 }
 
-return(list(Coding=Coding,Intron=Intron,UTR=UTR,Exon=Exon,Gene=Gene,reading.frame= READ))
+ # store reverse strand information (SNP DATA)
+ if(length(Coding_ids)>0){
+  rev.strand <- vector(,length(Coding_ids))
+  rev.strand[tab[Coding_ids,7]=="-"] <- TRUE
+  rev.strand <- ff(rev.strand)
+ }
+ 
+
+return(list(Coding=Coding,Intron=Intron,UTR=UTR,Exon=Exon,Gene=Gene,reading.frame= READ,rev.strand=rev.strand))
 #,Coding.info=Coding.info,Intron.info=Intron.info,
 # Gene.info=Gene.info,UTR.info=UTR.info))
 

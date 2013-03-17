@@ -4,7 +4,7 @@
 \alias{PG_plot.biallelic.matrix-methods}
 
 
-\title{Plots the Biallelic Matrix}
+\title{Plot the biallelic matrix}
 
 
 \description{
@@ -20,8 +20,8 @@ This function plots the biallelic matrix of a specific region.
 \arguments{
 
   \item{object}{object of class \code{"GENOME"}}
-  \item{region}{the region id}
-  \item{ind.names}{individual names. default:ALL}
+  \item{region}{the region ID}
+  \item{ind.names}{individual names/IDs. default:ALL}
   \item{cex.axis}{size of text (y-axis)}
 
 }  
