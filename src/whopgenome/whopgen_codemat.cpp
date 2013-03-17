@@ -1708,7 +1708,7 @@ EXPORT	SEXP	VCF_readIntoCodeMatrixdiploid2( SEXP vcfptr, SEXP mat )
 	int*		ptr  = m.getIntPtr();
 	
 	//
-	char 		maprefalt[20] = {""};  //      store REF and ALT values
+	char 		maprefalt[1000] = {""};  //      store REF and ALT values
 	char		*fieldptr=0;
 	unsigned int	per_column = 0;		//      vars here to find out what to clear
 	unsigned int	per_row = 0;		//	when too little data exists

@@ -1,6 +1,6 @@
-8345f964f293ea9825766ec3db444793 *DESCRIPTION
+4eaf21eebb28df29f3a84a5d6bc6b955 *DESCRIPTION
 9a28cde6f00a21447e21c8af4df87459 *NAMESPACE
-c10a97aa88de97fa6e0795ea6c6149b4 *NEWS
+1b730f928a0cb863f8a09febb1185e08 *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -16,10 +16,10 @@ ee22716333ef161342134860e72039ea *R/LOAD.R
 6bffb11fcbd9aff4535f7731bbac0c64 *R/MS_getStats.R
 f8c2b2b87ac64953ffee602c6217a120 *R/PG_plot.biallelic.matrix.R
 6d347dc1547d61bdc958cc8fdfc93bdc *R/PopGenread.R
-2e07ed27ede19e9962a829a6769ed36c *R/PopGplot.R
+6c3b77a3384c463f70976bc8d3eee3df *R/PopGplot.R
 e89ae313b51d19c176257a80575acc0e *R/PsPn.R
 94f8bcc2cb9a20c0fac621e9d6614f0f *R/SNPFST.R
-a1d880d9ee56ba99161691b20c5c756e *R/Whop_readVCF.R
+fac01de31d1336c71cf5ac800dadeb0e *R/Whop_readVCF.R
 debc0e7063142d9816482cad99090473 *R/Yach.stats.R
 ad79948e9ca0f18e01ea118fd8a30ed6 *R/calc.R2.R
 dbcd629091d2ad1b32560026a19655ec *R/calcR2.R
@@ -39,7 +39,7 @@ b8a9a9dc3e95153488ad62e032440c5c *R/checkpoppairs.R
 7431b0bd8da4300d6fe68c047e3edbd0 *R/codontable.R
 a4567d6e91cddaa289252e0d3f512948 *R/complike.R
 8fb3f4da07ecdff99aa33f006d496794 *R/compute_intern_achaz.R
-57f819bbf9f487346307cf7ad9b2999b *R/concatenate.R
+2969e9cd1228385633c1f258e74de046 *R/concatenate.R
 485ba6bd4c0aa2dd4e93e5ddc8f5606b *R/concatenate.classes.R
 1d4eca5609e81c09d3ef7ee61a4e1371 *R/concatenate.regions.R
 2cac9f2302dad7c55cc93fdc302db821 *R/counthaplotype.R
@@ -53,7 +53,7 @@ a64bc9a14e01785db3b8d0bc45e1ae44 *R/diversity.stats.R
 0198b7f4bbdd4fdf1cd694a40296ccaf *R/fisherextest.R
 29c7f68c9c66f4dfd9a357fd90b45b1a *R/fitting_gff.R
 cd94ac57cf9af366d8946258313b8588 *R/freqtest_achaz.R
-3244a97a4f102a70939ee5289ff834f0 *R/fstcalc.R
+496540e0dad1bb40cf6abe3d3478691a *R/fstcalc.R
 59052286bebef5e82640f6878e016494 *R/genetree.R
 f755e44be4be94dcef7bbb055797f8ce *R/get.biallelic.matrix.R
 aa3d7d26d8946a6059de77c92366d34c *R/get.codons.R
@@ -62,8 +62,8 @@ f6f8fd738cddbacb642f084047f0284d *R/get.individuals.R
 d8ad98f74ce59203392de6d2fa0de2ad *R/get.sweeps.R
 31b300674ae75a3d9ea808ece2c0a3d8 *R/getTable.R
 324c6e42ac795a508399dfce70529cd7 *R/get_data.R
-23755e7de627487d5be9910b4e9ea3de *R/get_gff_info.R
-344182f98798fb6c97df57e5b220c93d *R/get_segsites.R
+e96950390b8eaff1d6264055aafbc972 *R/get_gff_info.R
+9c37fe11a0c88b509188f1ca625c08d2 *R/get_segsites.R
 d6d0bc5139ad9776fefba07593ed9dfc *R/getsyn.R
 0e97ac9e4f7cca935e428a5f3e7b3fd3 *R/getsynnonsyndiff.R
 f001f7fcc59662730cf4402f77e6e5c2 *R/gtest.R
@@ -76,7 +76,7 @@ ef06871bb30dc6172a2313a116c82ef4 *R/introgression.stats.R
 dae6cdf496704d53c5d6d49218b5288c *R/jointfreqdist.R
 6ab485fa3b1d6920aa018d1bde9169a3 *R/jump.window.transform.R
 38afa6d1886abf598ccf3ed4525ad18d *R/linkdisequ.R
-d0d1a67221d6ab623749d6e49ab90325 *R/linkdisequ_FAST.R
+43f028da0a290b40de016669009002e6 *R/linkdisequ_FAST.R
 f27a741fe0c0ad40c3c1ed89cdc8d9a7 *R/locstatsClass.R
 8e925d37eca0c9e65ed2f82e73d0969d *R/mismatch.R
 8b494d3aaf2818cd9e057263b85148bf *R/mktest.R
@@ -100,11 +100,11 @@ cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 4dc91a7811c362fc51884aeba5e59716 *R/read.big.fasta.R
 532457520d96727970d531a61f1192c4 *R/read.big.ms.output.R
 78382dde23fe3135604b17dbb7296f85 *R/read.ms.output.R
-467158946ce515bf209f0fb877c65f71 *R/readData.R
+163d5912a1d81ce5dc8ef4bcea7945b0 *R/readData.R
 75f14e68f9b5694c16f4d10fd8761964 *R/readHapMap.R
 63180d8824f849178ed55e5ccee2228d *R/readMS.R
 b75d3b7d3058fccfa2a13c0eebaf58ac *R/readSNP.R
-8b89584e78ea3972e2ec357e9dc65093 *R/readVCF.R
+d2fa8a5f2deb489a5f9ebfc50ef4dba7 *R/readVCF.R
 5fadf0c2062015b80d14ec4938eff3da *R/readVCFchunk.R
 7cd3428b8b2615d941b986eb9b3c741b *R/readVCFchunkHap.R
 3d9031d2787a5d86db05cc393a5760f4 *R/recomb.stats.R
@@ -112,7 +112,8 @@ b75d3b7d3058fccfa2a13c0eebaf58ac *R/readSNP.R
 cb8149412573e63265194747a4bbe709 *R/save_load_GENOME.R
 7d0516d11e6bdb965fe3a84f176af80d *R/set.outgroup.R
 5d37d7f7de03c459592abe969417b5f6 *R/set.ref.positions.R
-f35d0898d31288c97efb481851bce969 *R/set.synnonsyn.R
+ad5989e09d788a0b54d3a0c8a3e6cdf7 *R/set.synnonsyn.R
+f57aff8c693d3090ddc9a9af6dc80437 *R/set_gff_info.R
 9efe31c04d50c216153d70ea6d29d3b7 *R/slide.snp.sep.R
 2e5a936462138d9e7b63d4df12998743 *R/sliding.window.transform.fast.R
 ef6c180b3dde8459fbe9732afd783b5e *R/sliding.window.transform.new.R
@@ -121,7 +122,7 @@ e592eab585b0f2832280f88704a2bc67 *R/slim.R
 ce42f458430f6943a29a8e561d8a678d *R/snn.R
 57a8aa456b3dc240460a63ac0fe2e836 *R/sortmatrix.R
 3c61eb676cb87478e6e34fa736bbb816 *R/split.GFF.R
-3519447995af885a399c627debaf2cde *R/splitting.data.R
+c10ceb45c3cd038da4deaf794a9b6a92 *R/splitting.data.R
 967839e672544a4630910802b4a2d971 *R/splitting.data.sep.R
 9cd716c6f4b98e59a1f605f7d59e2fde *R/sweeps.stats.R
 113ab2f159203de9eb5e15a7abddbd0a *R/testparamsClass.R
@@ -136,9 +137,9 @@ a0656cc271cfd6c2095c005c74c73602 *data/snp_file.txt.gz
 c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 921298844664c2107a8579da549dd51d *inst/CITATION
 bf7e82a4e684fdfcc00a49aeb6736075 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-8dc8dee078e87c5dfe1c57cd86b6c15a *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+31bf6365b7a8eba5c2b89143d17d3e6a *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 479387030911054df2c1e2f506e67b17 *inst/doc/Integration_of_new_Methods.Rnw
-0bec98e1cac89a12b34b3d39add82261 *inst/doc/Integration_of_new_Methods.pdf
+e5336eaa5037173f00abd354565aa573 *inst/doc/Integration_of_new_Methods.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 78e65be24ba49c2f8346b829c177e014 *man/F_ST.stats-methods.Rd
@@ -149,8 +150,8 @@ bee4e1c454b85f24532d7d0dee6a567f *man/MS.Rd
 ee146c4b6326e746b998b0949eb4804f *man/MS_getStats.Rd
 05d7f7ea6b83e49faf410780681b5f09 *man/PG_plot.biallelic.matrix.Rd
 c4ae4c45b7d7537739ef78129f5c318c *man/PopGenome.Rd
-7f2fa306198101bea67d20de7a3be93c *man/PopGplot.Rd
-b8cff73c43f03011a2566c1c4b8694ad *man/Whop_readVCF.Rd
+b9a392298013945c960a92d2b841c45b *man/PopGplot.Rd
+0c7e1c16e183046be2a9758b01ef3554 *man/Whop_readVCF.Rd
 a5742221ffe0beb0ccde6ba244535f8f *man/calc.R2-methods.Rd
 d50522646a4a090d3e054bc37f2d8e10 *man/codontable.Rd
 2f6c2012cb04d15e0b2461b1a6a4c946 *man/concatenate.classes.Rd
@@ -176,7 +177,7 @@ f2686a9596376fcd0db3c8bf8a77531d *man/readData.Rd
 274b9aedea8b73bb3f7648effd8954de *man/readHapMap.Rd
 d4c8d9df54f48fe873fa08dfb3bc5ce1 *man/readMS.Rd
 8d089f1035efd782e4754fea9e099d95 *man/readSNP.Rd
-1df4d19aa98cac00a831060e7283983b *man/readVCF.Rd
+9e896a164d5cc0b6c0c6322c0394dfd8 *man/readVCF.Rd
 729b9ca78dd7b7dabbf09d65ae320182 *man/recomb.stats-methods.Rd
 06e45d751921660290fd31c8a8abc452 *man/region.as.fasta.Rd
 1b7724e3e45295785a6f4ef96ce6561f *man/save.session.Rd
@@ -205,7 +206,7 @@ cd16220a9e551bc722a15078bdfa491d *src/combnsum_C.c
 97ab045fb39615bfda242a07fc1e7458 *src/compute_FREQ_C.c
 d41d8cd98f00b204e9800998ecf8427e *src/dummy.cc
 5154386aede23d186697f21dd70ffd86 *src/filldiplomatrix.c
-fb7814750d754f1432e472212bdce50c *src/find_lines.c
+1beb9a1cf003a5e41a461468e54b2c8a *src/find_lines.c
 e7758633c6fda62687c5eaafa4c47984 *src/find_windowC.c
 4b23e6f2a73c3bedbd9f589cfc9e309a *src/fittingGFFC++.c
 18d0b0ba76604b4c1075fbfe58a0d764 *src/get_dim_fasta.c
@@ -214,7 +215,7 @@ f2d125c68c29f5d698faaf021fb7e409 *src/get_ind_fasta.c
 9119fee1c5e8c2e1b9d6933380ab3cc7 *src/get_segsites_C.c
 d00c8c3ffacaebbf6677ee423a39bf12 *src/makeBial.c
 01778e346691c4e55c3a0051e7bb0c93 *src/makeBialMatrix.c
-f34c03ac6eafbbcc0cfe8755899b96c6 *src/myReadVCFC.c
+04bc5a148e2bbdb544f84b9f2b4b50a1 *src/myReadVCFC.c
 88448d1fdb52df90ab135ea702d05264 *src/my_match_C.c
 8838ee1f82dfd8fe8c26b3774e9f1883 *src/my_unique_C.c
 aba13a3883d7d117af33a6d8fe8c1ed1 *src/tabix/bam_endian.h
@@ -243,7 +244,7 @@ ce38794789ad110d3b0c899fefb22bc9 *src/whopgenome/whop_r_dataframe.cpp
 006540b056b71696b3df59f7343ea44e *src/whopgenome/whop_tabix_internal.h
 a2074b57a6c8791dd88600906318d952 *src/whopgenome/whop_tools.h
 107253919b0666b7f8d34f0516a4f454 *src/whopgenome/whop_vcf.h
-000670ef53da98bf337746ef6c9b0297 *src/whopgenome/whopgen_codemat.cpp
+e3d65d100dd7dd51f31bfef99e854dfc *src/whopgenome/whopgen_codemat.cpp
 3d12dd5dfb83fdd37696c86db10acd42 *src/whopgenome/whopgen_common.h
 4799a857e461409b1cf41cc9683e4b6d *src/whopgenome/whopgen_filtering.cpp
 77421d6029dc86da633657df50aa7317 *src/whopgenome/whopgen_main.cpp

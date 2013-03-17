@@ -15,6 +15,7 @@ biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]  # with r
 biallelic.sites          <- object@region.data@biallelic.sites[[xyz]]
 START                    <- object@region.data@reading.frame[[xyz]][,] #  weil ff object
 REV                      <- object@region.data@rev.strand[[xyz]][,]    #  reverse strand information #---
+REV                      <- as.logical(REV) 
 CodingSNPS               <- object@region.data@CodingSNPS[[xyz]]
 
 
@@ -93,6 +94,9 @@ erg  <- apply(Coding.matrix,1,function(xx){
  #return(bial.pos)
  bial.pos    <- biallelic.sites[bial.pos]
 
+#print(bial.pos)
+#print(biallelic.sites2)
+
 # Create Start Vector
  synGLOBAL$count <- 1
  vec <- sapply(START,function(x){
@@ -115,8 +119,9 @@ erg  <- apply(Coding.matrix,1,function(xx){
  START.vec   <- unlist(vec)
  REV.vec     <- unlist(vec_rev) #---
 
-#print(REV.vec)
-#print(START.vec)
+#print(length(REV.vec))
+#print(length(START.vec))
+#print(length(bial.pos))
 
  cod.pos              <- (bial.pos - START.vec)%%3
  # in case of reverse strand 
@@ -134,10 +139,18 @@ erg  <- apply(Coding.matrix,1,function(xx){
  
  #print(START.vec[300])
 
+# print(length(bial.pos))
+# print(length(cod.pos))
+# print(length(rev.pos))
+
  ids         <- !duplicated(bial.pos)
  cod.pos     <- cod.pos[ids]
  bial.pos    <- bial.pos[ids]
  rev.pos     <- rev.pos[ids] #----
+
+# print(bial.pos)
+# print(length(cod.pos))
+# print(length(rev.pos))
 
  # print(rev.pos[1215])
  # print(bial.pos[1215])

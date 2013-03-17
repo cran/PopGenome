@@ -291,18 +291,24 @@ start <- 1
 
 if(obj@big.data){
 
-  rows_bial        <- dim(obj@region.data@biallelic.matrix[[1]])[1]
+  iddd             <- which(obj@n.biallelic.sites>1)[1] # first region with data
+  rows_bial        <- dim(obj@region.data@biallelic.matrix[[iddd]])[1]
   cols_bial        <- sum(obj@n.biallelic.sites)
+
+  if(cols_bial==0){
+  stop("No biallelic positions available for concatenation")
+  }
 
   if(rows_bial*cols_bial>.Machine$integer.max){
     print("Warning: Matrix too big for ff package --> using the bigmemory package! ")
+    require(bigmemory)
     options(bigmemory.allow.dimnames=TRUE)
-    biallelic.matrix <- filebacked.big.matrix(backingfile="BIGBIAL",ncol=cols_bial,nrow=rows_bial, type="double")
+    biallelic.matrix <- bigmemory::filebacked.big.matrix(backingfile="BIGBIAL",ncol=cols_bial,nrow=rows_bial, type="double")
   }else{
     biallelic.matrix <- ff(0,dim=c(rows_bial,cols_bial))
   }
 
-  rownames(biallelic.matrix) <- rownames(obj@region.data@biallelic.matrix[[1]])
+  rownames(biallelic.matrix) <- rownames(obj@region.data@biallelic.matrix[[iddd]])
 
   # init the gff informations
   if(obj@gff.info){
@@ -454,9 +460,9 @@ stat      <- obj@region.stats
            if(cols.coding2[xx]!=0){
             end.coding2                                <- start.coding2 + cols.coding2[xx] - 1       
             Coding.matrix2[start.coding2:end.coding2,] <- dat@Coding.matrix2[[xx]][,] + ADD.GFF
-            start.coding2 <- end.coding2 + 1
-            ADD.GFF       <- ADD.GFF + ADD.SITES[xx]
+            start.coding2 <- end.coding2 + 1           
            }
+           ADD.GFF       <- ADD.GFF + ADD.SITES[xx]
           }
 
           if(R.exons){
@@ -476,8 +482,8 @@ stat      <- obj@region.stats
             # Intron
             Intron.matrix[start.introns:end.introns,]     <- dat@Intron.matrix[[xx]][,] #+ ADD.GFF3
             start.introns <- end.introns + 1
-            # ADD.GFF3      <- end
-            # ADD.GFF3        <- ADD.GFF3 + obj@n.sites[xx]
+            #ADD.GFF3      <- end
+            #ADD.GFF3        <- ADD.GFF3 + obj@n.sites[xx]
             #ADD.GFF3      <- ADD.GFF3  + ADD.SITES[xx]
            }
           }
@@ -614,11 +620,11 @@ stat      <- obj@region.stats
 
 
       if(xx>1){
-          biallelic.sites2  		<- c(biallelic.sites2,(dat@biallelic.sites2[[xx]]+biallelic.sites2[length(biallelic.sites2)]))
+          biallelic.sites2  		<- c(biallelic.sites2,(dat@biallelic.sites2[[xx]] + sum(ADD.SITES[1:(xx-1)]))) #biallelic.sites2[length(biallelic.sites2)]))
           if(snp.data){
             biallelic.sites  		<- c(biallelic.sites,(dat@biallelic.sites[[xx]]))  
           }else{
-            biallelic.sites  		<- c(biallelic.sites,(dat@biallelic.sites[[xx]]+biallelic.sites[length(biallelic.sites)])) 
+            biallelic.sites  		<- c(biallelic.sites,(dat@biallelic.sites[[xx]]   + sum(ADD.SITES[1:(xx-1)])))  #biallelic.sites[length(biallelic.sites)])) 
           }
       }else{
 	  biallelic.sites               <- c(biallelic.sites,dat@biallelic.sites[[xx]]) 

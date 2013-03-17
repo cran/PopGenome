@@ -3,6 +3,107 @@
 #include <R.h>
 #include <Rinternals.h>
 
+SEXP find_lines_GFF_Human2 (SEXP RRfilename, SEXP RRchromosome) {
+
+  SEXP ret = R_NilValue;
+  
+  PROTECT(ret = allocVector(INTSXP,2));
+
+// init
+for(int xx =0; xx<2;xx++){
+INTEGER(ret)[xx] = 0;
+}
+
+  //char ch;
+  int ch;
+  char *file;
+  int line_count = 0;
+  //int chr2;
+  int raus=0;
+  char *chr;
+  int FOUND  = 0; 
+  
+
+  SEXP Rfilename;
+  Rfilename   = STRING_ELT(RRfilename,0);
+  file        = (char*)CHAR(Rfilename);
+
+  SEXP Rchromosome;
+
+  Rchromosome   = STRING_ELT(RRchromosome,0);
+  chr           = (char*)CHAR(Rchromosome);
+  
+
+  // printf("%c", *file);
+ 
+  FILE *fp   = fopen( file ,"rt");
+
+  if(fp==NULL) {
+    Rprintf("Cannot open file.\n");
+    UNPROTECT(1);
+    return R_NilValue;
+  }
+
+char ident[1000] = {""};
+char temp[2] = {""};
+
+  while(1) {
+    
+    ch      = fgetc(fp);
+
+    if(ch==EOF){break;}
+
+    //printf("%c", *ident);
+
+    if(ch=='\n'){
+
+      line_count ++;
+        
+             while(1){	                 
+             ch      = fgetc(fp);
+	     if(ch==EOF && FOUND==0){ Rprintf("Identifier not found");goto end;}
+	     if(ch==EOF && FOUND==1){ INTEGER(ret)[1]=line_count-1;goto end;}	
+             //if(ch==EOF){ Rprintf("Identifier not found");goto end;}
+	     if(ch=='\t'){break;}	
+             temp[0] = ch;
+	     strcat(ident,temp);
+             }
+
+	    // printf("%c", *ident);
+	    // break;		
+
+	     // compare identifiers
+             if(FOUND==0){	
+             	if(strcmp(ident,chr)==0){ // identical  
+              	INTEGER(ret)[0] = line_count;
+              	FOUND = 1;
+             	}
+	     }else{	
+             	if(strcmp(ident,chr)!=0){ // not identical  
+              	INTEGER(ret)[1] = line_count-1;
+              	break;
+             	}
+	     }
+     
+            strcpy(ident, ""); // delete array 
+
+    } // one line 
+
+ } // End of while            
+
+  //printf("%d",line_count);
+  //printf("%d",chr2);
+
+  end:
+  fclose(fp);
+
+  UNPROTECT(1);
+ 
+  return ret;
+
+}
+
+
 
 SEXP find_lines_GFF (SEXP RRfilename, SEXP RRchromosome) {
 

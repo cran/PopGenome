@@ -33,22 +33,27 @@ if(!is.list(positions)){
 
  if(subsites=="coding"){
     Gene.matrix <- object@region.data@Coding.matrix[[1]][,]
+    Gene.matrix <- unique(Gene.matrix)
     LENGTH      <- GLOBAL.GFF$Coding
  }
  if(subsites=="exon"){
     Gene.matrix <- object@region.data@Exon.matrix[[1]][,]
+    Gene.matrix <- unique(Gene.matrix)	
     LENGTH      <- GLOBAL.GFF$Exon
  }
  if(subsites=="utr"){
     Gene.matrix <- object@region.data@UTR.matrix[[1]][,]
+    Gene.matrix <- unique(Gene.matrix)
     LENGTH      <- GLOBAL.GFF$UTR
  }
  if(subsites=="intron"){
     Gene.matrix <- object@region.data@Intron.matrix[[1]][,]
+    Gene.matrix <- unique(Gene.matrix)  
     LENGTH      <- GLOBAL.GFF$Intron
  }
  if(subsites=="gene"){
     Gene.matrix <- object@region.data@Gene.matrix[[1]][,]
+    Gene.matrix <- unique(Gene.matrix)
     LENGTH      <- GLOBAL.GFF$Gene
  }
  

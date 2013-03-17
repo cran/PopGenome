@@ -1,8 +1,12 @@
+//#define _FILE_OFFSET_BITS		64
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <R.h>
 #include <Rinternals.h>
 #include <string.h>
+
+//#define			PLATFORM_BITS		32
 
 // Get individual names
 SEXP getIndividuals(char *VCFbuffer, int ploidy){
@@ -90,10 +94,10 @@ return(row_names);
 
 
 // FUNCTION: Count SNPs ---------------------------------------------------------
-int countSNPs(char *VCFbuffer, int size){
+int countSNPs(char *VCFbuffer, long int size){
 
- int x=0;
- int count=-1;
+ long int x=0;
+ long int count=-1;
 
 // Skip to first SNP
 while(1){
@@ -105,7 +109,7 @@ while(1){
 x++;
 }
 //count SNPs
-for(int i = x+1; i <= size;i++){
+for(long int i = x+1; i <= size;i++){
 
 //printf("%c",VCFbuffer[i]);
      if(VCFbuffer[i]=='\n'){
@@ -119,9 +123,9 @@ return(count);
 
 
 // FUNCTION: Check Ploidy -----------------------------------------------
-int checkPloidy(char *VCFbuffer, int size){
+int checkPloidy(char *VCFbuffer, long int size){
 
-int count = 1;
+long int count = 1;
 // Check Ploidy from the end of the file
 // Jump to the first TAB
 while(VCFbuffer[size]!='\t'){
@@ -174,35 +178,47 @@ static char	nucleotide_mapping[] = {
   Rfilename   = STRING_ELT(RRfilename,0);
   file        = (char*)CHAR(Rfilename);
   FILE *fp;
-  fp = fopen( file ,"r");
+  fp = fopen( file ,"rt");
   if(fp==NULL) {
     Rprintf("Cannot open file.\n");
     UNPROTECT(1);
     return R_NilValue;
   }
-  fseek(fp,0,SEEK_END);
-  int size = ftell(fp);
+//  printf("0");
+
+  fseeko(fp,0,SEEK_END);
+  /*unsigned int size*/ off_t size = ftello(fp);
+// printf("1");
   rewind(fp);
 
 //printf("size is: %d",size);
+//printf("2");
 
 // Read file into buffer
 char *VCFbuffer;
 size_t result;
 VCFbuffer = calloc( 1, size+1 );
-if (VCFbuffer == NULL) {Rprintf("Memory error");  UNPROTECT(1); return R_NilValue;}
+if (VCFbuffer == NULL) {Rprintf("Memory error !!! ");Rprintf("\n");UNPROTECT(1); return R_NilValue;}
+
+//printf("3");
 
 result=fread(VCFbuffer , size, 1, fp);//FIXME warnings ...
 
+//printf("4");
 
 fclose(fp);
 
 //
 // Count SNPs
 //
-int n_snps = countSNPs(VCFbuffer,size);
+long int n_snps = countSNPs(VCFbuffer,size);
+//printf("n.biallelic.sites: %d",n_snps);
+//printf("\n");
+
 SEXP positions = allocVector(INTSXP,n_snps);
 PROTECT(positions);
+
+//printf("5");
 
 //printf("N.SNPS=: %d",n_snps);
 //
@@ -211,6 +227,8 @@ PROTECT(positions);
 int ploidy = checkPloidy(VCFbuffer,size);
 //printf("Ploidy=: %d",ploidy);
 
+//printf("6");
+
 //
 // Get individuals
 //
@@ -218,6 +236,7 @@ SEXP row_names;
 row_names = getIndividuals(VCFbuffer, ploidy);
 PROTECT(row_names);
 
+//printf("7");
 //
 // Init Matrix
 //
@@ -233,9 +252,11 @@ for (int i = 0; i < J; i++){
 //
 // Fill Matrix ------------------------------------------
 //
+//printf("8");
+
 //skip to first individual
 int nucmap[10];
-int x = 0;
+long int x = 0;
 while(1){
 	if(VCFbuffer[x]=='\n' && VCFbuffer[x+1]!='#'){
         break;
@@ -244,11 +265,13 @@ x++;
 }
 // iterate over snps
 int tabcount = 0;
-int count;
+long int count;
 char str[100]={""};
 char temp[2]={""};
 
-for(int i=0; i<J;i++){
+//printf("9");
+
+for(long int i=0; i<J;i++){
 
 tabcount = 0;
 x = x+1; // skpip the End of line \n
@@ -291,7 +314,7 @@ x = x+1; // skpip the End of line \n
                         if(tabcount==9){ // Individuals
 			//printf("*%c",VCFbuffer[x]);
 			//printf("---");break;
-			 for(int j=0; j < I; j++){
+			 for(long int j=0; j < I; j++){
 				while(VCFbuffer[x]!='\t' && VCFbuffer[x]!='\n'){x++;} //skip Tabs
 				if(VCFbuffer[x]=='\n'){break;}
 				x= x+1;
@@ -329,3 +352,53 @@ free(VCFbuffer);
 
 return(list);
 }
+
+SEXP pimpMatrix(SEXP RinMatrix, SEXP RinMatrix2){
+
+SEXP ret = R_NilValue;
+
+int I;
+int J;
+SEXP Rdim;
+SEXP Rvalue;   // input matrix
+SEXP Rvalue2;  // output matrix
+
+Rdim = getAttrib(RinMatrix, R_DimSymbol);
+I    = INTEGER(Rdim)[0]; // Reihen 
+J    = INTEGER(Rdim)[1]; // Spalten
+
+//Rvalue        = coerceVector(RinMatrix, INTSXP);
+int    *Rval    = INTEGER(RinMatrix);
+//Rvalue2       = coerceVector(RinMatrix2, INTSXP);
+int    *Rval2   = INTEGER(RinMatrix2);
+
+PROTECT(ret = allocVector(INTSXP,1));
+INTEGER(ret)[0] = 0;
+
+int value;
+//for(int i=0; i< J*I; i++){
+//value2 = Rval[i];
+//printf("%f",value2);
+//}
+
+for (int i = 0; i < J; i++){
+ for (int j = 0; j < I; j++){
+
+  // value = (Rval[j + I*i]);
+  // printf("%f",value);
+
+   Rval2[2*j + 2*I*i]     = (int)(Rval[j + I*i]/10);
+   Rval2[(2*j+1) + 2*I*i] = Rval[j + I*i] % 10;
+
+  
+  
+ }
+}
+
+INTEGER(ret)[0] = 1;
+UNPROTECT(1);
+return ret;
+
+}
+
+

@@ -1,9 +1,20 @@
+Changes in PopGenome 2.0.9
+===========================
+
+BUG FIXED:
+
+- concatenate.regions (small BUG)
+
+NEW FEATURES:
+
+- readVCF: faster computation + better GFF support
+
 Changes in PopGenome 2.0.8
 ===========================
 
 BUG FIXED:
 
-- 
+- concatenate.regions (small BUG)
 
 NEW FEATURES:
 

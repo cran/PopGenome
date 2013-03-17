@@ -292,7 +292,7 @@ for(pop1 in 1:TIL) {
 	nca <- ncw
 	if(PIA1ALL[pop1] && length(populations[[pop1]]) >= 1 && ncw > 0){
 	   FST1ALL[pop1] <- 1 - ((PIW[pop1] + piw)/2)/(PIA1ALL[pop1]/nca)
-	}else{FST1ALL[pop1] <- -10000}
+	}else{FST1ALL[pop1] <- NaN}
 }
 
 apply_id2 <- rbind(apply_id[2,],apply_id[1,])
@@ -340,7 +340,7 @@ nca <-  sum(erg[4,])
  ####---------------------- FSTALL --------------------------####
   if(spia){ 
      FSTALL = 1 - (spiw/ncw)/(spia/nca)
-  }else{FSTALL <- -10000}
+  }else{FSTALL <- NaN}
 
 }#END if outgroup[1]!=FALSE
 

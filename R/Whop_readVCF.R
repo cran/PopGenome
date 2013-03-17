@@ -25,13 +25,13 @@ cat("\n")
 cat("GFF information ...")
 cat("\n")
   
-   tid2 <- tid
-   if(length(grep("Chr",tid2))==1 | length(grep("chr",tid2))==1){
-   tid2 <- substr(tid2,4,nchar(tid2))
-   }
-   if(nchar(tid2)==1){CHR <- c(tid2,"z")}else{CHR <- unlist(strsplit(tid2,""))}
+   #tid2 <- tid
+   #if(length(grep("Chr",tid2))==1 | length(grep("chr",tid2))==1){
+   #tid2 <- substr(tid2,4,nchar(tid2))
+   #}
+   #if(nchar(tid2)==1){CHR <- c(tid2,"z")}else{CHR <- unlist(strsplit(tid2,""))}
    
-   my_pos      <- .Call("find_lines_GFF_Human", gffpath, CHR)
+   my_pos      <- .Call("find_lines_GFF_Human2", gffpath, tid)
    gff.table   <- read.table(gffpath,sep="\t",colClasses=c(rep("character",3),rep("integer",2),rep("character",2),"character","NULL"),
                              skip = my_pos[1], nrows = my_pos[2] - my_pos[1]
                             )
@@ -86,7 +86,7 @@ gffpath <- "GFFRObjects"
 	#
 	#
 	#alltids = .Call("VCF_getContigNames",v)
-	alltids = vcf_getcontignames(v) # whopGenome
+	alltids = WhopGenome::vcf_getcontignames(v) # whopGenome
 	print("Available ContigIdentifiers (parameter tid):")
 	print(alltids)
 	if( ! (tid %in% alltids) )
@@ -97,7 +97,7 @@ gffpath <- "GFFRObjects"
 	#
 	#
 	# sn <- .Call("VCF_getSampleNames",v)
-          sn <- vcf_getsamples(v)
+          sn <- WhopGenome::vcf_getsamples(v)
         # sn <- sn[1:(length(sn)-1)] # FIXME	
          
 	#
@@ -116,11 +116,11 @@ gffpath <- "GFFRObjects"
 	
 	#print( schnittmengesamples )
 	#.Call("VCF_selectSamples",v,schnittmengesamples )
-	 vcf_selectsamples(v,schnittmengesamples)
+	WhopGenome::vcf_selectsamples(v,schnittmengesamples)
 	#
 	#
 	#regset <- .Call("VCF_setRegion",v,tid,frompos,topos)
-	regset <- vcf_setregion(v,tid,frompos,topos)
+	regset <- WhopGenome::vcf_setregion(v,tid,frompos,topos)
 
 	if( regset == FALSE )
 	{
@@ -153,7 +153,11 @@ gffpath <- "GFFRObjects"
 		#.Call("VCF_readIntoCodeMatrix",v,mi)
 		#}else{
 		#.Call("VCF_readIntoCodeMatrixdiploid",v,mi)
-		 check <-VCF_read_snp_diplo_bial_int_nuclcodes(v,mi)
+		
+                # check <- WhopGenome::VCF_read_snp_diplo_bial_int_nuclcodes(v,mi)
+                  check <- WhopGenome::VCF_snpmat_diplo_anyal_nucodes_filtered(v,mi)
+		# check <- WhopGenome::VCF_read_snp_diplo_bial_int_nuclcodes(v,mi)
+ 
                  if(check==FALSE){if(first){stop("No SNPs in this region or numcols > total number of SNPs in this region.")};break}else{first<- FALSE}
 		#}
 		#

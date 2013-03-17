@@ -13,7 +13,8 @@
 \usage{
 
 readVCF(filename, numcols, tid, frompos, topos,
-        samplenames=NA, gffpath = FALSE, include.unknown=FALSE,approx=TRUE)
+        samplenames=NA, gffpath = FALSE, include.unknown=FALSE, approx=FALSE,
+	out="", parallel=FALSE)
 
 }
 
@@ -26,8 +27,10 @@ readVCF(filename, numcols, tid, frompos, topos,
   \item{topos}{end of the region}
   \item{samplenames}{a vector of individuals}
   \item{gffpath}{the corresponding GFF file}
-  \item{include.unknown}{includ positions with unknown nucleotides}
+  \item{include.unknown}{includ positions with unknown/missing nucleotides}
   \item{approx}{see details !}
+  \item{out}{a folder suffix where the temporary files should be saved} 
+  \item{parallel}{parallel computation using mclapply} 
 }
 
 \details{
@@ -47,8 +50,6 @@ Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
 to get and define the individuals which should be considered in the analysis. \cr
 See also readData(..., format="VCF") ! \cr
-At this time, if a GFF/GTF is used the data should be organized in a way that \cr
-the "tid" is a numerical value. The prefix "Chr" or "chr" is also supported.
 }
 
 \value{

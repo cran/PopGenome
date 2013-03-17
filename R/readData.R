@@ -23,22 +23,23 @@ if(SNP.DATA){big.data=TRUE}
 if(parallized){
  
 	library(parallel)
-	n.cores <- detectCores() #multicore:::detectCores()
-	n.cores <- n.cores - 1 
-	options(cores=n.cores)
-        getOption('cores')
+	n.cores <- parallel::detectCores() #multicore:::detectCores()
+	#n.cores <- n.cores - 1 
+	#options(cores=n.cores)
+        #getOption('cores')
 
 	files       <- list.files(path)
-        split_files <- split(files,1:n.cores)
+        split_files <- split(files,sort(rep(1:n.cores,ceiling(length(files)/n.cores))))
        
         if(gffpath[1]!=FALSE){
         gff_files       <- list.files(gffpath)
-        split_files_gff <- split(gff_files,1:n.cores)
+        split_files_gff <- split(gff_files,sort(rep(1:n.cores,ceiling(length(gff_files)/n.cores))))
         }
  
 	
    xxx <- NULL
    yyy <- NULL
+
    for (i in 1:n.cores){
    
        command <- paste("mkdir split",i,sep="")      
@@ -47,6 +48,7 @@ if(parallized){
        filename_path <- file.path(getwd(),filename)
        sapply(split_files[[i]],function(x){
        command <- file.path(path,x)
+       #command <- paste("mv",command,filename_path,sep=" ")
        command <- paste("cp",command,filename_path,sep=" ")
        system(command)
        
@@ -62,7 +64,8 @@ if(parallized){
        filename_path <- file.path(getwd(),filename)
        sapply(split_files_gff[[i]],function(x){
        command <- file.path(gffpath,x)
-       command <- paste("cp",command,filename_path,sep=" ")
+       #command <- paste("mv",command,filename_path,sep=" ")
+        command <- paste("cp",command,filename_path,sep=" ")
        system(command)
        })
        
@@ -74,7 +77,16 @@ if(parallized){
 
 
 if(gffpath[1]==FALSE){
- rueck    	       <- mclapply  (xxx,readData,format=format,parallized=FALSE,progress_bar_switch=FALSE,FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA)
+
+#print(xxx)
+#print(format)
+#print(progress_bar_switch)
+#stop("Jo")
+
+ rueck    	      <- parallel::mclapply(xxx,readData,
+			 format=format,parallized=FALSE,progress_bar_switch=FALSE,
+			 FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA,
+			 include.unknown=include.unknown, mc.cores = n.cores, mc.silent = TRUE)
 
 }else{
 
@@ -84,15 +96,15 @@ for(iii in 1:n.cores){
  INPUT[[iii]] <- c(xxx[iii],yyy[iii])
 }
 
-rueck    	       <- mclapply(INPUT,function(x){
+rueck    	       <- parallel::mclapply(INPUT,function(x){
                           daten    <- x[1]
                           gffdaten <- x[2]
                           TT <- readData(path=daten,
                                  gffpath=gffdaten,format=format,parallized=FALSE,progress_bar_switch=FALSE,
-                                 FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA)
+                                 FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA,include.unknown=include.unknown)
                           
                           return(TT) 
-                       })
+                          },mc.cores = n.cores, mc.silent = TRUE, mc.preschedule = TRUE)
 
 }
 
@@ -112,11 +124,17 @@ genome@Pop_Slide$calculated      <- FALSE
 if(!is.list(populations)){genome@populations <- list(NULL)}else{genome@populations <- populations}
 genome@outgroup        <- outgroup
 
-## Delete splits
+## Move splits back to original folder
+## and Delete splits afterwards #TODO
+
 for (i in 1:n.cores){  
+        #command <- paste("mv split",i,"/*"," ",path,sep="")
+	#system(command)
         command <- paste("rm -r split",i,sep="")      
         system(command)
        if(gffpath[1]!=FALSE){
+	#command <- paste("mv split",i,"/*"," ",gffpath,sep="")
+	#system(command)
         command <- paste("rm -r GFFRObjects_split",i,sep="")      
         system(command)
        }
@@ -371,6 +389,7 @@ if(progress_bar_switch){ ### because of parallized
 	print(liste[xx])
     }	
 
+    #print(liste[xx])
     CCC <- try(PopGenread(liste[xx],format),silent=TRUE) 
     if(is.na(CCC$matrix[1])){next}
 
