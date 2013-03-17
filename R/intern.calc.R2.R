@@ -28,8 +28,9 @@ for(xx in 1:npops){
  if(n.segsites.pop<=1){next}
 
   bialsites    <- as.numeric(colnames(matrix_pol))
-  EINSEN       <- colSums(popmatrix)
-  res          <- .Call("R2_C_plus",popmatrix,EINSEN,bialsites)  
+  EINSEN       <- colSums(popmatrix, na.rm=TRUE)
+  NULLEN       <- colSums(popmatrix==0, na.rm=TRUE)
+  res          <- .Call("R2_C_plus", popmatrix, EINSEN, NULLEN, bialsites)  
  
  R2  <- res[[1]]
  M   <- res[[2]]

@@ -18,7 +18,7 @@
 \usage{
 
 \S4method{linkage.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,
-          include.unknown=FALSE,do.ZnS,do.WALL=TRUE)
+			do.ZnS,do.WALL=TRUE)
 \S4method{get.linkage}{GENOME}(object)
 
 }
@@ -39,10 +39,8 @@
                   \code{"utr"}:  SNPs in UTR regions. \cr
                   \code{"gene"}: SNPs in genes. \cr
           default:\code{FALSE}}
-  
-  
+ 
   \item{detail}{if you want to calculate some detailed statistics. This can be considerably slower! default:\code{FALSE}}  
-  \item{include.unknown}{TRUE if unknown positions should be considered. Slower !  see readData()}
   \item{do.ZnS}{calculate ZnS, ZA and ZZ} 
   \item{do.WALL}{calculate Wall's B/Q}
 }
@@ -83,7 +81,7 @@ The following slots will be modified in the \code{"GENOME"}  object \cr
 # GENOME.class <- linkage.stats(GENOME.class,list(1:4,5:10),subsites="syn")
 # GENOME.class <- linkage.stats(GENOME.class,list(c("seq1","seq5","seq3"),
 # c("seq2","seq8")))
-# GENOME.class <- linkage.stats(GENOME.class,detail=TRUE)
+# GENOME.class <- linkage.stats(GENOME.class, detail=TRUE)
 # show the result:
 # get.linkage(GENOME.class)
 # GENOME.class@Wall.B --> population specific view

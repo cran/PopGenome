@@ -40,12 +40,18 @@ npops    <- length(populations)
 Segpos   <- vector("list",npops)
 
 for(xx in 1:npops){
+
    popmatrix    <- matrix_pol[populations[[xx]],,drop=FALSE]
-   site_length  <- dim(popmatrix)[1]
+   # site_length  <- dim(popmatrix)[1]
+
    erg <- apply(popmatrix,2,function(x){
-         check   <- sum(x,na.rm=TRUE)
-          if(check==0|check==site_length){return(FALSE)}else{return(TRUE)}
+
+         check       <- sum(x, na.rm=TRUE)
+         site_length <- sum(!is.na(x))
+
+          if(check==0 | check==site_length){return(FALSE)}else{return(TRUE)}
           })
+
    Segpos[[xx]] <- which(erg)
    
 }

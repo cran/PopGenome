@@ -15,7 +15,8 @@
 
 \usage{
 
-\S4method{sweeps.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE, freq.table=FALSE)
+\S4method{sweeps.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,
+ freq.table=FALSE, FST=FALSE)
 \S4method{get.sweeps}{GENOME}(object)
 
 }
@@ -37,6 +38,7 @@
                   \code{"gene"}: SNPs in genes. \cr
           default:\code{FALSE}}
 \item{freq.table}{the frequency counts for the CLR test. \code{"list"}}
+\item{FST}{use FST values instead of the minor allele frequencies}
   
 }
 

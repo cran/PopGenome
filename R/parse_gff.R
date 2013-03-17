@@ -111,6 +111,7 @@ if(length(GLOBAL.GFF$GFF)!=0){
 
  if(dim(READ)[1]>0){
   READ                    <- ff(READ,dim=dim(READ))
+  close(READ)
  }
 }
 
@@ -119,6 +120,7 @@ if(length(GLOBAL.GFF$GFF)!=0){
   rev.strand <- vector(,length(Coding_ids))
   rev.strand[tab[Coding_ids,7]=="-"] <- TRUE
   rev.strand <- ff(rev.strand)
+  close(rev.strand)
  }else{rev.strand <- NULL}
  
 

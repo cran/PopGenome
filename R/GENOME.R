@@ -113,6 +113,7 @@ MDG2="matrix",
 
 D		       =   "matrix",              # introgression slots
 f		       =   "matrix",              
+jack.knife             =   "logical",
 
 genes                  =   "list",                # a list of statistics objects
 region.data            =   "region.data",         # list of class GEN
@@ -983,9 +984,14 @@ if(length(XX@region.data@biallelic.sites[[bialmatNr]])==0){return(NULL)}
      }# da zuviele ff files open... muss nich !
 
     }else{ 
-      if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss nur wegen BIGMEMORY package !
+     if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss nur wegen BIGMEMORY package !
      # open(XX@BIG.BIAL[[1]])
+     if(length(XX@jack.knife)==0){
      bial <- XX@BIG.BIAL[[1]][,XX@SLIDE.POS[[bialmatNr]],drop=FALSE]
+     }else{
+     jack.positions   <- unique(unlist(XX@SLIDE.POS[-bialmatNr]))
+     bial <- XX@BIG.BIAL[[1]][,jack.positions,drop=FALSE] 
+     }
     }
 
 #}else{
@@ -1368,11 +1374,11 @@ if(subsites=="gene" & length(bial!=0)){
 # popLinkage  (linkdisequ)
 # ------------------------------------------------------------
 
-setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,include.unknown=FALSE,do.ZnS=TRUE, do.WALL=TRUE) standardGeneric("linkage.stats"))
+setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE, do.ZnS=TRUE, do.WALL=TRUE) standardGeneric("linkage.stats"))
  setMethod("linkage.stats", "GENOME",
- function(object,new.populations,subsites,detail,include.unknown,do.ZnS,do.WALL){
+ function(object,new.populations,subsites,detail,do.ZnS,do.WALL){
 
-if(include.unknown){detail <-TRUE} #FIXME
+# if(include.unknown){detail <-TRUE} #FIXME
 
  region.names                       <- object@region.names
  n.region.names                     <- length(region.names)
@@ -2470,10 +2476,10 @@ if(subsites=="intergenic"){
 
  #########################################################################
  # MKT ####################################################################
- setGeneric("MKT", function(object,new.populations=FALSE) standardGeneric("MKT"))
+ setGeneric("MKT", function(object,new.populations=FALSE, do.fisher.test=FALSE) standardGeneric("MKT"))
  setMethod("MKT", "GENOME",
 
- function(object,new.populations){
+ function(object,new.populations, do.fisher.test){
   
   region.names   <- object@region.names
   n.region.names <- length(object@region.names)
@@ -2518,11 +2524,11 @@ else{stop("You have to define more than one population to calculate the MK Test"
    
   # INIT
   MKmulti  <- vector("list",n.region.names)
-  MKTWO    <- matrix(,n.region.names,6)
+  MKTWO    <- matrix(,n.region.names,7)
   # Pn/Ps/Dn/Ds
  
   # Names
-  MKnames          <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha")
+  MKnames          <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
   
   if(!missing(new.populations)){
    NEWPOP <- TRUE
@@ -2605,8 +2611,13 @@ for(xx in 1:n.region.names){
         
            NI    <- (Pn/Ps)/(Dn/Ds)
            alpha <- 1-NI
-           
-     return(c(Pn,Ps,Dn,Ds,NI,alpha))
+
+           fisher.P <- NaN
+           if(do.fisher.test){
+           fisher.P <- fisher.test(rbind(c(Ps,Ds),c(Pn,Dn)))$p.value
+           }           
+
+     return(c(Pn,Ps,Dn,Ds,NI,alpha,fisher.P))
             
     })
     
@@ -2633,7 +2644,7 @@ for(xx in 1:n.region.names){
   object@MKT         <- MKmulti
  }else{
   rownames(MKTWO)    <- region.names
-  colnames(MKTWO)    <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha")
+  colnames(MKTWO)    <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
   object@MKT         <- MKTWO
  }
  
@@ -2668,10 +2679,10 @@ for(xx in 1:n.region.names){
 # ---------------------------------------------------------------------
 # Calc Neutrality (calc_freqstats)
 # ----------------------------------------------------------------------
- setGeneric("detail.stats", function(object,new.populations=FALSE,new.outgroup=FALSE,subsites=FALSE,biallelic.structure=FALSE,mismatch.distribution=FALSE,site.spectrum=TRUE) standardGeneric("detail.stats"))
+ setGeneric("detail.stats", function(object,new.populations=FALSE, new.outgroup=FALSE, subsites=FALSE,biallelic.structure=FALSE, mismatch.distribution=FALSE, site.spectrum=TRUE, site.FST=FALSE) standardGeneric("detail.stats"))
  setMethod("detail.stats", "GENOME",
  
- function(object,new.populations,new.outgroup,subsites,biallelic.structure,mismatch.distribution,site.spectrum){
+ function(object,new.populations,new.outgroup,subsites,biallelic.structure,mismatch.distribution,site.spectrum, site.FST){
  
  region.names   <- object@region.names 
  n.region.names <- length(region.names)
@@ -2725,6 +2736,7 @@ for(xx in 1:n.region.names){
 # for change 
 Xminor.allele.freqs     <- vector("list",n.region.names) 
 Xbiallelic.structure    <- vector("list",n.region.names) 
+Xsite.FST               <- vector("list",n.region.names)
 
 # Init
  init        <- matrix(,n.region.names,npops)
@@ -2887,6 +2899,12 @@ if(subsites=="coding" & length(bial!=0)){
      Xminor.allele.freqs[[xx]]         <- res2$jfd
     }
 
+    if(site.FST){
+     #res3 <- apply(bial,2,function(x){return(fstcalc(as.matrix(x),populations,outgroup,data=list())$FSTALL)})
+     #Xsite.FST[[xx]] <- res3
+     Xsite.FST[[xx]] <- site_FST(bial, populations)
+    }
+
     # -----------------------
     #   fill detailed Slots
     # -----------------------
@@ -2901,6 +2919,7 @@ if(subsites=="coding" & length(bial!=0)){
 }
    change@minor.allele.freqs  <- Xminor.allele.freqs
    change@biallelic.structure <- Xbiallelic.structure
+   change@site.FST            <- Xsite.FST 
    object@MDSD <- MDSD
    object@MDG1 <- MDG1
    object@MDG2 <- MDG2

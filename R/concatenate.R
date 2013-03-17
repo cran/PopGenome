@@ -401,6 +401,7 @@ for (xx in 1:n.chunks) {
 dat       <- obj@region.data
 stat      <- obj@region.stats
 
+if(obj@n.biallelic.sites[xx]==0){next}
 
 # region.data
 
@@ -436,9 +437,13 @@ stat      <- obj@region.stats
          if(obj@snp.data){
           if(R.reading){
            if(cols.reading[xx]!=0){
-            end.reading                               <- start.reading + cols.reading[xx] - 1       
+            end.reading                               <- start.reading + cols.reading[xx] - 1
+            open(dat@reading.frame[[xx]]) 
+            open(dat@rev.strand[[xx]])      
             reading.frame[start.reading:end.reading,] <- dat@reading.frame[[xx]][,] # + ADD.GFF6
             rev.strand[start.reading:end.reading]     <- dat@rev.strand[[xx]][,]
+            close(dat@reading.frame[[xx]])
+            close(dat@rev.strand[[xx]]) 
             start.reading  <- end.reading + 1
             # ADD.GFF      <- end
             # ADD.GFF6       <- ADD.GFF6 + obj@n.sites[xx]
@@ -449,8 +454,10 @@ stat      <- obj@region.stats
           # Coding CDS
           if(R.coding){
            if(cols.coding[xx]!=0){
-            end.coding                              <- start.coding + cols.coding[xx] - 1       
+            end.coding                              <- start.coding + cols.coding[xx] - 1 
+            open(dat@Coding.matrix[[xx]])       
             Coding.matrix[start.coding:end.coding,] <- dat@Coding.matrix[[xx]][,] #+ ADD.GFF
+	    close(dat@Coding.matrix[[xx]]) 
             start.coding <- end.coding + 1
             #ADD.GFF      <- ADD.GFF + ADD.SITES[xx]
            }
@@ -458,8 +465,10 @@ stat      <- obj@region.stats
            # Coding2 CDS
           if(R.coding2){
            if(cols.coding2[xx]!=0){
-            end.coding2                                <- start.coding2 + cols.coding2[xx] - 1       
+            end.coding2                                <- start.coding2 + cols.coding2[xx] - 1
+            open(dat@Coding.matrix2[[xx]])        
             Coding.matrix2[start.coding2:end.coding2,] <- dat@Coding.matrix2[[xx]][,] + ADD.GFF
+            close(dat@Coding.matrix2[[xx]])
             start.coding2 <- end.coding2 + 1           
            }
            ADD.GFF       <- ADD.GFF + ADD.SITES[xx]
@@ -468,8 +477,10 @@ stat      <- obj@region.stats
           if(R.exons){
            if(cols.exons[xx]!=0){
             # Exon
-            end.exons                               <- start.exons + cols.exons[xx] - 1       
+            end.exons                               <- start.exons + cols.exons[xx] - 1 
+            open(dat@Exon.matrix[[xx]])       
             Exon.matrix[start.exons:end.exons,]     <- dat@Exon.matrix[[xx]][,] #+ ADD.GFF2
+            close(dat@Exon.matrix[[xx]]) 
             start.exons <- end.exons + 1
             # ADD.GFF2 <- end
             # ADD.GFF2      <- ADD.GFF2 + obj@n.sites[xx]
@@ -480,7 +491,9 @@ stat      <- obj@region.stats
            if(cols.introns[xx]!=0){
             end.introns                                   <- start.introns + cols.introns[xx] - 1 
             # Intron
+            open(dat@Intron.matrix[[xx]]) 
             Intron.matrix[start.introns:end.introns,]     <- dat@Intron.matrix[[xx]][,] #+ ADD.GFF3
+            close(dat@Intron.matrix[[xx]]) 
             start.introns <- end.introns + 1
             #ADD.GFF3      <- end
             #ADD.GFF3        <- ADD.GFF3 + obj@n.sites[xx]
@@ -491,7 +504,9 @@ stat      <- obj@region.stats
            if(cols.utrs[xx]!=0){
             # UTR
             end.utrs                               <- start.utrs + cols.utrs[xx] - 1 
+            open(dat@UTR.matrix[[xx]]) 
             UTR.matrix[start.utrs:end.utrs,]       <- dat@UTR.matrix[[xx]][,] #+ ADD.GFF4
+            close(dat@UTR.matrix[[xx]]) 
             start.utrs <- end.utrs + 1
             # ADD.GFF4   <- end
             # ADD.GFF4      <- ADD.GFF4 + obj@n.sites[xx]
@@ -501,8 +516,10 @@ stat      <- obj@region.stats
           if(R.genes){
            if(cols.genes[xx]!=0){
             # Gene
-            end.genes                               <- start.genes + cols.genes[xx] - 1 
+            end.genes                               <- start.genes + cols.genes[xx] - 1
+            open(dat@Gene.matrix[[xx]])  
             Gene.matrix[start.genes:end.genes,]     <- dat@Gene.matrix[[xx]][,] # + ADD.GFF5
+            close(dat@Gene.matrix[[xx]]) 
             start.genes <- end.genes + 1
             # ADD.GFF5    <- end
             # ADD.GFF5     <- ADD.GFF5 + obj@n.sites[xx]
@@ -515,9 +532,13 @@ stat      <- obj@region.stats
          if(obj@snp.data){
           if(R.reading){
            if(cols.reading[xx]!=0){
-            end.reading                               <- start.reading + cols.reading[xx] - 1       
+            end.reading                               <- start.reading + cols.reading[xx] - 1
+            open(dat@reading.frame[[xx]])      
+            open(dat@rev.strand[[xx]])  
             reading.frame[start.reading:end.reading,] <- dat@reading.frame[[xx]][,] # + ADD.GFF6
             rev.strand[start.reading:end.reading]     <- dat@rev.strand[[xx]][,] # + ADD.GFF6
+            close(dat@reading.frame[[xx]])
+            close(dat@rev.strand[[xx]]) 
             start.reading  <- end.reading + 1
             # ADD.GFF      <- end
             # ADD.GFF6       <- ADD.GFF6 + obj@n.sites[xx]
@@ -528,8 +549,10 @@ stat      <- obj@region.stats
           # Coding CDS
           if(R.coding){
            if(cols.coding[xx]!=0){
-            end.coding                              <- start.coding + cols.coding[xx] - 1       
+            end.coding                              <- start.coding + cols.coding[xx] - 1 
+            open(dat@Coding.matrix[[xx]])       
             Coding.matrix[start.coding:end.coding,] <- dat@Coding.matrix[[xx]][,] + ADD.GFF
+            close(dat@Coding.matrix[[xx]]) 
             start.coding <- end.coding + 1
             ADD.GFF      <- ADD.GFF + ADD.SITES[xx]
            }
@@ -547,8 +570,10 @@ stat      <- obj@region.stats
           if(R.exons){
            if(cols.exons[xx]!=0){
             # Exon
-            end.exons                               <- start.exons + cols.exons[xx] - 1       
+            end.exons                               <- start.exons + cols.exons[xx] - 1
+            open(dat@Exon.matrix[[xx]])        
             Exon.matrix[start.exons:end.exons,]     <- dat@Exon.matrix[[xx]][,] + ADD.GFF2
+            close(dat@Exon.matrix[[xx]]) 
             start.exons <- end.exons + 1
             # ADD.GFF2 <- end
             # ADD.GFF2      <- ADD.GFF2 + obj@n.sites[xx]
@@ -559,7 +584,9 @@ stat      <- obj@region.stats
            if(cols.introns[xx]!=0){
             end.introns                                   <- start.introns + cols.introns[xx] - 1 
             # Intron
+            open(dat@Intron.matrix[[xx]]) 
             Intron.matrix[start.introns:end.introns,]     <- dat@Intron.matrix[[xx]][,] + ADD.GFF3
+            close(dat@Intron.matrix[[xx]]) 
             start.introns <- end.introns + 1
             # ADD.GFF3      <- end
             # ADD.GFF3        <- ADD.GFF3 + obj@n.sites[xx]
@@ -569,8 +596,10 @@ stat      <- obj@region.stats
           if(R.utrs){
            if(cols.utrs[xx]!=0){
             # UTR
-            end.utrs                               <- start.utrs + cols.utrs[xx] - 1 
+            end.utrs                               <- start.utrs + cols.utrs[xx] - 1
+            open(dat@UTR.matrix[[xx]])  
             UTR.matrix[start.utrs:end.utrs,]       <- dat@UTR.matrix[[xx]][,] + ADD.GFF4
+            close(dat@UTR.matrix[[xx]]) 
             start.utrs <- end.utrs + 1
             # ADD.GFF4   <- end
             # ADD.GFF4      <- ADD.GFF4 + obj@n.sites[xx]
@@ -580,8 +609,10 @@ stat      <- obj@region.stats
           if(R.genes){
            if(cols.genes[xx]!=0){
             # Gene
-            end.genes                               <- start.genes + cols.genes[xx] - 1 
+            end.genes                               <- start.genes + cols.genes[xx] - 1
+            open(dat@Gene.matrix[[xx]])  
             Gene.matrix[start.genes:end.genes,]     <- dat@Gene.matrix[[xx]][,]  + ADD.GFF5
+            close(dat@Gene.matrix[[xx]]) 
             start.genes <- end.genes + 1
             # ADD.GFF5    <- end
             # ADD.GFF5     <- ADD.GFF5 + obj@n.sites[xx]

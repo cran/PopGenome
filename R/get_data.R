@@ -478,7 +478,9 @@ features <- gff
     # pump reverse strand #FIXME Performance
     JJJ            <- new.env()
     JJJ$count      <- 1
-    rev.strand     <-  as.vector(unlist(apply(features$Coding,1,function(x){back <- rep(features$rev.strand[JJJ$count],x[2]-x[1]+1);JJJ$count <- JJJ$count+1;return(back)})))  
+    open(features$rev.strand)
+    rev.strand     <-  as.vector(unlist(apply(features$Coding,1,function(x){back <- rep(features$rev.strand[JJJ$count],x[2]-x[1]+1);JJJ$count <- JJJ$count+1;return(back)}))) 
+    close(features$rev.strand) 
     #---------------
 
     ids            <- match(matrix_pos, Coding_region)
@@ -575,6 +577,8 @@ if(!SNP.DATA){
 
  # GFF 
  testmatrix           <- matr[,matrix_codonpos,drop=FALSE]
+
+#print(testmatrix)
 
 ### change rows for reverse strands
  if(any(reverse.codons)){

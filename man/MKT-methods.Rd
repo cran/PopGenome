@@ -14,7 +14,7 @@
 
 \usage{
 
-\S4method{MKT}{GENOME}(object,new.populations=FALSE)
+\S4method{MKT}{GENOME}(object, new.populations=FALSE, do.fisher.test=FALSE)
 \S4method{get.MKT}{GENOME}(object)
 
 }
@@ -23,6 +23,7 @@
 
   \item{object}{an object of class \code{"GENOME"}}
   \item{new.populations}{list of populations. default:\code{FALSE}}
+  \item{do.fisher.test}{P-value calculation out of the Dn,Ds,Pn,Ps table}
 }
 
 \details{

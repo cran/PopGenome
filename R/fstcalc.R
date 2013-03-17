@@ -340,7 +340,7 @@ nca <-  sum(erg[4,])
  ####---------------------- FSTALL --------------------------####
   if(spia){ 
      FSTALL = 1 - (spiw/ncw)/(spia/nca)
-  }else{FSTALL <- NaN}
+  }else{FSTALL <- 0}
 
 }#END if outgroup[1]!=FALSE
 
@@ -384,7 +384,7 @@ nca      <-  sum(erg[4,])
  ####---------------------- FSTALL --------------------------####
   if(spia){ 
      FSTALL = 1 - (spiw/ncw)/(spia/nca)
-  }else{FSTALL <- NaN}
+  }else{FSTALL <- 0}
 }
 
 

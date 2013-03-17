@@ -15,8 +15,8 @@ haplotype.diversity    = "list",
 haplotype.counts       = "list" ,      # sfreqh
 minor.allele.freqs     = "list",       # JFD
 biallelic.structure    = "list",       # SXX
-linkage.disequilibrium = "list"       # Link
-
+linkage.disequilibrium = "list",       # Link
+site.FST               = "list"
 ))
 
 
@@ -31,13 +31,13 @@ setMethod("show", "region.stats",
 cat("-----\n")
  cat("SLOTS:\n")
  cat("-----\n")
- out <- data.frame(Slots=c("nucleotide.diversity","haplotype.diversity","haplotype.counts", "minor.allele.freqs","linkage.disequilibrium","biallelic.structure"),         
+ out <- data.frame(Slots=c("nucleotide.diversity","haplotype.diversity","haplotype.counts", "minor.allele.freqs","linkage.disequilibrium","biallelic.structure","site.FST"),         
                
 
                 Description=c(
-               " Nucleotide diversity","Haplotype diversity","Haplotype distribution","Minor allele frequencies","Linkage disequilibrium","Shared and fixed polymorphisms"),
+               " Nucleotide diversity","Haplotype diversity","Haplotype distribution","Minor allele frequencies","Linkage disequilibrium","Shared and fixed polymorphisms","SNP-wise FST"),
 
-               Module=c("FST","FST","FST","Detail","Linkage","Detail"))
+               Module=c("FST","FST","FST","Detail","Linkage","Detail","Detail"))
  
               
 

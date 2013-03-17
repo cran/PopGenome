@@ -1,3 +1,24 @@
+Changes in PopGenome 2.1.0
+===========================
+
+BUG FIXED:
+
+- readVCF: polyallelic sites were not stored
+- misleading results in the module linkage.stats 
+  and calc.R2 when unknown nucleotides are included
+  (NaNs in the biallelic matrix)
+- get.codons() did not worked correctly for data
+  in alignment format
+- readData: PopGenome now correctly opens and close
+  ff-objects. As a consequence more data (data chunks) can 
+  be read in without a write error reported by the ff-package.
+
+NEW FEATURES:
+
+- MKT: new parameter
+- detail.stats(,site.FST) now computes SNP-wise FST
+- jack.knife.transform()
+
 Changes in PopGenome 2.0.9
 ===========================
 
@@ -9,12 +30,13 @@ NEW FEATURES:
 
 - readVCF: faster computation + better GFF support
 
+
 Changes in PopGenome 2.0.8
 ===========================
 
 BUG FIXED:
 
-- concatenate.regions (small BUG)
+- 
 
 NEW FEATURES:
 

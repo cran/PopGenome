@@ -74,6 +74,8 @@ for(xx in 1:(length(object@region.names)-1)){
  a <- length((unlist(get.individuals(object,xx))))
  b <- length((unlist(get.individuals(object,xx+1))))
 
+  if(a==0 | b==0){next}
+
   if(a!=b){
      can_con <- FALSE
      break

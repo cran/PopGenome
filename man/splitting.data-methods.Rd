@@ -41,6 +41,9 @@
                    If FALSE, the regions are scanned seperately}
 }
 
+\details{
+Note, if \code{whole.data=FALSE} data with \code{n.biallelic.sites==0} should be removed.
+}
 
 
 \value{

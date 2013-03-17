@@ -3,7 +3,7 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP R2_C(SEXP RinMatrix, SEXP EINSEN){
+SEXP R2_C(SEXP RinMatrix, SEXP EINSEN, SEXP NULLEN){
 
 SEXP ret = R_NilValue;
 
@@ -22,12 +22,14 @@ double value2;
 Rvalue           = coerceVector(RinMatrix, REALSXP);
 double *Rval     = REAL(Rvalue);
 double *einsen   = REAL(EINSEN);
+double *nullen   = REAL(NULLEN);
 
 double  ones;
 double  zeros;
 double     id;
 double     id2;
 double     count;
+double valid_comp;
 
 double  freqsite1;
 double  freqsite2;
@@ -57,7 +59,11 @@ for (int m=0; m < J-1; m++){
  
  // sites 1
     ones  = einsen[m];
-    zeros = site_length - ones;
+    zeros = nullen[m];
+    site_length = ones + zeros;
+
+//    zeros = site_length - ones;
+
     if(ones>=zeros){
        freqsite1 = ones/site_length;
        id = 1;
@@ -71,7 +77,11 @@ for (int m=0; m < J-1; m++){
 
  // sites 2
     ones  = einsen[i];
-    zeros = I - ones;
+    zeros = nullen[i];
+    site_length = ones + zeros;
+
+//    zeros = I - ones;
+
     if(ones>=zeros){
        freqsite2 = ones/site_length;
        id2 = 1;
@@ -82,18 +92,27 @@ for (int m=0; m < J-1; m++){
  // End of sites 2
     
    count = 0;
+   valid_comp = 0;
+
    for (int j = 0; j < I; j++){
    
     value1 = Rval[j +I*m];
     value2 = Rval[j +I*i];
-    
-     if(value1==id && value2 ==id2){
+	
+    //count valid comparisons
+    if((value1==0 && value2==0) || (value1==1 && value2==0) || (value1==0 && value2==1) || (value1==1 && value2==1)){
+    valid_comp ++;
+    }    
+
+     if(value1 == id && value2 == id2){
        count ++;
      }
     
    }
 
-   d_raw  = (double)count/(double)site_length - freqsite1*freqsite2;
+   //d_raw  = (double)count/(double)site_length - freqsite1*freqsite2;
+   if(valid_comp==0){continue;}
+   d_raw  = (double)count/(double)valid_comp - freqsite1*freqsite2;
 
    freqsite1_low = 1-freqsite1;
    freqsite2_low = 1-freqsite2;
@@ -101,17 +120,13 @@ for (int m=0; m < J-1; m++){
    REAL(ret)[fill] = r2;
    fill ++;
 
-   //printf("%f",value1);
-  
+   // printf("%f",value1);
    // if(value2==6){break;}
    // if(value2==5){break;}  
    // if(value1!=value2){
         //printf("Treffer");
    //	INTEGER(ret)[i]=1; // polymorphic
-   //     break;      
-     
-   
-  
+   //     break;       
  }
 }
 
@@ -284,7 +299,7 @@ return list;
 }
 
 
-SEXP R2_C_plus(SEXP RinMatrix, SEXP EINSEN, SEXP bialsites){
+SEXP R2_C_plus(SEXP RinMatrix, SEXP EINSEN, SEXP NULLEN, SEXP bialsites){
 
 SEXP ret = R_NilValue;
 
@@ -303,6 +318,7 @@ double value2;
 Rvalue           = coerceVector(RinMatrix, REALSXP);
 double *Rval     = REAL(Rvalue);
 double *einsen   = REAL(EINSEN);
+double *nullen   = REAL(NULLEN);
 double *bialpos  = REAL(bialsites);
 
 double  ones;
@@ -310,6 +326,7 @@ double  zeros;
 double     id;
 double     id2;
 double     count;
+double valid_comp;
 
 double  freqsite1;
 double  freqsite2;
@@ -352,7 +369,10 @@ for (int m=0; m < J-1; m++){
  
  // sites 1
     ones  = einsen[m];
-    zeros = site_length - ones;
+    //zeros = site_length - ones;
+    zeros = nullen[m];
+    site_length = ones + zeros;
+	
     if(ones>=zeros){
        freqsite1 = ones/site_length;
        id = 1;
@@ -366,7 +386,10 @@ for (int m=0; m < J-1; m++){
 
  // sites 2
     ones  = einsen[i];
-    zeros = I - ones;
+    zeros = nullen[i];
+    site_length = ones + zeros;
+
+    //zeros = I - ones;
     if(ones>=zeros){
        freqsite2 = ones/site_length;
        id2 = 1;
@@ -377,6 +400,7 @@ for (int m=0; m < J-1; m++){
  // End of sites 2
     
    count = 0;
+   valid_comp = 0;
    m00=0;
    m01=0;
    m10=0;
@@ -392,19 +416,24 @@ for (int m=0; m < J-1; m++){
      }
    	  // fill M Matrix
      if(value1==0 && value2 == 0){
+        valid_comp ++;
 	m00++;
      }
      if(value1==0 && value2 == 1){
 	m01++;
+        valid_comp ++;
      }
      if(value1==1 && value2 == 0){
 	m10++;
+	valid_comp ++;
      }
      if(value1==1 && value2 == 1){
 	m11++;
+        valid_comp ++;
      }
-
    }
+
+
  
   // Fill Matrix M
   INTEGER(M)[fill+((J*(J-1))/2)*0] = m00;
@@ -413,8 +442,10 @@ for (int m=0; m < J-1; m++){
   INTEGER(M)[fill+((J*(J-1))/2)*3] = m11;
   REAL(Dist)[fill] = bialpos[i] - bialpos[m];
 
-   d_raw  = (double)count/(double)site_length - freqsite1*freqsite2;
-
+   if(valid_comp==0){continue;}
+   //d_raw  = (double)count/(double)site_length - freqsite1*freqsite2;
+     d_raw  = (double)count/(double)valid_comp - freqsite1*freqsite2;
+	
    freqsite1_low = 1-freqsite1;
    freqsite2_low = 1-freqsite2;
    r2 = (d_raw*d_raw)/(freqsite1*freqsite1_low*freqsite2*freqsite2_low);
@@ -443,6 +474,71 @@ UNPROTECT(1);
 return list;
 
 }
+
+SEXP count_congruent(SEXP RinMatrix){
+
+// APPROX SNP SEARCH
+
+SEXP ret = R_NilValue;
+
+int I;
+int J;
+SEXP Rdim;
+SEXP Rvalue;
+
+Rdim = getAttrib(RinMatrix, R_DimSymbol);
+I    = INTEGER(Rdim)[0]; // Reihen 
+J    = INTEGER(Rdim)[1]; // Spalten
+
+double value1;
+double value2;
+Rvalue           = coerceVector(RinMatrix, REALSXP);
+double *Rval     = REAL(Rvalue);
+
+PROTECT(ret = allocVector(INTSXP,J-1));
+
+// Init ret
+for(int i=0; i< J-1; i++){
+INTEGER(ret)[i]=1; // congruent
+}
+
+//for(int i=0; i< J*I; i++){
+//value2 = Rval[i];
+//printf("%f",value2);
+//}
+
+for (int i = 0; i < J-1; i++){
+ for (int j = 0; j < I; j++){
+
+   value1 = Rval[j + I*i];     // site 1
+   value2 = Rval[j + I*(i+1)]; // site 2
+  
+   //printf("%f",value1);
+   //printf(":");
+   //printf("%f",value2);
+   //printf("\n");
+   	
+   // one of the values are Nan
+   if((value1 != 0 && value1!=1) || (value2 != 0 && value2!=1)){continue;}  
+
+   if((value1!=value2)){  
+   INTEGER(ret)[i] = 0;
+   break;                   
+   } 
+   
+ }
+
+//printf("new site pair");
+//printf("\n");
+
+}
+
+UNPROTECT(1);
+
+return ret;
+
+}
+
 
 
 

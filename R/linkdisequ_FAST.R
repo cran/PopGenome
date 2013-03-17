@@ -62,8 +62,10 @@ for(xx in 1:npops){
 #### ---------
  
   # site_length  <- dim(popmatrix)[1]
-  EINSEN       <- colSums(popmatrix)
-  res          <- .Call("R2_C",popmatrix,EINSEN)  
+  EINSEN       <- colSums(popmatrix, na.rm = TRUE)
+  NULLEN       <- colSums(popmatrix==0, na.rm = TRUE) # include.unknown=TRUE
+
+  res          <- .Call("R2_C", popmatrix, EINSEN, NULLEN)  
  
   # NULLEN       <- site_length - EINSEN
 
@@ -179,7 +181,7 @@ for(xx in 1:npops){
 #############################################################
  
  # Zns      <- sum(res[3,],na.rm=TRUE)/numsitepairs
- Zns        <- mean(res)
+ Zns        <- mean(res, na.rm = TRUE)
  znsvek[xx] <- Zns
 
 # ZA/ZZ (Rozas) ---------------------------------------------
@@ -201,10 +203,9 @@ if(n.segsites.pop==2){
 
 }
    
-   ZA[xx]   <- sum(res[adjacent])/(n.segsites.pop-1)
+   ZA[xx]   <- sum(res[adjacent], na.rm = TRUE)/(n.segsites.pop-1)
    ZZ[xx]   <- ZA[xx] - znsvek[xx]
  
-
 
 }# End of iteration over pops
 

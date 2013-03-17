@@ -545,33 +545,39 @@ if(progress_bar_switch){ ### because of parallized
         
         fill                    <- as.matrix(gff_object$Coding)
         Coding.matrix[[xx]]     <- ff(fill,dim=dim(fill))
+        close(Coding.matrix[[xx]])
 
         if(dim(gff_object_fit$Coding)[1]>0){
          reading.frame[[xx]]     <- gff_object_fit$reading.frame
          rev.strand[[xx]]        <- gff_object_fit$rev.strand
          fill                    <- as.matrix(gff_object_fit$Coding)
          Coding.matrix2[[xx]]    <- ff(fill,dim=dim(fill)) # wegen set.synnonsyn
+         close(Coding.matrix2[[xx]])
         }
       #  Coding.info[[xx]]       <- ff(as.factor(gff_object$Coding.info))
       }
       if(dim(gff_object$UTR)[1]>0){
         fill                    <- as.matrix(gff_object$UTR)
         UTR.matrix[[xx]]        <- ff(fill,dim=dim(fill))
+        close(UTR.matrix[[xx]])
       #  UTR.info[[xx]]          <- ff(as.factor(gff_object$UTR.info))
       }
       if(dim(gff_object$Intron)[1]>0){
         fill                    <- as.matrix(gff_object$Intron)   
         Intron.matrix[[xx]]     <- ff(fill,dim=dim(fill))
+        close(Intron.matrix[[xx]])
       #  Intron.info[[xx]]       <- ff(as.factor(gff_object$Intron.info))
       }
       if(dim(gff_object$Exon)[1]>0){
         fill                    <- as.matrix(gff_object$Exon) 
         Exon.matrix[[xx]]       <- ff(fill,dim=dim(fill))
+        close(Exon.matrix[[xx]])
       #  Exon.info[[xx]]         <- ff(as.factor(gff_object$Exon.info))
       } 
       if(dim(gff_object$Gene)[1]>0){
         fill                    <- as.matrix(gff_object$Gene)  
         Gene.matrix[[xx]]       <- ff(fill,dim=dim(fill))
+        close(Gene.matrix[[xx]])
       #  Gene.info[[xx]]         <- ff(as.factor(gff_object$Gene.info))
       }    
      }

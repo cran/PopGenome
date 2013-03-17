@@ -2,9 +2,9 @@
 # Selective Sweeps Statistics
 # ------------------------------------------------------------
 
-setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE, freq.table = FALSE) standardGeneric("sweeps.stats"))
+setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE, freq.table = FALSE, FST = FALSE) standardGeneric("sweeps.stats"))
  setMethod("sweeps.stats", "GENOME",
- function(object,new.populations,subsites, freq.table){
+ function(object,new.populations,subsites, freq.table, FST){
 
  
  region.names                       <- object@region.names
@@ -23,17 +23,21 @@ setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE,
  
 # bial        <- object@biallelics
 # Init
- init        <- matrix(,n.region.names,npops)
- CL          <- init
- #CLmax       <- init
- CLR         <- init
-
-# Names
- nam                  <- paste("pop",1:npops)
- rownames(CL)         <- region.names
- colnames(CL)         <- nam
- rownames(CLR)        <- region.names
- colnames(CLR)        <- nam
+ if(!FST){
+  init        <- matrix(NaN,n.region.names,npops)
+  CL          <- init
+  CLR         <- init
+  # Names
+  nam                  <- paste("pop",1:npops)
+  rownames(CL)         <- region.names
+  colnames(CL)         <- nam
+  rownames(CLR)        <- region.names
+  colnames(CLR)        <- nam
+ }else{
+  init        <- matrix(NaN,n.region.names,1)
+  CL          <- init
+  CLR         <- init
+ }
 
  if(!missing(new.populations)){
    NEWPOP      <- TRUE
@@ -154,12 +158,18 @@ if(subsites=="gene" & length(bial!=0)){
      # change@Pop_Linkage[[xx]] <- list(Populations=populations,Outgroup=NULL)
      # ------------------- fill detail slots
 
+     if(!FST){	
      res                       <- complike(bial,populations,freq.table)
      CL[xx,respop]             <- res$CL
     #CLmax[xx,respop]          <- res$CLmax 
      CLR[xx,respop]            <- res$CLR
      # -------------------
-    
+     }else{
+     res                       <- complike_FST(bial,populations,freq.table)
+     CL[xx,] 	               <- res$CL
+     CLR[xx,]	               <- res$CLR
+     }    
+
   # PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
   ###################################################################

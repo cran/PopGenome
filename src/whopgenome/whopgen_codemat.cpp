@@ -356,7 +356,7 @@ EXPORT	SEXP	VCF_readIntoCodeMatrix( SEXP vcfptr, SEXP mat )
 			//
 			//	- parse the GT subfield ( regexp: [0-9]+[/|][0-9]+ )
 			//
-			int left_allele = fieldptr[0] - '0';
+			int left_allele = fieldptr[0]  - '0';
 			int right_allele = fieldptr[2] - '0';
 			//assert( left_allele >= 0 && left_allele <= 9 )
 			//assert( right_allele >= 0 && right_allele <= 9 )
@@ -1746,17 +1746,31 @@ EXPORT	SEXP	VCF_readIntoCodeMatrixdiploid2( SEXP vcfptr, SEXP mat )
 
 			// fill maprefalt ///////////////////////////////////////////////////
 			maprefalt[0] = refptr[0];
-			int xyz = 0;
+			int xyz  = 0;
+                        int xyz2 = 0;
 			while(altptr[xyz]!='\t'){
 			
-			//printf(": %c",maprefalt[xyz]);
-
 				if(altptr[xyz]!=','){
-				maprefalt[xyz+1] = altptr[xyz];
-				//xyz++;
+				maprefalt[xyz2+1] = altptr[xyz];
+				xyz2++;
 				}
 			xyz++;
 			}
+			//prints
+			/* 
+			printf(": %c",maprefalt[0]);
+			printf(": %c",maprefalt[1]);
+			printf(": %c",maprefalt[2]);
+			printf(": %c",maprefalt[3]);
+			printf("**");
+			printf(": %c",altptr[0]);
+			printf(": %c",altptr[1]);
+			printf(": %c",altptr[2]);
+			printf(": %c",altptr[3]);
+			*/
+			//end prints
+
+
 			////////////////////////////////////////////////////////////////////
 			//FIXME Take all lines ! Also multi allelic
 			//printf("REF: %c", refptr[0]);

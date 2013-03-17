@@ -13,7 +13,8 @@ This function plots values with smoothed lines using spline interpolation.
 
 \usage{
 
-PopGplot(values,colors=FALSE,span=0.1,ylab="",xlab="")
+PopGplot(values,colors=FALSE,span=0.1,ylab="",xlab="",
+	ylim=c(min(values,na.rm=TRUE),max(values,na.rm=TRUE)))
 
 }
 
@@ -23,6 +24,7 @@ PopGplot(values,colors=FALSE,span=0.1,ylab="",xlab="")
 \item{span}{the degree of smoothing} 
 \item{ylab}{a title for the y axis} 
 \item{xlab}{a title for the x axis} 
+\item{ylim}{ranges for the y axis}
 }  
 
 \examples{

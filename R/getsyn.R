@@ -13,6 +13,8 @@ if(length(matrixone)==0){return(list(mono=as.matrix(NaN),syn=as.matrix(NaN),nons
 
 matrix                 <- codonise64(matrixone)
 
+#print(matrix)
+
 monoid   <- NULL
 synid    <- NULL
 nonsynid <- NULL

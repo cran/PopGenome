@@ -22,12 +22,13 @@ for(xx in 1:npops){
 
     segmatrix    <- matrix_pol[populations[[xx]],segsites[[xx]],drop=FALSE]
     if(dim(segmatrix)[2]<=1){Q[xx]<- NaN;B[xx]<-NaN;next;}
-    con          <- count_congruent(segmatrix) # benachbarte Site Paare sind identisch !
+    con          <- .Call("count_congruent", segmatrix)
+    #con          <- count_congruent(segmatrix) # neighbouring sites are identical !
     consum       <- sum(con)
     B[xx]        <- consum/(length(segsites[[xx]])-1)
 
     # Count the types of different congruent pairs
-    checkmatrix  <- segmatrix[,which(con)]
+    checkmatrix  <- segmatrix[,con]
     checkmatrix  <- unique(t(checkmatrix))
     Scheck       <- dim(checkmatrix)[1]
     # --------------------------------------------

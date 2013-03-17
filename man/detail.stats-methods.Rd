@@ -24,7 +24,8 @@
 	subsites=FALSE,
 	biallelic.structure=FALSE,
 	mismatch.distribution=FALSE,
-	site.spectrum=TRUE
+	site.spectrum=TRUE,
+        site.FST=FALSE
         )
 \S4method{get.detail}{GENOME}(object, biallelic.structure=FALSE)
 
@@ -53,9 +54,8 @@
   \item{biallelic.structure}{fixed and shared polymorphisms (stored in \code{GENOME.class@region.stats}).}
   \item{mismatch.distribution}{statistics based on mismatch distribution}
   \item{site.spectrum}{minor allele frequency of each SNP}
-  
+  \item{site.FST}{computes FST for each SNP}
 }
-
 
 
 \value{
@@ -87,8 +87,8 @@ returns a matrix for each region, where \cr
 
 # GENOME.class <- readData("\home\Alignments")
 # GENOME.class
+# GENOME.class <- set.populations(GENOME.class,list(1:10))
 # GENOME.class <- detail.stats(GENOME.class)
-# GENOME.class <- detail.stats(GENOME.class,list(1:7,8:12))
 # show the result:
 # mismatch.values   <- get.detail(GENOME.class)
 # bial.struc.values <- get.detail(GENOME.class, biallelic.structure=TRUE)

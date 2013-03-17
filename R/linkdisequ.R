@@ -96,7 +96,8 @@ if(dim(pp)[2]>1){ # more than 2 sites
      bb     <- site2==id2
      cc     <- which(aa==TRUE & bb==TRUE)
      x      <- length(cc)
-     d_raw  <- x/alle - freqsite1*freqsite2 #### d_raw
+     valid_comp <- length(which(!is.na(site1) & !is.na(site2))) # a new FIX for include.unknown=TRUE
+     d_raw  <- x/valid_comp - freqsite1*freqsite2 #### d_raw
      # -------------------------------------------
     
      

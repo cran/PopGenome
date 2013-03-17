@@ -23,6 +23,9 @@ POLARITY[45:48]                       <- "acidic"
 minor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[1])}) # FIXME really minor ? done 
 mayor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[2])}) # FIXME really mayor ? done
 
+#print(minor)
+#print(mayor)
+
 # ReCheck minor/mayor Codons
 if(!object@snp.data){
 
@@ -32,8 +35,9 @@ subst         <- object@region.data@biallelic.substitutions[[regionID]]
  for (xx in 1:length(minor)){
 
 	if(minor.alleles[xx]==subst[2,xx]){
-        minor[xx] <- mayor[xx]
-	mayor[xx] <- minor[xx]
+        save.minor <- minor[xx]
+        minor[xx]  <- mayor[xx]
+	mayor[xx]  <- save.minor
 	}
 
  }
@@ -70,7 +74,7 @@ erg      <- as.logical(object@region.data@synonymous[[regionID]][codeids])
 bial.pos <- object@region.data@biallelic.sites[[regionID]][codeids]
 
 # Collect information and store in data.frame 
-XX    <- c("Position","Codons (major)","Codons (minor)","Protein (major)","Protein (minor)","synonymous", "Polarity (major)","Polarity (minor)")
+XX    <- c("Position","Codons (minor)","Codons (major)","Protein (minor)","Protein (major)","synonymous", "Polarity (major)","Polarity (minor)")
 DATA  <- data.frame(bial.pos,NucALT, NucREF, ALT, REF, as.logical(erg), ALTPOL, REFPOL)
 colnames(DATA) <- XX
 

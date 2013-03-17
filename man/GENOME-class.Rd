@@ -38,6 +38,7 @@
 \alias{get.codons}
 \alias{PG_plot.biallelic.matrix}
 \alias{introgression.stats}
+\alias{jack.knife.transform}
 
 
 
@@ -149,6 +150,7 @@
     \item{\code{region.stats}:}{Detailed (site-specific) statistics}
     \item{\code{D}}{Pattersons D statistic}
     \item{\code{f}}{the fraction of the genome that is admixed}
+    \item{\code{jack.knife}}{jacknife mode}
   }
 }
 \section{Methods}{
