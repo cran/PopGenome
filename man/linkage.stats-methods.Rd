@@ -18,7 +18,7 @@
 \usage{
 
 \S4method{linkage.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,
-          include.unknown=FALSE, do.WALL=TRUE)
+          include.unknown=FALSE,do.ZnS,do.WALL=TRUE)
 \S4method{get.linkage}{GENOME}(object)
 
 }
@@ -43,6 +43,7 @@
   
   \item{detail}{if you want to calculate some detail statistics. slower! default:\code{FALSE}}  
   \item{include.unknown}{TRUE, if unknown positions should be considered. Slower !  see readData()}
+  \item{do.ZnS}{ZnS, ZA and ZZ} 
   \item{do.WALL}{Wall B/Q}
 }
 

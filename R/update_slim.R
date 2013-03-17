@@ -399,12 +399,17 @@ A_included <- 0
 A_excluded <- 0
 
 if(any(included)){
-A_included     		<-  log_prior_alpha(BBB$d_alpha[included]) - ( -0.5*log(2*pi*BBB$var_alpha[included])-((BBB$d_alpha[included]-BBB$mean_alpha[included])^2)/(2*BBB$var_alpha[included]))
+A_included     		<-  log_prior_alpha(BBB$d_alpha[included]) - ( -0.5*log(2*pi*BBB$var_alpha[included])-((BBB$d_alpha[included]-BBB$mean_alpha[included])^2)/(2*BBB$var_alpha[included])) - log(10)
 }
+ #log_prior_alpha(alpha[i]) -(-0.5*log(2*M_PI*var_alpha[i])-((alpha[i]-mean_alpha[i])*(alpha[i]-mean_alpha[i]))/(2*var_alpha[i]))-log(prior_odds);
 
 if(any(excluded)){
-A_excluded     		<-  (-0.5*log(2*pi*BBB$var_alpha[excluded]) - ((BBB$d_alpha[excluded]-BBB$mean_alpha[excluded])^2)/(2*BBB$var_alpha[excluded])) - log_prior_alpha(BBB$d_alpha[excluded])
+A_excluded     		<-  (-0.5*log(2*pi*BBB$var_alpha[excluded]) - ((BBB$d_alpha[excluded]-BBB$mean_alpha[excluded])^2)/(2*BBB$var_alpha[excluded])) - log_prior_alpha(BBB$d_alpha[excluded]) + log(10)
 }
+
+#(-0.5*log(2*M_PI*var_alpha[i])-((alpha[i]-mean_alpha[i])*(alpha[i]-mean_alpha[i]))/(2*var_alpha[i]))
+#            -log_prior_alpha(alpha[i])+log(prior_odds);
+
 
 A[included] 	          <-  A[included] + A_included 
 A[excluded]               <-  A[excluded] + A_excluded

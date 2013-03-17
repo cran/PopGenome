@@ -105,6 +105,7 @@ mult.Linkage           =   "matrix",
 RM                     =   "matrix",
 CL                     =   "matrix",
 CLmax                  =   "matrix",
+CLR                    =   "matrix",
 
 MDSD="matrix",
 MDG1="matrix",
@@ -930,10 +931,25 @@ popGetBial <- function( XX , bialmatNr )
 # ff or not
 #if(XX@big.data){
 
+# if no biallelic sites return NULL
+if(length(XX@region.data@biallelic.sites[[bialmatNr]])==0){return(NULL)}
+
+
     if(length(XX@BIG.BIAL)==0){
-     if(XX@big.data){open(XX@region.data@biallelic.matrix[[bialmatNr]])} # da zuviele ff files open... muss nich !
+     if(XX@big.data){
+
+         open(XX@region.data@biallelic.matrix[[bialmatNr]]) # open ff file
+
+     } # da zuviele ff files open... muss nich !
+
      bial <- XX@region.data@biallelic.matrix[[bialmatNr]][,,drop=FALSE]
-     if(XX@big.data){close(XX@region.data@biallelic.matrix[[bialmatNr]])}# da zuviele ff files open... muss nich !
+
+     if(XX@big.data){
+
+        close(XX@region.data@biallelic.matrix[[bialmatNr]]) # close ff file
+
+     }# da zuviele ff files open... muss nich !
+
     }else{ 
       if(length(XX@SLIDE.POS[[bialmatNr]])==0){return(NULL)} # muss nur wegen BIGMEMORY package !
      # open(XX@BIG.BIAL[[1]])
@@ -955,7 +971,7 @@ popGetBial <- function( XX , bialmatNr )
 	    #return(NULL)
             #}
 
- }else{return(NULL)}
+  }else{return(NULL)}
 
 }
  
@@ -1320,9 +1336,9 @@ if(subsites=="gene" & length(bial!=0)){
 # popLinkage  (linkdisequ)
 # ------------------------------------------------------------
 
-setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,include.unknown=FALSE,do.WALL=TRUE) standardGeneric("linkage.stats"))
+setGeneric("linkage.stats", function(object,new.populations=FALSE,subsites=FALSE,detail=FALSE,include.unknown=FALSE,do.ZnS=TRUE, do.WALL=TRUE) standardGeneric("linkage.stats"))
  setMethod("linkage.stats", "GENOME",
- function(object,new.populations,subsites,detail,include.unknown,do.WALL){
+ function(object,new.populations,subsites,detail,include.unknown,do.ZnS,do.WALL){
 
 if(include.unknown){detail <-TRUE} #FIXME
 
@@ -1490,6 +1506,9 @@ if(subsites=="gene" & length(bial!=0)){
      Pop_Linkage[[xx]]        <- list(Populations=populations,Outgroup=NULL)
      # ------------------- fill detail slots
 
+
+  if(do.ZnS){
+
     if(!detail){
     res                          <- linkdisequ_FAST(bial,populations)
     Zns[xx,respop]               <- res$Zns
@@ -1505,7 +1524,7 @@ if(subsites=="gene" & length(bial!=0)){
      ZZ [xx,respop]              <- res$ZZ
     }
     # -------------------
-    
+  }  
        
     if(do.WALL){
     res              <- wall99bq(bial,populations)
@@ -1596,9 +1615,9 @@ else{poppairs <- 1;nn <- "pop1"}
   
    
   # INIT
-  init  <- matrix(1,n.region.names,npops)
-  init1 <- matrix(NA,length(nn),n.region.names)
-  init2 <- matrix(1,n.region.names,1)
+  init  <- matrix(0,n.region.names,npops)
+  init1 <- matrix(0,length(nn),n.region.names)
+  init2 <- matrix(0,n.region.names,1)
   
   nuc.F_ST.vs.all   <- init
   PIW               <- matrix(0,n.region.names,npops)
@@ -1950,10 +1969,10 @@ else{poppairs <- 1;nn <- "pop1"}
 ##### ------------------------------ ####------------------------------------------------ 
 #########################################################################################  
   
-  init3  <- matrix(NA,length(nn),n.region.names)
+  init3  <- matrix(0,length(nn),n.region.names)
   nam    <- paste("pop",1:npops)
   init1  <- matrix(0,n.region.names,npops)
-  init2  <- matrix(1,n.region.names,1)
+  init2  <- matrix(0,n.region.names,1)
   
   FSTN2  <- init2
   FSTH   <- init2
@@ -2846,14 +2865,60 @@ if(subsites=="coding" & length(bial!=0)){
   return(object)
  })
 
-setGeneric("get.detail", function(object) standardGeneric("get.detail"))
+setGeneric("get.detail", function(object, biallelic.structure=FALSE) standardGeneric("get.detail"))
  setMethod("get.detail", "GENOME",
  
- function(object){
+ function(object,biallelic.structure){
 
 
 if(!object@Pop_Detail$calculated){stop("Statistics have to be calculated first !")}
  
+
+# biallelic.structure
+if(biallelic.structure){
+
+res   <- vector("list",length(object@region.names)) 
+npops <- length(object@Pop_Detail$Populations)
+
+ for(yy in 1:length(object@region.names)){
+   
+   bial.sites <- object@region.data@biallelic.sites[[yy]]
+   if(length(bial.sites)==0){next}
+
+   popmat     <- matrix(0,npops,length(bial.sites))
+   colnames(popmat) <- bial.sites
+   rownames(popmat) <- paste("pop",1:npops)
+
+   for(xx in 1:npops){
+    
+    data <- object@region.stats@biallelic.structure[[yy]]$POP[,1][[xx]] # SX "I am polymorph rest is monomorph "
+    ids  <- match(data,bial.sites)
+    popmat[xx,ids] <- 1
+
+    data <- object@region.stats@biallelic.structure[[yy]]$POP[,2][[xx]] # SXF "I am monomorph rest is polymorph "
+    ids  <- match(data,bial.sites)
+    popmat[xx,ids] <- 2
+
+    data <- object@region.stats@biallelic.structure[[yy]]$POP[,3][[xx]] # SF  "I am mono rest is mono with same mono value"
+    ids  <- match(data,bial.sites)
+    popmat[xx,ids] <- 3
+   
+    data <- object@region.stats@biallelic.structure[[yy]]$POP[,4][[xx]] # SS "I am mono rest is mono with different mono value"
+    ids  <- match(data,bial.sites)
+    popmat[xx,ids] <- 4
+
+
+   }
+
+ res[[yy]] <- popmat
+
+ }
+
+return(res)
+
+}# end of if biallelic.structure
+
+
   res   <- matrix(,length(object@region.names),3)
   pops1 <- vector("list",length(object@Pop_Detail$Populations))
   
@@ -2869,8 +2934,9 @@ if(!object@Pop_Detail$calculated){stop("Statistics have to be calculated first !
  
  pops1            <- as.matrix(pops1)
  rownames(pops1)  <- paste("pop",1:length(object@Pop_Detail$Populations))
- #colnames(pops) <- "Genome
+ colnames(pops1)   <- "Mismatch Distribution"
 return(pops1)
+
 })
 
 ##################################################################################

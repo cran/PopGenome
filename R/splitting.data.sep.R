@@ -315,7 +315,7 @@ genomeobj@Pop_Recomb$calculated     <- FALSE
 genomeobj@Pop_Slide$calculated      <- TRUE
 genomeobj@Pop_Detail$calculated     <- FALSE
 genomeobj@big.data                  <- object@big.data
-
+genomeobj@snp.data                  <- object@snp.data
 
 return(genomeobj)
 

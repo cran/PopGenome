@@ -13,7 +13,7 @@ This function extract annotation informations from a gtf/gff file.
 
 \usage{
 
-get_gff_info(object=FALSE,gff.file,chr,position,feature=FALSE)
+get_gff_info(object=FALSE,gff.file,chr,position,feature=FALSE,extract.gene.names=FALSE)
 
 }
 
@@ -22,9 +22,9 @@ get_gff_info(object=FALSE,gff.file,chr,position,feature=FALSE)
   \item{object}{object of class \code{GENOME}} 
   \item{gff.file}{basepath of the gtf/gff file}
   \item{chr}{the chromosome}
-  \item{position}{reference position or region id (when \code{object} is specified)}
+  \item{position}{reference positions or region id (when \code{object} is specified)}
   \item{feature}{feature to search for in the gff-file. returns a list of positions}
-
+  \item{extract.gene.names}{returns the gene names of the chromosome}
 }  
 
 \details{

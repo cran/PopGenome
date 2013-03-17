@@ -14,7 +14,8 @@ if(format=="VCFhap"){SNP.DATA=TRUE}
 
 if(parallized){
  
-	n.cores <- multicore:::detectCores()
+	library(parallel)
+	n.cores <- detectCores() #multicore:::detectCores()
 	n.cores <- n.cores - 1 
 	options(cores=n.cores)
         getOption('cores')
@@ -353,8 +354,7 @@ if(progress_bar_switch){ ### wegen parallized
  # -----------------------------#
 
  for(xx in 1:sizeliste){ # 
-    
-     
+      
     CCC <- try(PopGenread(liste[xx],format),silent=TRUE) 
     if(is.na(CCC$matrix[1])){next}
 
@@ -373,7 +373,7 @@ if(progress_bar_switch){ ### wegen parallized
     # if(length(grep("GFFRObjects",gffpath))!=0){
  
     if(SNP.DATA){
-     
+     if(!is.na(gff_liste[xx])){
        if(length(grep("GFFRObjects",gffpath))!=0){
         
           Robj                       <- load(gff_liste[xx])
@@ -384,7 +384,7 @@ if(progress_bar_switch){ ### wegen parallized
 
           gff_object_fit             <- fitting_gff_fast(pos,gff_object)              
           FIT                        <- TRUE
-      
+     }else{gff.object.exists <- FALSE} 
     }else{
       
         if(!is.na(gff_liste[xx])){
@@ -431,7 +431,7 @@ if(progress_bar_switch){ ### wegen parallized
     if(xx==ceiling(sizeliste/2)){gc()}
 ###################################################################
  
-    if(is.list(result)){
+    if(is.list(result)){ # biallelic.sites exist
       
       # fill region.data
       populationsX[[xx]]        <- result$populations
@@ -441,11 +441,21 @@ if(progress_bar_switch){ ### wegen parallized
       outgroup2[[xx]]           <- result$outgroup2
 
       datt                      <- result$data.sum
+      
       CodingSNPS[[xx]]          <- datt$CodingSNPS
       UTRSNPS[[xx]]             <- datt$UTRSNPS
       IntronSNPS[[xx]]          <- datt$IntronSNPS
       ExonSNPS[[xx]]            <- datt$ExonSNPS
       GeneSNPS[[xx]]            <- datt$GeneSNPS	
+
+      if(GFF.BOOL & !gff.object.exists){
+       fillinit                  <- vector(,length(datt$biallelic.sites))
+       CodingSNPS[[xx]]          <- fillinit
+       UTRSNPS[[xx]]             <- fillinit
+       IntronSNPS[[xx]]          <- fillinit
+       ExonSNPS[[xx]]            <- fillinit
+       GeneSNPS[[xx]]            <- fillinit
+      }
 
       transitions[[xx]]         <- datt$transitions       # matrix_sv  transition war eine 1
       
@@ -460,7 +470,7 @@ if(progress_bar_switch){ ### wegen parallized
        polyallelic.sites[[xx]]   <- pos[datt$polyallelic.sites] # mhitbp          
       }
 
-      if(!big.data){
+     if(!big.data){
 
       biallelic.matrix[[xx]]           <- datt$biallelic.matrix  # matrix_pol
       colnames(biallelic.matrix[[xx]]) <- biallelic.sites[[xx]]

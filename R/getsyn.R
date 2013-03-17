@@ -5,7 +5,7 @@ getsyn <- function(matrix){
 if(length(colnames(matrix))==0){colnames(matrix) <- 1:dim(matrix)[2]}
 
 
-   matrixone            <- deletecodongaps(matrix) #### 
+    matrixone            <- deletecodongaps(matrix) #### 
    
    # matrixone <- matrix
   

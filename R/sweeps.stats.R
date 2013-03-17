@@ -2,10 +2,11 @@
 # Selective Sweeps Statistics
 # ------------------------------------------------------------
 
-setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE) standardGeneric("sweeps.stats"))
+setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE, freq.table = FALSE) standardGeneric("sweeps.stats"))
  setMethod("sweeps.stats", "GENOME",
- function(object,new.populations,subsites){
+ function(object,new.populations,subsites, freq.table){
 
+ 
  region.names                       <- object@region.names
  n.region.names                     <- length(region.names)
  
@@ -24,13 +25,16 @@ setGeneric("sweeps.stats", function(object,new.populations=FALSE,subsites=FALSE)
 # Init
  init        <- matrix(,n.region.names,npops)
  CL          <- init
- CLmax       <- init
+ #CLmax       <- init
+ CLR         <- init
 
 # Names
  nam                  <- paste("pop",1:npops)
  rownames(CL)         <- region.names
- colnames(CLmax)      <- nam
- 
+ colnames(CL)         <- nam
+ rownames(CLR)        <- region.names
+ colnames(CLR)        <- nam
+
  if(!missing(new.populations)){
    NEWPOP      <- TRUE
    populations <- vector("list",npops)
@@ -150,10 +154,10 @@ if(subsites=="gene" & length(bial!=0)){
      # change@Pop_Linkage[[xx]] <- list(Populations=populations,Outgroup=NULL)
      # ------------------- fill detail slots
 
-     res                       <- complike(bial,populations)
+     res                       <- complike(bial,populations,freq.table)
      CL[xx,respop]             <- res$CL
-     CLmax[xx,respop]          <- res$CLmax 
-    
+    #CLmax[xx,respop]          <- res$CLmax 
+     CLR[xx,respop]            <- res$CLR
      # -------------------
     
   # PROGRESS #######################################################
@@ -164,7 +168,8 @@ if(subsites=="gene" & length(bial!=0)){
 }
  
 object@CL    <- CL
-object@CLmax <- CLmax
+object@CLR   <- CLR
+#object@CLmax <- CLmax
 
   return(object)
 

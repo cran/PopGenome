@@ -17,16 +17,17 @@ import_file <- function(modus, filename, locnum, popnum){
 			population[[i]]<-tmp;
 		}
 	} else {
-		hapnum<-as.integer(scan(filename,what="",skip=5,nlines=1)[3]);
+
+		hapnum <- 19 #length(as.integer(scan(filename,what="",skip=5,nlines=1))) - 1
 		for(i in 1:popnum){
 			tmp<-matrix(as.integer(scan(filename,what="",skip=5+(i-1)*(locnum+2),nlines=locnum)),ncol=(hapnum+3),byrow=TRUE);
 			population[[i]]<-tmp;
 		}
+
 	}
 
 	print("Data successfully imported!");
 
-
-
 	return(population)
+        
 }

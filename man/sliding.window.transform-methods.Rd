@@ -15,9 +15,12 @@
 
 \usage{
 
-\S4method{sliding.window.transform}{GENOME}(object,width=7,jump=5,type=1,start.pos=FALSE,end.pos=FALSE,whole.data=TRUE)
-
-
+\S4method{sliding.window.transform}{GENOME}(object, 
+	width=7, jump=5, 
+	type=1,
+	start.pos=FALSE,end.pos=FALSE,
+	whole.data=TRUE
+	)
 }
 
 \arguments{

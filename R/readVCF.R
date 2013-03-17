@@ -169,12 +169,12 @@ gffpath <- "GFFRObjects"
 
                   SUB_GFF      <- split.GFF(gff.table,cn[1],cn[numusedcols])
                   
-                 
+                  if(length(SUB_GFF)!=0){
                    o_b_j_sub    <- SUB_GFF
                   
                    fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
                    save( file = fullfilename , o_b_j_sub  )
-                  
+                  }
 
                 }
 
@@ -200,10 +200,13 @@ if(res@genelength>1){
  res@region.names   <- paste(tid,":",frompos,"-",topos,sep=" ")
  res@n.sites        <- as.numeric((topos - frompos + 1))
  res@keep.start.pos <- frompos
+ res@gff.info       <- GFF
 
 # Delete
 unlink("SNPRObjects", recursive=TRUE)
-if(GFF){unlink("GFFRObjects", recursive=TRUE)}
+if(GFF){
+unlink("GFFRObjects", recursive=TRUE)
+}
 
 return( res )
         

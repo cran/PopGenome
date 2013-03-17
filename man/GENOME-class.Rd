@@ -4,6 +4,7 @@
 
 \alias{neutrality.stats}
 \alias{linkage.stats}
+\alias{calc.R2}
 \alias{sliding.window.transform}
 \alias{F_ST.stats}
 \alias{F_ST.stats.2}
@@ -14,6 +15,8 @@
 \alias{sweeps.stats}
 \alias{Achaz.stats}
 \alias{set.populations}
+\alias{set.outgroup}
+\alias{get.individuals}
 \alias{show.slots}
 \alias{get.status}
 \alias{get.neutrality}
@@ -30,8 +33,10 @@
 \alias{splitting.data}
 \alias{mult.linkage.stats}
 \alias{getBayes}
-\alias{popGetBial}
+\alias{get.biallelic.matrix}
 \alias{region.as.fasta}
+\alias{get.codons}
+\alias{PG_plot.biallelic.matrix}
 
 
 \alias{getMS,GENOME-method}
@@ -133,6 +138,7 @@
     \item{\code{RM}:}{Minimum number of recombination events (Hudson)}
     \item{\code{CL}:}{Composite Likelihood of SNPs (Nielsen et. al)}
     \item{\code{CLmax}:}{Max. Composite Likelihood of SNPs (Nielsen et.al)}
+    \item{\code{CLR}:}{Composite Likelihood ratio test (Nielsen et. al)}
     \item{\code{MDSD}:}{}
     \item{\code{MDG1}:}{}
     \item{\code{MDG2}:}{}
@@ -149,6 +155,7 @@
     \item{F_ST.stats}{Fixation index }
     \item{getBayes}{Get the input for BayeScanR}
     \item{get.detail}{Get the results from the Detail module}
+    \item{get.codons}{Get informations about the codon-changes}
     \item{get.diversity}{Get diversities from the FST module}
     \item{get.F_ST}{Get FST values from the FST module}
     \item{get.linkage}{Get the values from the Linkage module}
@@ -158,6 +165,7 @@
     \item{get.status}{Status of calculation}
     \item{get.sum.data}{Get some data observed from the alignments}
     \item{linkage.stats}{Linkage disequilibrium}
+    \item{calc.R2}{Linkage disequilibrium}
     \item{mult.linkage.stats}{Linkage disequilibrium between regions }
     \item{recomb.stats}{Recombination statistics }
     \item{sweeps.stats}{Selective sweeps}
@@ -170,12 +178,16 @@
     \item{MKT}{MKT Test}
     \item{neutrality.stats}{Neutrality Statistics }
     \item{popFSTN}{Internal function}
+    \item{get.biallelic.matrix}{Prints the biallelic.matrix}
     \item{set.populations}{Defines the populations}
+    \item{set.outgroup}{Defines the outgroup}
+    \item{get.individuals}{Individual names}
     \item{region.as.fasta}{Extract the region as a fasta file}
     \item{show}{---}
     \item{show.slots}{Show slots of the class \code{GENOME}}
     \item{sliding.window.transform}{Sliding window analysis}
     \item{usage}{---}
+    \item{PG_plot.biallelic.matrix}{Plots the Biallelic Matrix}
   }
 }
 

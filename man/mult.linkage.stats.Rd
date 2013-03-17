@@ -13,19 +13,30 @@
 
 \usage{
 
-\S4method{mult.linkage.stats}{GENOME}(object,new.populations="list",lower.bound=0,upper.bound=1)
+\S4method{mult.linkage.stats}{GENOME}(object,lower.bound=0,upper.bound=1,pairs=FALSE)
 
 }
 
 \arguments{
 
   \item{object}{an object of class \code{"GENOME"}}
-  \item{new.populations}{list of populations. default:\code{FALSE}}
   \item{lower.bound}{sites with minor-allele-frequency=lower.bound are considered}
   \item{upper.bound}{sites with minor-allele-frequency=upper.bound are considered}
+  \item{pairs}{permutation matrix of pairwise comparisons}
 }
 
+\details{
 
+\code{pairs} is a matrix. Each column contains the pairwise comparison region-ids.\cr
+
+1 1 \cr
+2 3 \cr
+
+compares region 1 with 2, and region 1 with 3.
+
+
+
+}
 
 \value{
 
@@ -35,8 +46,10 @@ returned value is an modified object of class \code{"GENOME"} \cr \cr
 Following Slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
-   \item{mult.Linkage}{Some values about linkage for each pair of site (R2...)}
+   \item{mult.Linkage}{Some values about linkage for each pair of site (R2, P-value, Distance)}
   
+The Fisher-Exact-Test is used for the P-values.
+
 }
 
 \examples{

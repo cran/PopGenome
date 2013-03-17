@@ -12,8 +12,11 @@
 
 \usage{
 
-readSNP(folder,populations=FALSE,outgroup=FALSE,gffpath=FALSE,CHR=FALSE,
-        ref.chr=FALSE,snp.window.size=FALSE,parallized=FALSE,ffpackagebool=TRUE,include.unknown=FALSE)
+readSNP(folder,populations=FALSE,outgroup=FALSE,gffpath=FALSE,
+	CHR=FALSE,ref.chr=FALSE,snp.window.size=FALSE,
+	parallized=FALSE,ffpackagebool=TRUE,
+	include.unknown=FALSE
+	)
 
 }
 

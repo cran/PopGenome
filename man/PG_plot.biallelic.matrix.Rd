@@ -1,0 +1,39 @@
+\name{PG_plot.biallelic.matrix-methods}
+\docType{methods}
+\alias{PG_plot.biallelic.matrix,GENOME-method}
+\alias{PG_plot.biallelic.matrix-methods}
+
+
+\title{Plots the Biallelic Matrix}
+
+
+\description{
+This function plots the biallelic matrix of a specific region. 
+}
+
+\usage{
+
+\S4method{PG_plot.biallelic.matrix}{GENOME}(object,region, ind.names = FALSE , cex.axis = 0.5)
+
+}
+
+\arguments{
+
+  \item{object}{object of class \code{"GENOME"}}
+  \item{region}{the region id}
+  \item{ind.names}{individual names. default:ALL}
+  \item{cex.axis}{size of text (y-axis)}
+
+}  
+
+
+\examples{
+
+# GENOME.class <- readData("...\Alignments")
+# PG_plot.biallelic.matrix(GENOME.class, region = 1)
+
+}
+
+
+
+\keyword{methods}

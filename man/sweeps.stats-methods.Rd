@@ -15,7 +15,7 @@
 
 \usage{
 
-\S4method{sweeps.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE)
+\S4method{sweeps.stats}{GENOME}(object,new.populations=FALSE,subsites=FALSE, freq.table=FALSE)
 \S4method{get.sweeps}{GENOME}(object)
 
 }
@@ -36,6 +36,7 @@
                   \code{"utr"}:  SNPs in UTR regions. \cr
                   \code{"gene"}: SNPs in genes. \cr
           default:\code{FALSE}}
+\item{freq.table}{the frequency counts for the CLR test. \code{"list"}}
   
 }
 
@@ -50,25 +51,44 @@ Following Slots will be modified in the \code{"GENOME"} object \cr
 -------------------------------------------------------------- \cr
 
    \item{CL}{Composite Likelihood of SNPs}
-   \item{CLmax}{Max. Composite Likeliood of SNPs}
+   \item{CLR}{Nielsen's CLR test}
 
 }
 
+\details{
+The \code{freq.table} contains the global sets of frequency counts.
+It can be produced with the module \code{detail.stats}.
+The values in the slot \code{GENOME.class@region.stats@minor.allele.frequencies}
+can be used to create this global set. (use the R function \code{table})
+\code{freq.table} is a list of length n.pops.
+}
+
+
 \references{
+Cai JJ (2008) \emph{PGEToolbox: A Matlab toolbox for population genetics and evolution}
+Journal of Heredity Jul-Aug;99(4):438-40.doi:10.1093/jhered/esm127 \cr \cr 
 Nielson, R. (2005). \emph{Genomic scans for selective sweeps using SNP data}
-Genome Res. 2005 15: 1566-1575
+Genome Res. 2005 15: 1566-1575 \cr \cr
 }
 
 \examples{
 
-# GENOME.class <- readData("\home\Alignments")
-# GENOME.class
+# Reading one alignment stored in the folder Aln
+# CL
+# GENOME.class <- readData("\home\Aln")
 # GENOME.class <- sweeps.stats(GENOME.class)
-# GENOME.class <- sweeps.stats(GENOME.class,list(1:7,8:12))
-# show the result:
-# sweeps.values <- get.sweeps(GENOME.class)
-# sweeps.values[[1]] # first population !
-# GENOME.class@CLmax
+# GENOME.class@CL
+# CLR
+# create global set
+# GENOME.class  <- detail.stats(GENOME.class)
+# freq <- GENOME.class@region.stats@minor.allele.frequencies[[1]]
+# freq.table <- list()
+# freq.table[[1]] <- table(freq)
+# define the region of interest
+# GENOME.class.split <- splitting.data(GENOME.class, positions= ...)
+# calculate CLR
+# GENOME.class.split <- sweeps.stats(GENOME.class.split, freq.table=freq.table)
+# GENOME.class@CLR
  
 
 }

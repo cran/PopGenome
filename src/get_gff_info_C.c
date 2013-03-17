@@ -49,8 +49,8 @@ PROTECT(info = allocVector(STRSXP,1));
   int  count    = 0;
   int  count2   = 0;
   int  intcount = 0;
-  char str[1000];
-  char temp[100];
+  char str[2000];
+  char temp[10];
 
   int poss1;
   int poss2;
@@ -73,7 +73,7 @@ int line_count = 0;
         
        line_count ++;
        // Wenn schon nächstes Chromosom break;   
-       if(line_count>cend[0]){break;}  
+       if((cstart[0]+line_count)>cend[0]){break;}  
        
        //-------------------------------------
 
@@ -91,7 +91,7 @@ int line_count = 0;
               // save start pos as integer
               while((ch=fgetc(fp))!='\t'){
                 // printf("%c", ch);
-                 temp[0] = ch;
+                 temp[0] = (char)ch;
                  strcat(str,temp);
                  //strcpy(str,""); 
                  //intcount++;   
@@ -112,7 +112,7 @@ int line_count = 0;
              // save end position
              while((ch=fgetc(fp))!='\t'){
                  // printf("%c", ch);
-                 temp[0] = ch;
+                 temp[0] = (char)ch;
                  strcat(str,temp);
                  //strcpy(str,""); 
                  //intcount++;   
@@ -140,7 +140,7 @@ int line_count = 0;
                             // Get the informations
 		            while((ch=fgetc(fp))!='\n'){
                  		// printf("%c", ch);
-                 	        temp[0] = ch;
+                 	        temp[0] = (char)ch;
                  		strcat(str,temp);
                  		//strcpy(str,""); 
                  		//intcount++;   

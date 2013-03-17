@@ -15,7 +15,7 @@ BayeScanR is an R-version of BayeScan for codominant marker.
 
 \usage{
 
-BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000)
+BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000, discard=50000)
 
 }
 
@@ -25,6 +25,7 @@ BayeScanR(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000)
   \item{nb.pilot}{number of pilot runs}
   \item{pilot.runtime}{length of pilot runs}
   \item{main.runtime}{length of main runs} 
+  \item{discard}{how many runs in the main.loop should be discarded ?} 
 
 } 
 
@@ -40,6 +41,7 @@ Following Slots will be filled \cr
    \item{var_alpha}{variance of alpha values}
    \item{a_inc}{which alpha is included in the model}
    \item{fst}{FST values}
+   \item{P}{P-value}
 
 
 }

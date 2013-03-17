@@ -49,9 +49,11 @@ col.specify2    <- c(rep("factor",2),"integer",rep("factor",2),rep("NULL",4)) # 
 
 cat("Reading files ... \n")
 ## PROGRESS #########################
- progr <- progressBar()
+# progr <- progressBar()
 #####################################
 for (xx in 1:length(liste)){
+
+cat("Reading file: ",liste[[xx]], ": ",xx ," of ", length(liste), "\n" )
 
  if(CHR[1]!=FALSE){
 
@@ -109,10 +111,10 @@ f.data2[[xx]] <- f.split.data # seperated by chromosomes
 
 if(CHR[1]==FALSE){
   # delete(f.data[[xx]])
-    f.data[[xx]] <- NULL
+    f.data[[xx]] <- NA
 }
 # PROGRESS #######################################################
-    progr <- progressBar(xx,length(liste), progr)
+#    progr <- progressBar(xx,length(liste), progr)
 ###################################################################
 }
 
@@ -271,7 +273,7 @@ for ( qq in 1:length(SNP.MATRICES) ) {
   }  
 
   # delete.ff(SNP.MATRICES[[qq]])
-    SNP.MATRICES[[qq]] <- NULL   
+    SNP.MATRICES[[qq]] <- NA   
     gc()    
 
  }else{
@@ -279,7 +281,9 @@ for ( qq in 1:length(SNP.MATRICES) ) {
   o_b_j_sub    <- list(matrix=SNP.MATRICES[[qq]][,],reference=NaN,positions=SNP.POS[[qq]])
   save(o_b_j_sub,file=file.path(getwd(),"SNPRObjects",paste("chr",chromosomes[qq],sep="")))
   # delete.ff(SNP.MATRICES[[qq]])
-  SNP.MATRICES[[qq]] <- NULL
+  SNP.MATRICES[[qq]]  <- NA
+  gc()
+
  }
 }
 

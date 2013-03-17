@@ -48,6 +48,8 @@ if(MSMS[1]==FALSE){
     ndraws <- as.integer(strsplit(txt[1], split=" ")[[1]][3] )
 }
 
+#print(strsplit(txt[1], split=" "))
+
     h         <- numeric()
     result    <- list()
     gamlist   <- list()
@@ -67,6 +69,7 @@ if(MSMS[1]==FALSE){
 
 if(MSMS[1]!=FALSE){ndraws <- length(marker);nsam <- MSMS$nsam} # MSMS
 
+    
     stopifnot(length(marker) == ndraws)
 
 

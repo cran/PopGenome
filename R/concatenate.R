@@ -89,7 +89,16 @@ stat <- obj[[xx]]@region.stats
       Gene.matrix                  <- c(Gene.matrix,dat@Gene.matrix)
       reading.frame                <- c(reading.frame,dat@reading.frame)
 
-      transitions      		<- c(transitions,dat@transitions)  
+      transitions      		<- c(transitions,dat@transitions) 
+
+      if(length(obj[[xx]]@BIG.BIAL)!=0){
+	# in case of a slide or split object BIG.DATA
+        bbb                  		         <- obj[[xx]]@BIG.BIAL[[1]][,obj[[xx]]@SLIDE.POS[[1]]]
+	dat@biallelic.matrix    		 <- list( ff(bbb,dim=dim(bbb)) )
+        colnames(dat@biallelic.matrix[[1]])      <- obj[[xx]]@region.data@biallelic.sites[[1]]
+      
+      } 
+
       biallelic.matrix 		<- c(biallelic.matrix,dat@biallelic.matrix)
       biallelic.sites  		<- c(biallelic.sites,dat@biallelic.sites)
       biallelic.sites2          <- c(biallelic.sites2,dat@biallelic.sites2) 
@@ -178,6 +187,7 @@ genome@region.stats <- region.stats
 genome@region.data  <- region.data 
 
 
+genome@populations         <- vector("list",1)
 genome@n.sites             <- n.sites
 genome@n.sites2            <- n.sites2
 genome@n.valid.sites       <- n.valid.sites  
@@ -197,7 +207,7 @@ genome@Pop_FSTN$calculated       <- FALSE
 genome@Pop_FSTH$calculated       <- FALSE
 genome@Pop_MK$calculated         <- FALSE
 genome@Pop_Linkage$calculated    <- FALSE
-
+genome@Pop_Slide$calculated      <- TRUE
 
 
 genome@Pop_Detail$calculated     <- FALSE
@@ -732,8 +742,10 @@ if(obj@snp.data){
 #genome@trans.transv.ratio  <- trans.transv.ratio
 #genome@region.names        <- region.names
 
+genome@region.names              <- "Concatenate"
 genome@snp.data                  <- obj@snp.data
 genome@big.data                  <- obj@big.data
+genome@gff.info                  <- obj@gff.info
 genome@Pop_Slide$calculated      <- TRUE
 genome@Pop_Neutrality$calculated <- FALSE
 genome@Pop_FSTN$calculated       <- FALSE

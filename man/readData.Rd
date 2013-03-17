@@ -30,7 +30,7 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
 \arguments{
  
   \item{object}{object of class \code{"GENOME"}}
-  \item{path}{the basepath of the alignments}
+  \item{path}{the basepath (folder) of the alignments}
   \item{outgroup}{vector of outgroup sequences}
   \item{include.unknown}{if unknown positions should be considered.}
   \item{populations}{list of populations.default:\code{FALSE}}
@@ -45,7 +45,9 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
 }
 
 \details{
-If there is no gff-file specified, an alignment in the right reading frame is expected. Otherwise the examination of synonymous and nonsynonymous positions is useless. \cr \cr
+The data (alignments or SNP-files) have to be stored in a folder. The folder is the input of this \cr 
+function. If there is no gff-file specified, an alignment in the right reading frame is expected. \cr
+Otherwise the examination of synonymous and nonsynonymous positions is useless. \cr \cr
 
 format: \cr \cr 
 

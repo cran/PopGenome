@@ -83,7 +83,14 @@ comp1 <- vector("list",npops)
 comp2 <- vector("list",npops)
 comp3 <- vector("list",npops)
 comp4 <- vector("list",npops)
+comp5 <- vector("list",npops)
 #-------------------------------
+
+ # attr(SX_SXF_SF_SS,"SX :") <-   "I am polymorph rest is monomorph "
+ # attr(SX_SXF_SF_SS,"SXF:") <-   "I am monomorph rest is polymorph "
+ # attr(SX_SXF_SF_SS,"SF:")  <-   "I am mono rest is mono with same mono value"
+ # attr(SX_SXF_SF_SS,"SS:")  <-   "I am mono rest is mono with different mono value" 
+ # attr(SX_SXF_SF_SS,"SXX:") <-   "I am poly rest is poly" 
 
 #-------------- Outgroup is defined ---------------------------------------- #
 if(length(outgroup)>0){
@@ -144,12 +151,15 @@ if(npops > 1 & length(outgroup)==0){ # mehr als eine Population, aber keine Outg
    comp2[[xx]]  <- as.numeric(names(which(polqa==0 & polqb==1)))   # xx is monomorph rest is polymorph
    comp3[[xx]]  <- as.numeric(names(which(polqa==0 & polqb==0 & polqa_anc==polqb_anc))) # xx is monomorph rest is monomorph and have the same monomorph value
    comp4[[xx]]  <- as.numeric(names(which(polqa==0 & polqb==0 & polqa_anc!=polqb_anc))) # xx is monomorph rest is monomorph but not with the same monomorph value 
+   
+   # comp5[[xx]]  <- as.numeric(names(which(polqa==1 & polqb==1))) #  xx is polymorph rest is polymorph
 
    comp1[[xx]] <- data$biallelic.sites[comp1[[xx]]]
    comp2[[xx]] <- data$biallelic.sites[comp2[[xx]]]
    comp3[[xx]] <- data$biallelic.sites[comp3[[xx]]]
    comp4[[xx]] <- data$biallelic.sites[comp4[[xx]]]
    
+   # comp5[[xx]] <- data$biallelic.sites[comp5[[xx]]]
   
   }
 
@@ -193,7 +203,7 @@ if(npops>1 & length(outgroup)>0){
  rownames(SX_SXF_SF_SS) <- popnames
  colnames(SX_SXF_SF_SS) <- c("SX","SXF","SF","SS")
  attr(SX_SXF_SF_SS,"POPULATIONS:") <- ""
- OUT <- compout
+ OUT           <- compout
  colnames(OUT) <- "Outgroup"
  rownames(OUT) <- c("Sxo","Sanco","Sfo") 
  attr(OUT,"OUTGROUP:") <- "YES"
@@ -205,6 +215,8 @@ if(npops>1 & length(outgroup)==0){
  SXF   <- as.matrix(comp2)
  SF    <- as.matrix(comp3)
  SS    <- as.matrix(comp4)
+ # SXX <- as.matrix(comp5)
+
  SX_SXF_SF_SS <- cbind(SX,SXF,SF,SS)
  rownames(SX_SXF_SF_SS) <- popnames
  colnames(SX_SXF_SF_SS) <- c("SX","SXF","SF","SS")

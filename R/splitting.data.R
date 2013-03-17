@@ -244,8 +244,11 @@ if(!is.list(positions)){
             
         bialpos                       <- is.element(XXX@biallelic.sites[[1]],positions[[zz]])
         bialpos                       <- which(bialpos)
-                
+               
         region.names[zz]              <- paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
+          
+        if(length(bialpos)==0){next}
+
         SLIDE.POS[[zz]]               <- bialpos
         outgroup[[zz]]                <- XXX@outgroup[[1]]
         populations[[zz]]             <- XXX@populations[[1]]

@@ -1,9 +1,9 @@
-\name{popGetBial-methods}
+\name{get.biallelic.matrix-methods}
 
 \docType{methods}
 
-\alias{popGetBial,GENOME-method}
-\alias{popGetBial-methods}
+\alias{get.biallelic.matrix,GENOME-method}
+\alias{get.biallelic.matrix-methods}
 
 
 \title{Get the biallelic matrix}
@@ -14,14 +14,14 @@ This function returns the biallelic matrix of a specific region.
 
 \usage{
 
-\S4method{popGetBial}{GENOME}(object,bialmatNr)
+\S4method{get.biallelic.matrix}{GENOME}(object,region)
 
 }
 
  \arguments{
 
   \item{object}{An object of class \code{"GENOME"}}
-  \item{bialmatNr}{id of the region}
+  \item{region}{id of the region}
 
 }
 
@@ -29,7 +29,7 @@ This function returns the biallelic matrix of a specific region.
 \value{
 
 Biallelic matrix \cr
-rows:    names of each individuell \cr
+rows:    names of each individual \cr
 columns: biallelic sites \cr
 
 }
@@ -38,7 +38,7 @@ columns: biallelic sites \cr
 \examples{
 
 # GENOME.class <- readData("\home\Alignments")
-# popGetBial(GENOME.class,7) # biallelic matrix of the 7th alignment
+# get.biallelic.matrix(GENOME.class,7) # biallelic matrix of the 7th alignment
 }
 
 

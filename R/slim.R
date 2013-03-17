@@ -34,7 +34,7 @@
 BBB <- new.env()
 
 
-BayeScanR <- function(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000){
+BayeScanR <- function(input,nb.pilot=10,pilot.runtime=2500,main.runtime=100000,discard=50000){
 
 	# modification <<- modification
         
@@ -279,7 +279,7 @@ modification <- FALSE
 			
 		}#end of one pilot run (innere Schleife)
 			
-		
+
 			if(2*(k+1)>=nb_pilot){ 
 				nb_pilot_alpha <- nb_pilot_alpha + 1 
      			 }
@@ -326,7 +326,8 @@ modification <- FALSE
 
           BBB$mean_alpha <- BBB$mean_alpha/(nb_pilot_alpha*pilot_runtime) 
           BBB$var_alpha  <- BBB$m2/(nb_pilot_alpha*pilot_runtime)  - BBB$mean_alpha^2 
-
+#print(BBB$mean_alpha)
+#print(BBB$var_alpha)
 
        ################################
        ## MAIN                        #
@@ -360,7 +361,7 @@ for(i in 1:main_runtime){
    #print(d_alpha)
    #print("beta")
    #print(d_beta)
-
+   #print(BBB$d_alpha)
 
     # update beta  
     update_d_betaco()
@@ -385,7 +386,7 @@ for(i in 1:main_runtime){
     #}	
 
                
-               if(i>50){ # 50000 discard
+               if(i>discard){ # 50000 discard
                 cur_out <- cur_out + 1
                 ## Output
                      drinne                      <- which(BBB$alpha_included)
@@ -399,16 +400,17 @@ for(i in 1:main_runtime){
                      val                   <- rowSums(val) 
                      cur_fst               <- val/popnum
                      post_fst              <- post_fst  + cur_fst
-             }
+              }
 
    # PROGRESS #######################################################
     progr <- progressBar(i,main_runtime, progr)
    ###################################################################
-   
+   #print(nb_alpha)
 	} # End of Main Loop
 	
         outalpha      <- post_alpha/cur_out
         outfst        <- post_fst/cur_out
+        outnb_alpha   <- nb_alpha/cur_out
 	names(outfst) <- rownames(population[[1]])
         
 
@@ -419,6 +421,7 @@ for(i in 1:main_runtime){
 	output@a_inc     <- as.numeric(BBB$alpha_included)
 	output@var_alpha <- as.numeric(BBB$var_alpha)
 	output@fst       <- outfst
+	output@P         <- as.numeric(outnb_alpha)
 	
 	
 	return(output) 

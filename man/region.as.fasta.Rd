@@ -31,9 +31,9 @@ This generic function writes a FASTA file of the observed biallelic positions to
 
 \examples{
 
-#GENOME.class <- readSNP("Arabidopsis",CHR=1)
-#GENOME.class <- sliding.window.transform(GENOME.class,100,100)
-#region.as.fasta(GENOME.class,122,"my_fasta_file.fas")
+#GENOME.class       <- readSNP("Arabidopsis",CHR=1)
+#GENOME.class.split <- splitting.data(GENOME.class, positions=list(100:200))
+#region.as.fasta(GENOME.class.split,1,"my_fasta_file.fas")
 
 }
 

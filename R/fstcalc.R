@@ -143,7 +143,7 @@ pia <- (FREQ_LIST[[pop[1]]]["freq1",idd]*FREQ_LIST[[pop[2]]]["freq2",idd] + FREQ
 
 PIA[pop[1],pop[2]] <<- sum(pia) # every pair of population !!!!
 
-if(pop[2] < npops && length(populations[[pop[1]]])>1 && length(populations[[pop[2]]])>1){ 
+if(pop[2] < npops && length(populations[[pop[1]]])>=1 && length(populations[[pop[2]]])>=1){ 
 TEST[pop[1]] <<- TEST[pop[1]] + sum(pia) # PIA1ALL
 TEST[pop[2]] <<- TEST[pop[2]] + sum(pia) # PIA1ALL
 }
@@ -238,7 +238,7 @@ FSTPAIR <- matrix(NA,npops,npops)
 
 ##APPLY ####
 ap_erg3 <- apply(apply_id,2,function(pop){
-if(PIA[pop[1],pop[2]] && length(populations[[pop[1]]])> 1 && length(populations[[pop[2]]]) >1){
+if(PIA[pop[1],pop[2]] && length(populations[[pop[1]]])>= 1 && length(populations[[pop[2]]]) >=1){
   FSTPAIR[pop[1],pop[2]] <<- 1.0 - ((PIW[pop[1]] + PIW[pop[2]])/2.0)/(PIA[pop[1],pop[2]]) 
 
 }else{
@@ -248,7 +248,7 @@ if(PIA[pop[1],pop[2]] && length(populations[[pop[1]]])> 1 && length(populations[
 if(flag==1){# HKY CORRECTION
 
      if(!is.na(HKY[pop[1],pop[2]])){ 
-        if(HKY[pop[1],pop[2]] > 0 && length(populations[[pop[1]]])> 1 && length(populations[[pop[2]]]) >1){
+        if(HKY[pop[1],pop[2]] > 0 && length(populations[[pop[1]]])>= 1 && length(populations[[pop[2]]]) >=1){
            FSTHKY[pop[1],pop[2]] <<- 1.0 - ((diag(HKY)[pop[1]] + diag(HKY)[pop[2]])/2.0)/(HKY[pop[1],pop[2]])   
         }
      }else{
@@ -283,14 +283,14 @@ for(pop1 in 1:TIL) {
  piw <- 0
  ncw <- 0
    for(pop2 in 1:TIL) {
-       if(pop2 != pop1 && length(populations[[pop2]]) > 1) {
+       if(pop2 != pop1 && length(populations[[pop2]]) >= 1) {
           piw <- piw + PIW[pop2]
           ncw <- ncw + 1
 	 }
    }
 	piw <- piw/ncw
 	nca <- ncw
-	if(PIA1ALL[pop1] && length(populations[[pop1]]) > 1 && ncw > 0){
+	if(PIA1ALL[pop1] && length(populations[[pop1]]) >= 1 && ncw > 0){
 	   FST1ALL[pop1] <- 1 - ((PIW[pop1] + piw)/2)/(PIA1ALL[pop1]/nca)
 	}else{FST1ALL[pop1] <- -10000}
 }
@@ -308,14 +308,14 @@ if(outgroup[1]!=FALSE){ # Outgroup
   spia <-0
   nca <-0
 
-if(length(populations[[pop[1]]]) > 1) {
+if(length(populations[[pop[1]]]) >= 1) {
      spiw <- PIW[pop[1]]
      ncw  <- 1
 }
 
 # Only for Populations: no outgroup !!! look at if condition !!! #
 #------------------------------------------------------------------#
-if(length(populations[[pop[1]]]) > 1 && length(populations[[pop[2]]]) > 1 && pop[2]<npops){
+if(length(populations[[pop[1]]]) >= 1 && length(populations[[pop[2]]]) >= 1 && pop[2]<npops){
 	 spia <- PIA[pop[2],pop[1]]
 	 nca <-1
 }
@@ -353,14 +353,14 @@ erg <- apply(apply_id2,2,function(pop){
   spia <-0
   nca  <-0
 
-if(length(populations[[pop[1]]]) > 1) {
+if(length(populations[[pop[1]]]) >= 1) {
      spiw <-PIW[pop[1]]
      ncw  <- 1
 }
 
 # ALL Populations
 #------------------------------------------------------------------#
-if(length(populations[[pop[1]]]) > 1 && length(populations[[pop[2]]]) > 1){
+if(length(populations[[pop[1]]]) >= 1 && length(populations[[pop[2]]]) >= 1){
 	 spia <- PIA[pop[2],pop[1]]
 	 nca <-1
 }

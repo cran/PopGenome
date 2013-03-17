@@ -14,4 +14,3 @@ log_prior_alpha <- function(alpha_){
 }
 
 
-

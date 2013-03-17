@@ -1,8 +1,47 @@
+Changes in PopGenome 1.2.5
+==========================
+
+- fixed PDF problems
+
+Changes in PopGenome 1.2.4
+==========================
+
+BUGS FIXED:
+
+- SNP data chunk without corresponding GFF-chunk
+- concatenate regions: @gff.info was not set
+- positions (type=2) in splitting.data 
+  (error, when no SNPs where found)
+- readSNP: small BUG in reading all chromosomes
+- get_gff_info  
+- F_ST.stats: default value is 0.
+- linkage.stats: detail=FALSE, calculated wrong Z-statistics
+
+NEW FEATURES:
+
+- sweeps.stats: CLR test
+- get.detail(GENOME.class,biallelic.structure=TRUE)
+- get.codons()
+- get_gff_info(): new parameters
+- get.individuals
+- mult.linkage.stats (P-value, R2, Distance)
+- readMS
+- concatenate.regions
+- concatenate.classes
+- R2.stats
+- PG_plot.biallelic.matrix
+
+THX:
+
+- Anna
+- JD
+- Sebastian
+- Thorsten 
+
 Changes in PopGenome 1.2.3
 ==========================
 
-
-
+- removed object files in the src folder (for CRAN)
 
 Changes in PopGenome 1.2.2
 =========================
@@ -10,7 +49,7 @@ Changes in PopGenome 1.2.2
 BUGS FIXED:
 
 - readVCF with GFF-file, when chrosomeID includes "Chr"
-- readVCF (GENOME.class@region.names)
+- readVCF: (GENOME.class@region.names)
 - readData (..., FAST=TRUE) # small BUG in computing biallelic.sites
 - readData (..., format="HapMap")
 

@@ -144,7 +144,7 @@ return(EW_values)
 
 \begin{center}
 \begin{figure}
-\includegraphics[scale=0.7]{ZZZ2}
+\includegraphics[scale=0.7]{XYZ}
 \caption{\textit{myFunction.R (population specific)}}
 \end{figure}
 \end{center}

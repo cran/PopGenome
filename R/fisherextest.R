@@ -126,8 +126,8 @@ fisherextest <- function(a,b,c,d){
 
 tt <- rbind(cbind(a,b),cbind(c,d))
 tt <- as.matrix(tt)
-t <- rbind(cbind(a,b),cbind(c,d))
-t <- as.matrix(t)
+t  <- rbind(cbind(a,b),cbind(c,d))
+t  <- as.matrix(t)
 
 pp <- t[,1]/rowSums(t)
 

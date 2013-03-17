@@ -5,7 +5,8 @@ beta="numeric",
 var_alpha="numeric",
 a_inc  = "numeric",
 fst = "numeric",
-mfst="numeric"
+mfst="numeric",
+P="numeric"
 ))
 
 setMethod("show", "BAYESRETURN",

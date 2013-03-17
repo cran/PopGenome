@@ -26,7 +26,7 @@
 	mismatch.distribution=FALSE,
 	site.spectrum=TRUE
         )
-\S4method{get.detail}{GENOME}(object)
+\S4method{get.detail}{GENOME}(object, biallelic.structure=FALSE)
 
 
 
@@ -69,9 +69,17 @@ Following Slots will be modified in the \code{"GENOME"} object \cr
    \item{MDSD}{...}
    \item{MDG1}{...}
    \item{MDG2}{...}
-   \item{region.stats}{the slot  \code{biallelic.structure} and \code{minor.allele.freqs} will be filled}
-   
-  
+   \item{region.stats}{the slot  \code{biallelic.structure} and \code{minor.allele.freqs} will be filled} \cr
+
+The function \code{get.detail(GENOME.class, biallelic.structure=TRUE)} \cr
+returns a matrix for each region where, \cr
+
+\item{0}{pop is polymorph rest is polymorph} \cr
+\item{1}{pop is polymorph rest is monomorph} \cr
+\item{2}{pop is monomorph rest is polymorph} \cr  
+\item{3}{pop is monomorph rest is monomorph with same value}  \cr  
+\item{4}{pop is monomorph rest is monomorph with different values} \cr
+
   
 }
 
@@ -82,7 +90,8 @@ Following Slots will be modified in the \code{"GENOME"} object \cr
 # GENOME.class <- detail.stats(GENOME.class)
 # GENOME.class <- detail.stats(GENOME.class,list(1:7,8:12))
 # show the result:
-# mismatch.values <- get.detail(GENOME.class)
+# mismatch.values   <- get.detail(GENOME.class)
+# bial.struc.values <- get.detail(GENOME.class, biallelic.structure=TRUE)
 # GENOME.class@region.stats@biallelic.structure
 # GENOME.class@region.stats@biallelic.structure[[1]]
  

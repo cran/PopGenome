@@ -1,4 +1,4 @@
-get_gff_info <- function(object=FALSE, gff.file, chr, position, feature=FALSE){
+get_gff_info <- function(object=FALSE, gff.file, chr, position, feature=FALSE, extract.gene.names = FALSE){
 
 chr <- as.character(chr)
 
@@ -8,9 +8,23 @@ if(nchar(chr)==1){
    chr <- strsplit(chr,split="")[[1]]
 }
 
+if(extract.gene.names){
+
+ region      <- .Call("find_lines_GFF_Human",gff.file,chr)
+ start       <- region[1]
+ end         <- region[2]
+ gff.table   <- read.table(gff.file,sep="\t",colClasses=c("NULL","NULL","character",rep("NULL",5),"character"),
+                           skip = start - 1, nrows = end - start + 1)
+ ids       <- which(gff.table[,1]=="gene")
+ gff.table <- gff.table[ids, ]
+ 
+return(gff.table[,2])
+
+}
+
+
 if(feature[1]!=FALSE){
 
- 
  region      <- .Call("find_lines_GFF_Human",gff.file,chr)
  start       <- region[1]
  end         <- region[2]
