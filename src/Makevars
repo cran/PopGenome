@@ -7,7 +7,7 @@ PKG_CPPFLAGS =
 
 
 # CSOURCES
-POPSRCS = ap_pop_ancestral_C.c ap_pop_C.c C_get_sfreqh_C.c code_nucs.c combnsum2_C.c combnsum_C.c CompareVEK.c compute_FREQ_C.c compute_FREQOUT_C.c find_lines.c find_windowC.c fittingGFFC++.c get_dim_fasta.c get_gff_info_C.c get_ind_fasta.c get_segsites_C.c makeBial.c makeBialMatrix.c my_match_C.c my_unique_C.c R2_C.c verify_ancestral_C.c filldiplomatrix.c 
+POPSRCS = ap_pop_ancestral_C.c ap_pop_C.c C_get_sfreqh_C.c code_nucs.c combnsum2_C.c combnsum_C.c CompareVEK.c compute_FREQ_C.c compute_FREQOUT_C.c find_lines.c find_windowC.c fittingGFFC++.c get_dim_fasta.c get_gff_info_C.c get_ind_fasta.c get_segsites_C.c makeBial.c makeBialMatrix.c my_match_C.c my_unique_C.c R2_C.c verify_ancestral_C.c filldiplomatrix.c myReadVCFC.c
 
 TBISRCS = tabix/bedidx.c tabix/bgzf.c tabix/index.c tabix/knetfile.c tabix/kstring.c
 

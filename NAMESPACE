@@ -23,6 +23,7 @@ exportMethods(calc.R2)
 exportMethods(sweeps.stats)
 exportMethods(set.synnonsyn)
 exportMethods(Achaz.stats)
+exportMethods(introgression.stats)
 
 exportMethods(F_ST.stats.2)
 exportMethods(get.sum.data)

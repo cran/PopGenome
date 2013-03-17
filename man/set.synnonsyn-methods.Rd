@@ -15,8 +15,6 @@
 
 \S4method{set.synnonsyn}{GENOME}(object,ref.chr,save.codons=FALSE)
 
-
-
 }
 
 \arguments{
@@ -26,28 +24,26 @@
   \item{save.codons}{save codon changes}
 }
 
-
-
 \value{
-
-
-The return value is a modified object of class \code{"GENOME"} \cr 
+The return value is a modified object of class \code{"GENOME"} storing \cr
+syn/nonsyn informations in the slot \code{GENOME.class@region.data@synonymous}\cr
+for each SNP. (1=synonymous,0=non-synonymous) \cr 
 When \code{save.codons} is \code{TRUE} the SNP related codon changes \cr
-are saved. (see codontable() and codonise64())  
-  
+are saved in the corresponding slot \code{GENOME.class@region.data@codons}. \cr 
+(see also get.codons(), codontable() and codonise64())  
 }
 
 \note{
 The data has to be read in with a corresponding GFF/GTF file (including the CDS fields); 
 otherwise a correct classification is not possible.
+Note, transcripts which are in the same CDS region but have different reading frames are \cr
+are not specified correctly. PopGenome can also handle coding regions on reverse strands.
 }
 
 \examples{
-
-# GENOME.class <- readData("\home\Alignments",gffpath="GFF.Folder")
-# GENOME.class 
-# GENOME.class <- set.synnonsyn(GENOME.class,ref.chr="chromosome1.fas")
- 
+# GENOME.class <- readData("VCF",format="VCF",gffpath="GFF.Folder")
+# GENOME.class <- set.synnonsyn(GENOME.class,ref.chr="ref.fas")
+# GENOME.class@region.data@synonymous 
 
 }
 

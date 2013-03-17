@@ -24,6 +24,7 @@ Exon.matrix             <- NULL
 GeneSNPS                <- NULL
 Gene.matrix             <- NULL
 reading.frame           <- NULL
+rev.strand		<- NULL
 transitions  		<- NULL
 biallelic.matrix        <- NULL
 biallelic.sites         <- NULL

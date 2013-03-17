@@ -37,6 +37,7 @@
 \alias{region.as.fasta}
 \alias{get.codons}
 \alias{PG_plot.biallelic.matrix}
+\alias{introgression.stats}
 
 
 
@@ -146,6 +147,8 @@
     \item{\code{genes}:}{}
     \item{\code{region.data}:}{Detailed information about the data}
     \item{\code{region.stats}:}{Detailed (site-specific) statistics}
+    \item{\code{D}}{Pattersons D statistic}
+    \item{\code{f}}{the fraction of the genome that is admixed}
   }
 }
 \section{Methods}{
@@ -189,6 +192,7 @@
     \item{sliding.window.transform}{Transform a \code{GENOME} object into a new object suitable for sliding window analysis}
     \item{usage}{---}
     \item{PG_plot.biallelic.matrix}{Plot the biallelic matrix}
+    \item{introgression.stats}{Methods to measure archaic admixture}
   }
 }
 

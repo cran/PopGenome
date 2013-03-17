@@ -55,8 +55,8 @@ as the files storing the nucleotide data to ensure correct matching \cr \cr
 
 format: \cr 
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
-\code{"MAF"},\code{"MEGA"},\code{"HapMap"},\code{"VCF"}, 
-\code{"VCFhap"} (haploid), \cr
+\code{"MAF"},\code{"MEGA"} \cr
+\code{"HapMap"},\code{"VCF"} \cr
 \code{"RData"} \cr 
 Valid nucleotides are T,t,U,u,G,g,A,a,C,c,N,n,- \cr \cr
 
@@ -64,8 +64,8 @@ parallized: \cr
 - will speed up calculations if you use a very large amount of alignments \cr \cr
 
 FAST:   \cr 
-- will not classify synonymous/non-synonymous SNPs directly
-- fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
+- will not classify synonymous/non-synonymous SNPs directly \cr
+- fast computation (via compiled C code) of biallelic matrix, biallelic sites, transversions/transitions \cr
   and biallelic substitutions \cr
 - can be switched to \code{TRUE} in case of SNP data without loss of information \cr \cr                  
 
@@ -83,7 +83,6 @@ SNP.DATA: \cr
 }
 
 \value{
-
 
   The function creates an object of class \code{"GENOME"} \cr \cr
   --------------------------------------------------------- \cr
@@ -111,6 +110,8 @@ SNP.DATA: \cr
 \examples{
 
 # GENOME.class <- readData("...\Alignments", FAST=TRUE)
+# GENOME.class <- readData("VCF", format="VCF")
+# Note, "Alignments" and "VCF" are folders !
 # GENOME.class@region.names
 # GENOME.class <- readData("...\Alignments", big.data=TRUE)
 # object.size(GENOME.class)

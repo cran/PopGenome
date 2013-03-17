@@ -1,31 +1,38 @@
-save.session <- function(object){
+save.session <- function(object,folder){
+
+curr <- getwd()
+dir.create(folder)
+setwd(folder)
 
 save(object,file="GENOME")
 
 if(object@big.data){
 
   if(length(object@BIG.BIAL)>0){
-    ffsave(object@BIG.BIAL,file="bial_1")
 
-    if(object@gff.info){
+    bial <- object@BIG.BIAL[[1]]
+    ffsave(bial,file="bial_1")		
+    #ffsave(object@BIG.BIAL,file="bial_1")
+
+    #if(object@gff.info){
        
-       if(is(object@region.data@Coding.matrix[[1]])[1]=="ff_matrix"){   
-       ffsave(object@region.data@Coding.matrix,file="Coding.matrix")
-       }
-       if(is(object@region.data@Gene.matrix[[1]])[1]=="ff_matrix"){ 
-       ffsave(object@region.data@Gene.matrix,file="Gene.matrix")
-       }
-       if(is(object@region.data@Exon.matrix[[1]])[1]=="ff_matrix"){ 
-       ffsave(object@region.data@Exon.matrix,file="Exon.matrix")
-       }
-       if(is(object@region.data@Intron.matrix[[1]])[1]=="ff_matrix"){ 
-       ffsave(object@region.data@Intron.matrix,file="Intron.matrix")
-       }
-       if(is(object@region.data@UTR.matrix[[1]])[1]=="ff_matrix"){ 
-       ffsave(object@region.data@UTR.matrix,file="UTR.matrix")
-       }
+    #   if(is(object@region.data@Coding.matrix[[1]])[1]=="ff_matrix"){   
+    #   ffsave(object@region.data@Coding.matrix,file="Coding.matrix")
+    #   }
+    #   if(is(object@region.data@Gene.matrix[[1]])[1]=="ff_matrix"){ 
+    #   ffsave(object@region.data@Gene.matrix,file="Gene.matrix")
+    #   }
+    #   if(is(object@region.data@Exon.matrix[[1]])[1]=="ff_matrix"){ 
+    #   ffsave(object@region.data@Exon.matrix,file="Exon.matrix")
+    #   }
+    #   if(is(object@region.data@Intron.matrix[[1]])[1]=="ff_matrix"){ 
+    #   ffsave(object@region.data@Intron.matrix,file="Intron.matrix")
+    #   }
+    #   if(is(object@region.data@UTR.matrix[[1]])[1]=="ff_matrix"){ 
+    #   ffsave(object@region.data@UTR.matrix,file="UTR.matrix")
+    #   }
 
-    }
+    #}
 
   }else{
 
@@ -69,11 +76,15 @@ if(object@big.data){
 
 } 
 
+setwd(curr)
 }
 
 ##########  ---- LOAD ------ #############
 
-load.session <- function(){
+load.session <- function(folder){
+
+curr       <- getwd()
+setwd(folder)
 
 name       <- load("GENOME")
 object     <- get(name[1])
@@ -83,38 +94,44 @@ change     <- object@region.data
 
    if(length(object@BIG.BIAL)>0){
 
-    ff.object.name       <- ffload(object@BIG.BIAL,file="bial_1")
-    ff.object            <- get(ff.object.name[1])
-    object@BIG.BIAL[[1]] <- ff.object
+#   bial                 <- object@BIG.BIAL[[1]]
+#   ff.object.name       <- ffload(bial,file="bial_1")	
+#   ff.object.name       <- ffload(object@BIG.BIAL,file="bial_1")
+#   ff.object            <- get(ff.object.name[1])
+#   object@BIG.BIAL[[1]] <- ff.object
  
-   if(object@gff.info){
+    ffload("bial_1",overwrite=TRUE)
+    vcv                  <- get("bial")
+    object@BIG.BIAL[[1]] <- vcv 	
 
-      if(file.exists("Coding.matrix.RData")){
-      ff.object.name     <- ffload(object@region.data@Coding.matrix,file="Coding.matrix")
-      ff.object          <- get(ff.object.name[1])
-      change@Coding.matrix[[1]] <- ff.object
-      }
-      if(file.exists("Gene.matrix.RData")){
-      ff.object.name     <- ffload(object@region.data@Gene.matrix,file="Gene.matrix")
-      ff.object          <- get(ff.object.name[1])
-      change@Gene.matrix[[1]] <- ff.object
-      }
-      if(file.exists("Exon.matrix.RData")){
-      ff.object.name     <- ffload(object@region.data@Exon.matrix,file="Exon.matrix")
-      ff.object          <- get(ff.object.name[1])
-      change@Exon.matrix[[1]] <- ff.object
-      }
-      if(file.exists("Intron.matrix.RData")){
-      ff.object.name     <- ffload(object@region.data@Intron.matrix,file="Intron.matrix")
-      ff.object          <- get(ff.object.name[1])
-      change@Intron.matrix[[1]] <- ff.object
-      }
-      if(file.exists("UTR.matrix.RData")){
-      ff.object.name     <- ffload(object@region.data@UTR.matrix,file="UTR.matrix")
-      ff.object          <- get(ff.object.name[1])
-      change@UTR.matrix[[1]] <- ff.object
-      }
-    }
+    #if(object@gff.info){
+
+    #  if(file.exists("Coding.matrix.RData")){
+    # ff.object.name     <- ffload(object@region.data@Coding.matrix,file="Coding.matrix")
+    #  ff.object          <- get(ff.object.name[1])
+    #  change@Coding.matrix[[1]] <- ff.object
+    #  }
+    #  if(file.exists("Gene.matrix.RData")){
+    #  ff.object.name     <- ffload(object@region.data@Gene.matrix,file="Gene.matrix")
+    #  ff.object          <- get(ff.object.name[1])
+    #  change@Gene.matrix[[1]] <- ff.object
+    #  }
+    #  if(file.exists("Exon.matrix.RData")){
+    #  ff.object.name     <- ffload(object@region.data@Exon.matrix,file="Exon.matrix")
+    #  ff.object          <- get(ff.object.name[1])
+    #  change@Exon.matrix[[1]] <- ff.object
+    #  }
+    #  if(file.exists("Intron.matrix.RData")){
+    #  ff.object.name     <- ffload(object@region.data@Intron.matrix,file="Intron.matrix")
+    #  ff.object          <- get(ff.object.name[1])
+    #  change@Intron.matrix[[1]] <- ff.object
+    #  }
+    #  if(file.exists("UTR.matrix.RData")){
+    #  ff.object.name     <- ffload(object@region.data@UTR.matrix,file="UTR.matrix")
+    #  ff.object          <- get(ff.object.name[1])
+    #  change@UTR.matrix[[1]] <- ff.object
+    #  }
+    #}
 
   }else{
 
@@ -170,6 +187,7 @@ change     <- object@region.data
  }
 
 object@region.data <- change
-
-return(object)
+setwd(curr)
+assign(folder,object,envir=parent.frame())
+#return(object)
 }

@@ -1,22 +1,46 @@
 PopGenread <- function(filepath,format) {
 
-
 if(format=="VCF"){
- res  <- readVCFchunk(filepath)
+ res  <- myReadVCF(filepath)
  mat  <- res$matrix
  ref  <- res$reference
  pos  <- res$positions
  return(list(matrix=mat,reference=ref,positions=pos)) 
 }
 
-if(format=="VCFhap"){
- res  <- readVCFchunkHap(filepath)
- mat  <- res$matrix
- ref  <- res$reference
- pos  <- res$positions
- return(list(matrix=mat,reference=ref,positions=pos)) 
-}
+############################################################
+#if(format=="VCF"){
+# res  <- readVCFchunk(filepath)
+# mat  <- res$matrix
+# ref  <- res$reference
+# pos  <- res$positions
+# return(list(matrix=mat,reference=ref,positions=pos)) 
+#}
 
+#if(format=="VCFhap"){
+# res  <- readVCFchunkHap(filepath)
+# mat  <- res$matrix
+# ref  <- res$reference
+# pos  <- res$positions
+# return(list(matrix=mat,reference=ref,positions=pos)) 
+#}
+
+#if(format=="VCFtri"){
+# res  <- readVCFchunk_tri(filepath)
+# mat  <- res$matrix
+# ref  <- res$reference
+# pos  <- res$positions
+# return(list(matrix=mat,reference=ref,positions=pos)) 
+#}
+
+#if(format=="VCFtet"){
+# res  <- readVCFchunk_tet(filepath)
+# mat  <- res$matrix
+# ref  <- res$reference
+# pos  <- res$positions
+# return(list(matrix=mat,reference=ref,positions=pos)) 
+#}
+###############################################################
 
 if(format=="HapMap"){
  res  <- parse_HapMap(filepath)

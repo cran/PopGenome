@@ -3,7 +3,7 @@
 \docType{methods}
 \alias{readVCF}
 
-\title{Read SNP data in VCF format}
+\title{Read SNP data in tabixed VCF format}
 
 
 \description{
@@ -19,7 +19,7 @@ readVCF(filename, numcols, tid, frompos, topos,
 
 \arguments{
  
-  \item{filename}{the corresponding VCF-file}
+  \item{filename}{the corresponding tabixed VCF-file}
   \item{numcols}{number of SNPs that should be read in as a chunk}
   \item{tid}{which chromosome ? (character)}
   \item{frompos}{start of the region}
@@ -33,13 +33,13 @@ readVCF(filename, numcols, tid, frompos, topos,
 \details{
 The readVCF function expects a tabixed VCF file with a diploid GT field. \cr
 In case of haploid data, the GT field has to be transformed to a pseudo-diploid \cr
-field (such as 0 -> 0|0). An alternative is to use readData(..., format="VCFhap"),\cr
-which can read non-tabixed haploid VCFs directly. \cr 
+field (such as 0 -> 0|0). An alternative is to use readData(..., format="VCF"),\cr
+which can read non-tabixed haploid and any kind of polyploid VCFs directly. \cr 
 When \code{approx=TRUE}, the algorithm will apply a logical OR to the GT-field:\cr
-(0|0=0,1|0=1,0|1=1,1|1=1). Note that this is an approximation for diploid data, which will \cr 
-speed up calculations. For haploid data, \code{approx} should be switched to \code{TRUE}. \cr  
+(0|0=0,1|0=1,0|1=1,1|1=1). Note, this is an approximation for diploid data, which will \cr 
+speed up calculations. In case of haploid data, \code{approx} should be switched to \code{TRUE}. \cr  
 If \code{approx=FALSE}, the full diploid information will be considered.\cr
-The ff-package we use to store the SNP information limits total data size to \cr
+The ff-package PopGenome uses to store the SNP information limits total data size to \cr
 individuals * (number of SNPs) <= .Machine$integer.max \cr
 In case of very large data sets, the bigmemory package will be used; \cr
 this will slow down calculations. \cr

@@ -342,7 +342,7 @@ static	unsigned int		blkidx=0,
 
 	//
 	//
-unsigned int __readdnapp_internal_maxblockloadsize = ( 500 * 1024 *1024 );
+unsigned int __readdnapp_internal_maxblockloadsize = ( 1000 * 1024 *1024 );
 
 
 /*

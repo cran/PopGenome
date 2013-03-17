@@ -13,12 +13,12 @@ This function loads a PopGenome session (more precisely: the corresponding \code
 
 \usage{
 
-load.session()
+load.session(folder)
 
 }
 
 \arguments{
-no arguments
+ \item{folder}{name of the folder/object}
 }  
 
 \details{
@@ -34,11 +34,11 @@ An object of class \code{"GENOME"}.
 \examples{
 
 # GENOME.class <- readData("...\Alignments")
-# save.session(GENOME.class)
+# save.session(GENOME.class,folder="GENOME.class")
 # q()
 # R
 # library(PopGenome)
-# GENOME.class <-load.session()
+# load.session("GENOME.class")
 
 }
 

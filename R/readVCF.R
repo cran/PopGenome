@@ -1,6 +1,9 @@
 
 readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE, approx=TRUE)
+
 {
+
+
 
 frompos <- as.integer(frompos)
 topos   <- as.integer(topos)
@@ -143,7 +146,7 @@ gffpath <- "GFFRObjects"
 		if(approx){
 		.Call("VCF_readIntoCodeMatrix",v,mi)
 		}else{
-		.Call("VCF_readIntoCodeMatrixdiploid",v,mi)
+		.Call("VCF_readIntoCodeMatrixdiploid2",v,mi)
 		}
 		#
 		setcols     <- as.integer( colnames(mi) ) > 0

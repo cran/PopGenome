@@ -25,7 +25,9 @@
   \item{upper.bound}{sites with minor-allele-frequency<=upper.bound are considered}
 }
 
-
+\details{
+Note, the pairwise comparisons are computed via \code{combn(n.snps,2)}.
+}
 
 \value{
 The slot GENOME.class@region.stats@linkage.disequilibrium will be filled.\cr 

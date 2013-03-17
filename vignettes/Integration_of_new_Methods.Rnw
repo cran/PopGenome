@@ -99,7 +99,7 @@ The following variables are useful:
 
 \subsubsection*{bial}
 The variable \texttt{bial} (short for biallelic matrix) contains the SNPs of the alignments.
-The rownames are the individuals, and the columns correspond to the positions of the observed SNPs. (Manual:\texttt{popGetBial}) 
+The rownames are the individuals, and the columns correspond to the positions of the observed SNPs. (Manual:\texttt{get.biallelic.matrix}) 
 
 \begin{verbatim}
 

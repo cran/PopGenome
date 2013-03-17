@@ -1,4 +1,4 @@
- \name{diversity.stats-methods}
+\name{diversity.stats-methods}
 
 \docType{methods}
 
@@ -50,7 +50,7 @@ The following slots will be modified in the \code{"GENOME"}  object \cr
 
 \tabular{rlll}{
             \tab Slot                	    \tab Reference   \tab Description\cr
-          1.\tab \code{nuc.diversity.within}	\tab [1]         \tab Nucleotide diversity (within the population) \cr
+          1.\tab \code{nuc.diversity.within}	\tab [1,3]       \tab Nucleotide diversity (within the population) \cr
           2.\tab \code{Pi}	                \tab [2]         \tab Diversity from Nei (within the population)    \cr 
           3.\tab \code{hap.diversity.within}	\tab [1]         \tab Haplotype diversity (within the population)\cr
           }
@@ -63,7 +63,9 @@ The nucleotide diversities have to be devided by \code{GENOME.class@n.sites} to 
 
 \references{
 [1] Hudson, R. R., M. Slatkin, and W.P. Maddison (1992). \emph{Estimating of levels of gene flow from DNA sequence data.} Gentics 13(2),583-589 \cr \cr
-[2] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr
+[2] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr \cr
+[3] Wakeley, J. (1996).\emph{The Variance of Pairwise Nucleotide Differences in Two Populations with Migration.}
+THEORETICAL POPULATION BIOLOGY. 49, 39-57. \cr 
 }
 
 \examples{

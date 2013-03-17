@@ -14,7 +14,7 @@ if(gffpath[1]!=FALSE){
 
 if(format=="HapMap"){SNP.DATA=TRUE;FAST=TRUE}
 if(format=="VCF")   {SNP.DATA=TRUE;FAST=TRUE}
-if(format=="VCFhap"){SNP.DATA=TRUE;FAST=TRUE}
+#if(format=="VCFhap"){SNP.DATA=TRUE;FAST=TRUE}
 
 if(SNP.DATA){big.data=TRUE}
 
@@ -479,11 +479,15 @@ if(progress_bar_switch){ ### because of parallized
       if(is.na(pos[1])){
        biallelic.sites[[xx]]     <- datt$biallelic.sites   # matrix_pos
        polyallelic.sites[[xx]]   <- datt$polyallelic.sites
+       sites.with.gaps[[xx]]     <- datt$sites.with.gaps
+       sites.with.unknowns[[xx]] <- datt$sites.with.unknowns
       }else{
        biallelic.sites2[[xx]]    <- datt$biallelic.sites
        biallelic.sites[[xx]]     <- pos[datt$biallelic.sites]
        nsites[xx]                <- biallelic.sites[[xx]][length(biallelic.sites[[xx]])] 
-       polyallelic.sites[[xx]]   <- pos[datt$polyallelic.sites] # mhitbp          
+       polyallelic.sites[[xx]]   <- pos[datt$polyallelic.sites] # mhitbp
+       sites.with.gaps[[xx]]     <- pos[datt$sites.with.gaps]
+       sites.with.unknowns[[xx]] <- pos[datt$sites.with.unknowns]          
       }
 
      if(!big.data){
@@ -570,8 +574,7 @@ if(progress_bar_switch){ ### because of parallized
       biallelic.substitutions[[xx]] <- datt$biallelic.substitutions# subst
       minor.alleles[[xx]]       <- datt$minor.alleles # mutations
       codons[[xx]]              <- datt$codons
-      sites.with.gaps[[xx]]     <- datt$sites.with.gaps
-      sites.with.unknowns[[xx]] <- datt$sites.with.unknowns
+     
       
       # fill Genome data
       n.valid.sites[xx]       <- datt$n.valid.sites

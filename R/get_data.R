@@ -17,10 +17,9 @@ if(FAST){
   }
 
 
-  # bialpos <- as.logical(bialpos)
-
+#bialpos <- as.logical(bialpos)
 #RETURNLISTE <- list(n_site=n_site,transitions=matrix_sv, biallelic.matrix=matrix_pol,
-# biallelic.sites=matrix_pos,matrix_codonpos=matrix_codonpos,n.singletons=unic,totalmis=NaN,s_sites=NaN,mvbp=mvbp
+#biallelic.sites=matrix_pos,matrix_codonpos=matrix_codonpos,n.singletons=unic,totalmis=NaN,s_sites=NaN,mvbp=mvbp
 #,trans.transv.ratio=(transitions/transversions),n.valid.sites=algsites,n.biallelic.sites=bial_sites,
 #polyallelic.sites=mhitbp,n.nucleotides=sum_sam,biallelic.compositions=TCGA,ROUGH=erg,matrix_freq=matrix_freq,syn=syn,
 #nonsyn=nonsyn,synonymous=!as.logical(synnonsyn),biallelic.substitutions=subst,minor.alleles=mutations,codons=Codons,
@@ -31,8 +30,9 @@ if(FAST){
 biallelic.sites    <- which(bialpos==1)
 polyallelic.sites  <- which(bialpos==4)
 
-# gaps            <- which(bialpos==2)
-# unknowns        <- which(bialpos==3)
+#FIXME
+gaps            <- which(bialpos==2)
+unknowns        <- which(bialpos==3)
 
 
 if(length(biallelic.sites)==0){
@@ -115,6 +115,7 @@ Coding_region_length<-NaN;Intron_region_length<-NaN;UTR_region_length<-NaN;Exon_
   
 
 return(list(biallelic.matrix=Bial.Mat,biallelic.sites=biallelic.sites,polyallelic.sites=polyallelic.sites,
+sites.with.gaps=gaps,sites.with.unknowns=unknowns,
 transitions=transitions,n.valid.sites=NaN,synonymous=rep(NaN,length(biallelic.sites)),
 trans.transv.ratio=tt.ratio,biallelic.substitutions=biallelic.substitutions,CodingSNPS=CodingSNPS,UTRSNPS=UTRSNPS,IntronSNPS=IntronSNPS,
 ExonSNPS=ExonSNPS,GeneSNPS=GeneSNPS,Coding_region_length=Coding_region_length,

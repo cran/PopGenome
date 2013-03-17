@@ -69,13 +69,13 @@ FAST=FALSE
           4.\tab \code{Hudson.G_ST}             \tab [3]         \tab see reference ... \cr
           5.\tab \code{Hudson.H_ST}             \tab [3]         \tab see reference ... \cr
           6.\tab \code{Hudson.K_ST}             \tab [3]         \tab see reference ... \cr
-          7.\tab \code{nuc.diversity.within}    \tab [1]         \tab Nucleotide diversity (within the population)\cr
+          7.\tab \code{nuc.diversity.within}    \tab [1,5]       \tab Nucleotide diversity (within the population)\cr
           8.\tab \code{hap.diversity.within}    \tab [1]         \tab Haplotype diversity (within the population) \cr
           9.\tab \code{Pi}          	        \tab [4]         \tab Nei's diversity (within the population)  \cr
           10.\tab \code{hap.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against all other individuals (haplotype)\cr
           11.\tab \code{nuc.F_ST.vs.all}        \tab [1]         \tab Fixation Index for each population against tall other individuals (nucleotide)\cr
           12.\tab \code{hap.diversity.between}  \tab [1]         \tab Haplotype diversities between populations\cr
-          13.\tab \code{nuc.diversity.between}  \tab [1]         \tab Nucleotide diversities between populations\cr
+          13.\tab \code{nuc.diversity.between}  \tab [1,5]       \tab Nucleotide diversities between populations\cr
           14.\tab \code{nuc.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of populations (nucleotide)\cr
           15.\tab \code{hap.F_ST.pairwise}      \tab [1]         \tab Fixation Index for every pair of populations (haplotype)\cr
           16.\tab \code{Nei.G_ST.pairwise}      \tab [2]         \tab Fixation Index for every pair of populations (Nei)\cr
@@ -94,7 +94,7 @@ FAST=FALSE
 If \code{FAST} is switched on, this module only calculates \code{nuc.diversity.within}, \code{hap.diversity.within}, \code{haplotype.F_ST},
 \code{nucleotide.F_ST} and \code{pi}.
 Note: \cr 
-The nucleotide diversities have to be devided by \code{GENOME@n.sites} to give diversities per site.
+The nucleotide diversities have to be devided by the size of region considered (e.g. \code{GENOME@n.sites}) to give diversities per site.
  
 
 }
@@ -104,8 +104,9 @@ The nucleotide diversities have to be devided by \code{GENOME@n.sites} to give d
 [1] Hudson, R. R., M. Slatkin, and W.P. Maddison (1992). \emph{Estimating levels of gene flow from DNA sequence data.} Gentics 13(2),583-589 \cr \cr
 [2] Nei, M. (1973). \emph{Analysis of gene diversity in subdivided populations.} Proc.Natl. Acad. Sci. USA 70: 3321-3323 \cr \cr
 [3] Hudson, R. R., Boos, D.D. and N. L. Kaplan (1992). \emph{A statistical test for detecting population subdivison.} Mol. Biol. Evol. 9: 138-151. \cr \cr
-[4] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr
- 
+[4] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr \cr
+[5] Wakeley, J. (1996).\emph{The Variance of Pairwise Nucleotide Differences in Two Populations with Migration.}
+THEORETICAL POPULATION BIOLOGY. 49, 39-57. \cr 
 
 }
 

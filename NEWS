@@ -1,3 +1,22 @@
+Changes in PopGenome 2.0.8
+===========================
+
+BUG FIXED:
+
+- 
+
+NEW FEATURES:
+
+- The function readData(..., format="VCF") is now faster and 
+  is able to handle any kind of polyploid data. 
+- set.populations: new parameter.
+- save and loading "GENOME" objects: much easier.
+- readVCF(): can handle unknown positions like ./.
+- introgression.stats()
+
+THX:
+Durrell
+
 Changes in PopGenome 2.0.7
 ===========================
 

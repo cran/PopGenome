@@ -39,9 +39,9 @@ rev.strand.shift         <- START[REV,3]
 #zero			 <- rev.strand.shift==0 
 #one 			 <- rev.strand.shift==1 
 #two 			 <- rev.strand.shift==2
-#rev.strand.shift[zero]   <-  1
+#rev.strand.shift[zero]   <-  0
 #rev.strand.shift[one]    <-  2
-#rev.strand.shift[two]    <-  0
+#rev.strand.shift[two]    <-  1
 }else{
 rev.strand.shift         <- 0
 }

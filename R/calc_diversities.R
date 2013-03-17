@@ -155,16 +155,17 @@ calc_nuc_diversity_within <- function(matrix){
 
   if(n.individuals==1){return(0)}
 
-  n.vergleiche    <- choose(dim(matrix)[1],2)
+  #n.vergleiche    <- choose(dim(matrix)[1],2)
   
   erg <- apply(matrix,2,function(x){
              
-         einsen     <- sum(x==1, na.rm=TRUE)
-         nullen     <- sum(x==0, na.rm=TRUE)
-         # nullen     <- n.individuals - einsen                            
-         div        <- (einsen * nullen)/n.vergleiche
+         einsen       <- sum(x==1, na.rm=TRUE)
+         nullen       <- sum(x==0, na.rm=TRUE)
+	 all          <- einsen + nullen
+         n.vergleiche <- (all*(all-1))/2  
+         if(n.vergleiche==0){return(0)}                                   
+         div          <- (einsen * nullen)/n.vergleiche 
          return(div)
-
          })
 
   erg <- sum(erg)

@@ -111,6 +111,9 @@ MDSD="matrix",
 MDG1="matrix",
 MDG2="matrix",
 
+D		       =   "matrix",              # introgression slots
+f		       =   "matrix",              
+
 genes                  =   "list",                # a list of statistics objects
 region.data            =   "region.data",         # list of class GEN
 region.stats           =   "region.stats"         # list of class DATA
@@ -323,13 +326,14 @@ setGeneric("get.status", function(object) standardGeneric("get.status"))
 
 ## Set Population
 #--------------------------------------------
-setGeneric("set.populations", function(object,new.populations=FALSE, diploid=FALSE) standardGeneric("set.populations"))
+setGeneric("set.populations", function(object,new.populations=FALSE, diploid=FALSE,triploid=FALSE,tetraploid=FALSE) standardGeneric("set.populations"))
  setMethod("set.populations", "GENOME",
- function(object,new.populations,diploid){
+ function(object,new.populations,diploid,triploid,tetraploid){
 
 npops              <- length(new.populations)
 change             <- object@region.data
 populations        <- vector("list",npops)
+populations2       <- vector("list",npops)
 
 # if diploid add individuals.2
 if(diploid){
@@ -338,14 +342,31 @@ if(diploid){
   new.populations[[yy]] <- c(new.populations[[yy]],dottwo) 
  } 
 }
+if(triploid){
+ for (yy in 1:npops) {
+  dottwo                <- paste(new.populations[[yy]],".2", sep="")
+  dotthree              <- paste(new.populations[[yy]],".3", sep="")
+  new.populations[[yy]] <- c(new.populations[[yy]],dottwo,dotthree) 
+ } 
+}
+if(tetraploid){
+ for (yy in 1:npops) {
+  dottwo                <- paste(new.populations[[yy]],".2", sep="")
+  dotthree              <- paste(new.populations[[yy]],".3", sep="")
+  dottfour              <- paste(new.populations[[yy]],".4", sep="")
+  new.populations[[yy]] <- c(new.populations[[yy]],dottwo,dotthree,dottfour) 
+ } 
+}
+
 # End of diploid
 
 object@populations <- new.populations
 
 # Init
 
-XX_popmissing  <- vector("list",length(object@region.names))
-XX_populations <- vector("list",length(object@region.names))
+XX_popmissing   <- vector("list",length(object@region.names))
+XX_populations  <- vector("list",length(object@region.names))
+XX_populations2 <- vector("list",length(object@region.names))
 
 ############################################################
 progr <- progressBar()
@@ -363,9 +384,11 @@ for(xx in 1:length(object@region.names)){
 
            if(is.character(new.populations[[yy]])){
               #populations[[yy]] <- match(new.populations[[yy]],rownames(object@DATA[[xx]]@matrix_pol))
-              populations[[yy]] <- match(new.populations[[yy]],rownames(bial))
-              naids             <- which(!is.na(populations[[yy]]))
-              populations[[yy]] <- populations[[yy]][naids]
+              populations[[yy]]  <- match(new.populations[[yy]],rownames(bial))
+              naids              <- which(!is.na(populations[[yy]]))
+              populations[[yy]]  <- populations[[yy]][naids]
+              populations2[[yy]] <- rownames(bial)[populations[[yy]]]
+
            }else{
               populations[[yy]] <- new.populations[[yy]]
               ids               <- which(populations[[yy]]>dim(bial)[1])
@@ -382,17 +405,20 @@ for(xx in 1:length(object@region.names)){
        # if(length(populations)==0){next} # Keine Population vorhanden
 
      XX_populations[[xx]]  <- populations 
-     XX_popmissing[[xx]]   <- popmissing
+     XX_populations2[[xx]] <- populations2 
 
+     XX_popmissing[[xx]]   <- popmissing
+      
  # PROGRESS #######################################################
     progr <- progressBar(xx,length(object@region.names), progr)
  ###################################################################
 
 }
 
-change@populations <- XX_populations
-change@popmissing  <- XX_popmissing
-object@region.data <- change
+change@populations  <- XX_populations
+change@populations2 <- XX_populations2
+change@popmissing   <- XX_popmissing
+object@region.data  <- change
 return(object)
 
 })

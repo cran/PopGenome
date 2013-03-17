@@ -47,6 +47,9 @@
   \item{do.WALL}{calculate Wall's B/Q}
 }
 
+\details{
+Note, the pairwise comparisons are computed via \code{combn(n.snps,2)}.
+}
 
 \value{
 

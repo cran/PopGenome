@@ -608,10 +608,10 @@ Hs2 <- sum(H_between,na.rm=TRUE)/choose(npops,2)
 totalsize <- length(unlist(populations))
 totalfreq <- colSums(sfreqh)/totalsize
 
-Ht             <- (totalsize/(totalsize-1))* (1-sum(totalfreq^2))
+Ht              <- (totalsize/(totalsize-1))* (1-sum(totalfreq^2))
  
 #Ht              <- sum(H_between,na.rm=TRUE)/choose(npops,2)
-Ht_dash         <- 1-sum(totalfreq^2) + Hs/(length(nx)/(sum(1/nx))*npops)
+Ht_dash         <- 1 - sum(totalfreq^2) + Hs/(length(nx)/(sum(1/nx))*npops)
 
 KST             <- 1 - mean(Ks,na.rm=TRUE)/mean(KT,na.rm=TRUE) # have to be tested !!!
 HST             <- 1 - Hs2/Ht          # Hudson eq (2)  works well !

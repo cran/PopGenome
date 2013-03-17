@@ -22,10 +22,10 @@ from the observed SNPs.
   \item{regionID}{what region/alignment should be analyzed ?}
 }
 \details{
-The slot GENOME.class@region.data@synonymous have to be set.\cr
-The data have to be read in with the correponding GFF file. \cr
-The function set.synnonsyn sets the syn/nonsny sites in case 
-of SNP data.
+The slot GENOME.class@region.data@synonymous and GENOME.class@region.data@codons \cr
+have to be set.\cr The data have to be read in with the correponding GFF file. \cr
+The function set.synnonsyn(..., save.codons=TRUE) sets the syn/nonsny \cr 
+sites in case of SNP data and stores the corresponding codon changes. 
 }
 
 \value{
@@ -49,7 +49,7 @@ The function \code{get.codons} returns a data.frame with the following informati
 # get.codons(GENOME.class,1)
 # SNP data
 # GENOME.class <- readData("VCF",gffpath="GFF")
-# GENOME.class <- set.synnonsyn(GENOME.class, ref.chr="ref.fas")
+# GENOME.class <- set.synnonsyn(GENOME.class, ref.chr="ref.fas",save.codons=TRUE)
 # get.codons(GENOME.class,1)
 
 }
