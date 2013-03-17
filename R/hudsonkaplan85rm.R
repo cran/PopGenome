@@ -1,3 +1,10 @@
+# Copyright
+# This function is from the PGE Toolbox (Matlab)
+# slightly modified
+#Cai JJ (2008) PGEToolbox: A Matlab toolbox for population genetics and evolution
+#Journal of Heredity Jul-Aug;99(4):438-40. doi:10.1093/jhered/esm127
+#modified
+
 hudsonkaplan85rm <- function(bial,populations) {
 
 npops    <- length(populations)

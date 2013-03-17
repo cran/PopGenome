@@ -30,7 +30,7 @@ The PopGenome framework is linked to Hudson's MS program for significance tests 
 \section{Reading data (alignments)}
 \textcolor{blue}{Reading three alignments in FASTA-format (\textit{4CL1tl.fas, C4Htl.fas and CADtl.fas}) stored in the folder "FASTA".
 (An example FASTA-file can be found in the \textit{data} subdirectory of the PopGenome package on CRAN. Alignment formats like \textit{Phylip, MEGA, MAF} are also accepted. \\ 
-\textbf{Note:} valid nucleotides are A,a,C,c,T,t,U,u,G,g,-(gap),N,n,?(unknown). 
+\textbf{Note:} valid nucleotides are A,a,C,c,T,t,U,u,G,g,-(gap),N,n(unknown). 
 Internally those nucleotides are coded into numeric values:}
 \begin{itemize}
 \item $T,U \rightarrow$ 1

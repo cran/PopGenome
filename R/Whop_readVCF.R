@@ -1,6 +1,9 @@
 
-readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE, approx=TRUE)
+Whop_readVCF <- function(v, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE)
 {
+
+require(WhopGenome)
+# v is a vcf_handle from WhopGenome
 
 frompos <- as.integer(frompos)
 topos   <- as.integer(topos)
@@ -73,7 +76,7 @@ gffpath <- "GFFRObjects"
 	
 	#
 	#
-	v <- .Call("VCF_open", filename )
+	#v <- .Call("VCF_open", filename )
 	if( is.null( v ) )
 	{
 		# setwd(curdir)
@@ -82,7 +85,8 @@ gffpath <- "GFFRObjects"
 	
 	#
 	#
-	alltids = .Call("VCF_getContigNames",v)
+	#alltids = .Call("VCF_getContigNames",v)
+	alltids = vcf_getcontignames(v) # whopGenome
 	print("Available ContigIdentifiers (parameter tid):")
 	print(alltids)
 	if( ! (tid %in% alltids) )
@@ -92,7 +96,8 @@ gffpath <- "GFFRObjects"
 	
 	#
 	#
-	sn <- .Call("VCF_getSampleNames",v)
+	# sn <- .Call("VCF_getSampleNames",v)
+          sn <- vcf_getsamples(v)
         # sn <- sn[1:(length(sn)-1)] # FIXME	
          
 	#
@@ -110,11 +115,13 @@ gffpath <- "GFFRObjects"
 	stopifnot( length( schnittmengesamples ) > 0 )
 	
 	#print( schnittmengesamples )
-	.Call("VCF_selectSamples",v,schnittmengesamples )
-	
+	#.Call("VCF_selectSamples",v,schnittmengesamples )
+	 vcf_selectsamples(v,schnittmengesamples)
 	#
 	#
-	regset <- .Call("VCF_setRegion",v,tid,frompos,topos)
+	#regset <- .Call("VCF_setRegion",v,tid,frompos,topos)
+	regset <- vcf_setregion(v,tid,frompos,topos)
+
 	if( regset == FALSE )
 	{
 		stop("Region could not be set!");
@@ -124,11 +131,11 @@ gffpath <- "GFFRObjects"
 	#
 #	mm <- matrix( nrow=12,ncol=10,data="-", dimnames=list(sl,rep("x",10)) )
 	mi <- matrix( nrow=length(schnittmengesamples),ncol=numcols,data=as.integer(0), dimnames=list(schnittmengesamples,rep("x",numcols)) )
-	if(approx==FALSE){
+	#if(approx==FALSE){
 	# save names for diploid data
 	dottwo    <- paste(schnittmengesamples,".2", sep="") 
   	diplNAMES <- as.vector(rbind(schnittmengesamples,dottwo)) 
-	}
+	#}
 
 	#
 	#
@@ -136,24 +143,29 @@ gffpath <- "GFFRObjects"
 	filenum=0
 	fileprefix=paste(sep="","chr:","_",tid,"_",frompos,"-",topos,"_")
 
+	first <- TRUE
 	#
 	while( numusedcols == numcols )
 	{
  
 		#
-		if(approx){
-		.Call("VCF_readIntoCodeMatrix",v,mi)
-		}else{
-		.Call("VCF_readIntoCodeMatrixdiploid",v,mi)
-		}
+		#if(approx){
+		#.Call("VCF_readIntoCodeMatrix",v,mi)
+		#}else{
+		#.Call("VCF_readIntoCodeMatrixdiploid",v,mi)
+		 check <-VCF_read_snp_diplo_bial_int_nuclcodes(v,mi)
+                 if(check==FALSE){if(first){stop("No SNPs in this region or numcols > total number of SNPs in this region.")};break}else{first<- FALSE}
+		#}
 		#
+                #print(mi)
 		setcols     <- as.integer( colnames(mi) ) > 0
-		numusedcols <- sum(setcols)
-
+		numusedcols <- sum(setcols, na.rm=TRUE)
+		
+                #print(colnames(mi))
 		#if(numusedcols==0){
                 #   .Call("VCF_close",v)
                 #   stop("no SNPs !")
-                #}
+                # }
 		#
 
 		cn <- as.integer( colnames(mi)[1:numusedcols] )
@@ -166,25 +178,29 @@ gffpath <- "GFFRObjects"
 		#print( fullfilename )
 		
 		#
-		
 		#
 		#print(cn[1])
 		#print(cn[numusedcols])
 		#print(mi)
-		if(approx){
-		o_b_j_sub  <- list(matrix=mi,reference=NaN, positions=cn)
-                }else{ # create diploid matrix
+		#if(approx){
+		#o_b_j_sub  <- list(matrix=mi,reference=NaN, positions=cn)
+                #}else{
+
+                
+                if(any(is.na(setcols))){
+                  mi[mi==0] <- 11
+                }
+		
+                # create dipl Matrix 
+                #.Call("filldiplomatrix",mi,diplmi)
                 diplmi <- as.character(mi)
                 diplmi <- strsplit(diplmi,split="")
                 diplmi <- as.numeric(unlist(diplmi))
                 diplmi <- matrix(diplmi, length(diplNAMES), dim(mi)[2]) 
-		#diplmi     <- mi
-		# modify matrix
-		#diplmi     <- matrix(as.character(diplmi),nrow=dim(diplmi)[1],ncol=dim(diplmi)[2]) #apply(diplmi,2,as.character)
-		#diplmi     <- apply(diplmi,2,function(x){as.numeric(sapply(strsplit(x,split=""),rbind))})
                 rownames(diplmi) <- diplNAMES		
 		o_b_j_sub  <- list(matrix=diplmi,reference=NaN, positions=cn)
-                }
+                
+               #}
 
 		save( file = fullfilename , o_b_j_sub  )
 

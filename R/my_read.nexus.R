@@ -1,6 +1,7 @@
 my_read.nexus <- function(file){
 
-LISTE  <- read.nexus.data(file)
+#LISTE  <- read.nexus.data(file)
+LISTE  <- APE_read.nexus.data(file) #Copyright APE package on CRAN  !
 size   <- length(LISTE)
 
 MAT <- NULL

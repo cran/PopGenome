@@ -358,9 +358,9 @@ static char	nucleotide_mapping[] = {
 	5,5,5,5,	5,5,5,5,	5,5,5,5,	5,6,6,5,				// 32	: !"#$%&'()*+’-./
 	5,5,5,5,	5,5,5,5,	5,5,5,5,	5,5,5,5,				// 48	:5123456789:;<=>?
 	5,4,5,2,	5,5,5,3,	5,5,5,5,	5,5,5,5,				// 64	:@ABCDEFGHIJKLMNO
-	5,5,5,5,	1,1,5,5,	5,5,5,5,	5,5,5,5,				// 80	:PQRSTUVWXYZ[\]^_
+	5,5,5,5,	1,1,5,5,	5,5,5,5,	5,5,5,5,				// 80	:PQRS TUVW XYZ[\]^_
 	5,4,5,2,	5,5,5,3,	5,5,5,5,	5,5,5,5,				// 96	:`abcdefghijklmno
-	5,5,5,5,	1,1,5,5,	5,5,5,5,	5,5,5,5,				// 112	:pqrstuvwxyz{|}~
+	5,5,5,5,	1,1,5,5,	5,5,5,5,	5,5,5,5,				// 112	:pqrs tuvw xyz{|}~
 	//FIXME : U = T => 1 ?
 	5,5,5,5,	5,5,5,5,	5,5,5,5,	5,5,5,5,				// 128	: - mostly nonprintable - 
 	5,5,5,5,	5,5,5,5,	5,5,5,5,	5,5,5,5,				// 144	: - mostly nonprintable - 
@@ -661,7 +661,7 @@ inline bool	cmpString( const char * str )
 */
 inline bool	isNucleotide( unsigned char c )
 {
-	return( c=='A' || c=='a' || c=='C' || c=='c' || c=='G' || c=='g' || c=='T' || c=='t' || c=='-' || c=='N' || c=='n' );
+	return( c=='A' || c=='a' || c=='C' || c=='c' || c=='G' || c=='g' || c=='T' || c=='t' || c=='-' || c=='N' || c=='n' || c=='U' || c=='u' );
 }
 
 inline bool	isIUPACNucleotide( unsigned char c )

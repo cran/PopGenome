@@ -56,5 +56,6 @@ export(readMS)
 export(MS_getStats)
 export(codontable)
 export(PopGplot)
+export(Whop_readVCF)
 
 export(MS)

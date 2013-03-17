@@ -49,34 +49,33 @@ The data (alignments or SNP-files) have to be stored in a folder. The folder is 
 function. If there is no gff-file specified, an alignment in the right reading frame is expected. \cr
 Otherwise the examination of synonymous and nonsynonymous positions is useless. \cr \cr
 
-format: \cr \cr 
+format: \cr 
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
 \code{"MAF"},\code{"MEGA"},\code{"HapMap"},\code{"VCF"}, 
 \code{"VCFhap"} (haploid), \cr
-\code{"RData"} \cr \cr
+\code{"RData"} \cr 
+Valid nucleotides are T,t,U,u,G,g,A,a,C,c,N,n,- \cr \cr
 
-parallized: \cr \cr
-- only works on UNIX, because of the multicore package. \cr
+parallized: \cr 
 - will speed up calculation if you use a huge amount of alignments \cr \cr
 
-FAST:   \cr \cr
+FAST:   \cr 
 - will not calculate syn/nonsyn SNPs
 - fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
   and biallelic substitutions \cr
-- can be switched to \code{TRUE} in case of SNP-data without loosing informations                   
+- can be switched to \code{TRUE} in case of SNP-data without loosing informations \cr \cr                  
 
-big.data: \cr \cr
-- using the ff-package \cr \cr
+big.data: \cr 
+- using the ff-package \cr 
 - ff mechanism for biallelic.matrix and gff/gtf information \cr 
 - is done automatically for readVCF or readSNP \cr
 - Note! should switch to TRUE, if you use big chunks \cr 
   and you want to concatenate them in the PopGenome framework \cr
-  (for example: sliding window of the whole data).\cr
+  (for example: sliding window of the whole data).\cr \cr
 
-SNP.DATA: \cr \cr
-
-- should be switched to \code{TRUE}, if you use SNP-data in alignment format. \cr \cr
-
+SNP.DATA: \cr 
+- should be switched to \code{TRUE}, if you use SNP-data in alignment format. \cr 
+- the corresponding SNP position can be set via \code{set.ref.positions}
 }
 
 \value{

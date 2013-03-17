@@ -34,7 +34,7 @@ mayor   <- subst[2,]
  bial <- apply(bial,1,function(x){return(nuc[match(x,number)])})
  bial <- t(bial)
 
-write.dna(bial,file=filename,colsep="",format="fasta")
+APE_write.dna(bial,file=filename,colsep="",format="fasta") # This function is from the APE package on CRAN 
 
 return(bial)
 }
@@ -89,7 +89,7 @@ fillids   <- match(bial.sites,s_tart:e_end)
 RETMAT[,fillids] <- bial
 
 rownames(RETMAT) <- ind.names
-write.dna(RETMAT,file=filename,colsep="",format="fasta")
+APE_write.dna(RETMAT,file=filename,colsep="",format="fasta") # This function is from the ape package on CRAN 
 
 return(bial)
 

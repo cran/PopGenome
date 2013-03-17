@@ -4,6 +4,9 @@ parallized=FALSE,FAST=FALSE,big.data=TRUE){
 
 if(!file.exists(filename)){stop("Cannot find file !")}
 
+if(file.exists("FASTARObjects")){unlink("FASTARObjects",recursive=TRUE)}
+
+
 ### DEFAULT VALUES for readData()
 progress_bar_switch <- TRUE
 gffpath=FALSE
