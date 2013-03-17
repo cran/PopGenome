@@ -143,6 +143,11 @@ for (int i = 0; i < J; i++){
    }
   
    if((value1!=value2)){  
+
+	if(value1==5){
+         value1=value2;
+         continue;
+    	}
       
         if((treffer) && (value2!=value3)){
           INTEGER(ret)[i]=4;// polyallelic

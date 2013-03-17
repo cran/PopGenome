@@ -1,6 +1,6 @@
-fe881553afdf44d88b0d88d1d7094890 *DESCRIPTION
+a5360606009ed972ff46bea2d9b91c0a *DESCRIPTION
 06335707827fdd59cc7f7a94408572c1 *NAMESPACE
-2101dc3542ed1c4e833a987ddee531a6 *NEWS
+6530d11f0b847628a1a6f2328d9eb6e9 *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -119,7 +119,7 @@ ce42f458430f6943a29a8e561d8a678d *R/snn.R
 57a8aa456b3dc240460a63ac0fe2e836 *R/sortmatrix.R
 3c61eb676cb87478e6e34fa736bbb816 *R/split.GFF.R
 3519447995af885a399c627debaf2cde *R/splitting.data.R
-ef449a51a7c5c19acdb9bc3fc99e2eb3 *R/splitting.data.sep.R
+967839e672544a4630910802b4a2d971 *R/splitting.data.sep.R
 9cd716c6f4b98e59a1f605f7d59e2fde *R/sweeps.stats.R
 113ab2f159203de9eb5e15a7abddbd0a *R/testparamsClass.R
 95b69822023aaeebdb1dbec19aa5048c *R/tn93.R
@@ -132,9 +132,9 @@ c4f74b26105aca59178c66f5618b4813 *data/fasta_file.txt.gz
 a0656cc271cfd6c2095c005c74c73602 *data/snp_file.txt.gz
 c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 6863bdc52e055bc8a67bbfdc17642c23 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-d79e0aa560e69a1e2d1464cffc8db87e *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+5281916bb0dd7c202bf41736f6861ea1 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 462d9efa03b0cfa2944edec554710773 *inst/doc/Integration_of_new_Methods.Rnw
-f68f1f9711dd22037bf2c7dfdb07fd86 *inst/doc/Integration_of_new_Methods.pdf
+9984529122459f900f203bda17c3afb8 *inst/doc/Integration_of_new_Methods.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 0f7995d2ee3f85fcdae7cbed74355f22 *man/F_ST.stats-methods.Rd
@@ -182,7 +182,7 @@ d4469c15103014b6c4feaa1b9ef4f6b2 *man/set.outgroup-methods.Rd
 19e648c02ed6603f9272c8f0eea4b659 *man/show.slots-methods.Rd
 652fe8a80253890967ba370bacc9f606 *man/sliding.window.transform-methods.Rd
 bc18e3af9863c7e0c8054345c781c44a *man/snp_file.Rd
-799de7a4ced54ba237957bc2037c8b82 *man/splitting.data-methods.Rd
+49a623699d9107cbefbb09c8ed556148 *man/splitting.data-methods.Rd
 2d31cd4ab651707a7271e981cef9eae5 *man/sweeps.stats-methods.Rd
 ef69eabecdd1a4a68abb7c49f3e780bb *man/test.params-class.Rd
 2cb93d7f906ba4c36f1a7e1ad63b475d *man/vcf_file.Rd
@@ -207,7 +207,7 @@ b284bcb367711dd8b25eb1a977c57fc1 *src/fittingGFFC++.c
 1a61b2e198b9ef45263e05c0e2eb0b45 *src/get_gff_info_C.c
 f2d125c68c29f5d698faaf021fb7e409 *src/get_ind_fasta.c
 9119fee1c5e8c2e1b9d6933380ab3cc7 *src/get_segsites_C.c
-238b31e7e8184889ed83deb6019d2860 *src/makeBial.c
+d00c8c3ffacaebbf6677ee423a39bf12 *src/makeBial.c
 01778e346691c4e55c3a0051e7bb0c93 *src/makeBialMatrix.c
 88448d1fdb52df90ab135ea702d05264 *src/my_match_C.c
 8838ee1f82dfd8fe8c26b3774e9f1883 *src/my_unique_C.c

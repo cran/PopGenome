@@ -51,13 +51,6 @@ The return value is a modified object of class \code{"GENOME"}. \cr
   
 }
 
-\note{
-
-If there are more than one region defined, PopGenome tries to concatenate those regions unless whole.data=FALSE.
- 
-}
-
-
 \examples{
 
 # GENOME.class <- readData("\home\Alignments")

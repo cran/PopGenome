@@ -47,34 +47,55 @@ N.subsites <- sapply(object@region.data@Intron.matrix,function(x){return(dim(x)[
 N.Bial.Sites <- object@n.biallelic.sites
 
 # Check the blocks of the Gene matrix
-gene.pos.ids <- matrix(,length(N.subsites),2)
-start        <- 1
-ADDX         <- 0
+if(subsites[1]!=FALSE){
+ gene.pos.ids <- matrix(,length(N.subsites),2)
+ start        <- 1
+ ADDX         <- 0
 
-for(xx in 1:length(N.subsites)){
+ for(xx in 1:length(N.subsites)){
    ADDX              <- ADDX + N.subsites[xx]
    gene.pos.ids[xx,] <- c(start,ADDX)
    start             <- ADDX + 1
+ }
 }
 ###########################################
 REGION.NAMES <- object@region.names
 
 
 # ------------------------------------------------------------
+can_con <- TRUE
 
-if(object@genelength>1){
+if(length(object@region.names)>1){
 # object@snp.data = TRUE # to manipulate the concatenation
-object          <- concatenate_to_whole_genome(object,object@genelength)
+
+# check if can be concatenated
+for(xx in 1:(length(object@region.names)-1)){
+
+ a <- length((unlist(get.individuals(object,xx))))
+ b <- length((unlist(get.individuals(object,xx+1))))
+
+  if(a!=b){
+     can_con <- FALSE
+     break
+  }
 }
 
+if(can_con){
+ object  <- concatenate_to_whole_genome(object,object@genelength)
+}     
+
+}
 
 genomeobj               <-  new("GENOME") 
 ddatt                   <-  new("region.data")
 XXX                     <-  object@region.data 
 
-
+if(can_con){
 genomeobj@BIG.BIAL[[1]] <- object@region.data@biallelic.matrix[[1]]
- 
+}else{
+genomeobj               <- object
+} 
+
 if(!is.list(positions)){
 
  if(subsites=="coding"){
@@ -116,6 +137,7 @@ if(!is.list(positions)){
      n.sites          <- numeric(length(positions))
   }
 
+ 
   SLIDE.POS        <- init            
   biallelic.matrix <- init
   biallelic.sites  <- init
@@ -127,7 +149,122 @@ if(!is.list(positions)){
  
   #-------------------------------------------------------------
 
-    if(!is.list(positions) & !object@snp.data){
+   if(!is.list(positions) & !can_con){
+     
+     # Init 
+     L     <- sum(N.subsites)
+     init  <- vector("list", L)
+     region.names <- character(L)
+     n.sites  <- numeric(L)
+     
+     SLIDE.POS        <- init            
+     biallelic.matrix <- init
+     biallelic.sites  <- init
+     outgroup         <- init
+     populations      <- init
+     popmissing       <- init
+     transitions      <- init
+     synonymous       <- init
+
+     ### Progress
+     progr <- progressBar()
+     ###
+
+
+       count <- 1
+       for( xx in 1: length(object@region.names) ){
+
+		if(N.subsites[xx] < 1){next}                
+		
+		for ( yy in 1:(N.subsites[xx]) ){
+
+                 if(subsites =="coding"){
+  		    pos     <- XXX@Coding.matrix[[xx]][yy,1]:XXX@Coding.matrix[[xx]][yy,2]
+                    bialpos <- is.element(XXX@biallelic.sites[[xx]],pos)
+                    bialpos <- which(bialpos)
+		    outgroup[[count]]             <- XXX@outgroup[[xx]]
+        	    populations[[count]]          <- XXX@populations[[xx]]
+        	    synonymous[[count]]           <- XXX@synonymous[[xx]][bialpos]
+        	    transitions[[count]]          <- XXX@transitions[[xx]][bialpos]
+        	    biallelic.sites[[count]]      <- XXX@biallelic.sites[[xx]][bialpos] 
+		    biallelic.matrix[[count]]     <- get.biallelic.matrix(object,xx)[,bialpos,drop=FALSE] 
+	            n.sites[count]                <- length(pos)  
+                    region.names[count]           <- paste(object@region.names[xx],":",pos[1],"-",pos[length(pos)]) 
+                 }
+
+		if(subsites =="exon"){
+  		    pos     <- XXX@Exon.matrix[[xx]][yy,1]:XXX@Exon.matrix[[xx]][yy,2]
+                    bialpos <- is.element(XXX@biallelic.sites[[xx]],pos)
+                    bialpos <- which(bialpos)
+		    outgroup[[count]]             <- XXX@outgroup[[xx]]
+        	    populations[[count]]          <- XXX@populations[[xx]]
+        	    synonymous[[count]]           <- XXX@synonymous[[xx]][bialpos]
+        	    transitions[[count]]          <- XXX@transitions[[xx]][bialpos]
+        	    biallelic.sites[[count]]      <- XXX@biallelic.sites[[xx]][bialpos] 
+		    biallelic.matrix[[count]]     <- get.biallelic.matrix(object,xx)[,bialpos,drop=FALSE] 
+	            n.sites[count]                <- length(pos)  
+                    region.names[count]           <- paste(object@region.names[xx],":",pos[1],"-",pos[length(pos)]) 
+                 }
+		if(subsites =="utr"){
+  		    pos     <- XXX@UTR.matrix[[xx]][yy,1]:XXX@UTR.matrix[[xx]][yy,2]
+                    bialpos <- is.element(XXX@biallelic.sites[[xx]],pos)
+                    bialpos <- which(bialpos)
+		    outgroup[[count]]             <- XXX@outgroup[[xx]]
+        	    populations[[count]]          <- XXX@populations[[xx]]
+        	    synonymous[[count]]           <- XXX@synonymous[[xx]][bialpos]
+        	    transitions[[count]]          <- XXX@transitions[[xx]][bialpos]
+        	    biallelic.sites[[count]]      <- XXX@biallelic.sites[[xx]][bialpos] 
+		    biallelic.matrix[[count]]     <- get.biallelic.matrix(object,xx)[,bialpos,drop=FALSE] 
+	            n.sites[count]                <- length(pos)  
+                    region.names[count]           <- paste(object@region.names[xx],":",pos[1],"-",pos[length(pos)]) 
+                 }
+		if(subsites =="intron"){
+  		    pos     <- XXX@Intron.matrix[[xx]][yy,1]:XXX@Intron.matrix[[xx]][yy,2]
+                    bialpos <- is.element(XXX@biallelic.sites[[xx]],pos)
+                    bialpos <- which(bialpos)
+		    outgroup[[count]]             <- XXX@outgroup[[xx]]
+        	    populations[[count]]          <- XXX@populations[[xx]]
+        	    synonymous[[count]]           <- XXX@synonymous[[xx]][bialpos]
+        	    transitions[[count]]          <- XXX@transitions[[xx]][bialpos]
+        	    biallelic.sites[[count]]      <- XXX@biallelic.sites[[xx]][bialpos] 
+		    biallelic.matrix[[count]]     <- get.biallelic.matrix(object,xx)[,bialpos,drop=FALSE] 
+	            n.sites[count]                <- length(pos)  
+                    region.names[count]           <- paste(object@region.names[xx],":",pos[1],"-",pos[length(pos)]) 
+                 }
+		if(subsites =="gene"){
+  		    pos     <- XXX@Gene.matrix[[xx]][yy,1]:XXX@Gene.matrix[[xx]][yy,2]
+                    bialpos <- is.element(XXX@biallelic.sites[[xx]],pos)
+                    bialpos <- which(bialpos)
+		    outgroup[[count]]             <- XXX@outgroup[[xx]]
+        	    populations[[count]]          <- XXX@populations[[xx]]
+        	    synonymous[[count]]           <- XXX@synonymous[[xx]][bialpos]
+        	    transitions[[count]]          <- XXX@transitions[[xx]][bialpos]
+        	    biallelic.sites[[count]]      <- XXX@biallelic.sites[[xx]][bialpos] 
+		    biallelic.matrix[[count]]     <- get.biallelic.matrix(object,xx)[,bialpos,drop=FALSE] 
+	            n.sites[count]                <- length(pos)  
+                    region.names[count]           <- paste(object@region.names[xx],":",pos[1],"-",pos[length(pos)]) 
+                 }
+
+
+
+		count <- count + 1 
+		}
+
+
+
+     ## Progress
+     progr <- progressBar(xx,length(object@region.names), progr)
+     ####
+
+       }
+     
+
+    }
+
+
+######################################################################################
+
+    if(!is.list(positions) & !object@snp.data & can_con){
     
      ### Progress
      progr <- progressBar()
@@ -158,7 +295,7 @@ if(!is.list(positions)){
      }
     }
  
-    if(!is.list(positions) & object@snp.data){
+    if(!is.list(positions) & object@snp.data & can_con){
 
      ### Progress
      progr <- progressBar()
@@ -233,7 +370,7 @@ if(!is.list(positions)){
    
 
 
-   if(is.list(positions) & type==1) {
+   if(is.list(positions) & type==1 & !can_con) {
 
      ### Progress
      progr <- progressBar()
@@ -242,13 +379,15 @@ if(!is.list(positions)){
       for(zz in 1:length(positions)){
 
         bialpos                       <- positions[[zz]]
-        region.names[zz]              <- paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
-        SLIDE.POS[[zz]]               <- bialpos
-        outgroup[[zz]]                <- XXX@outgroup[[1]]
-        populations[[zz]]             <- XXX@populations[[1]]
-        synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
-        transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
-        biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos]  
+        region.names[zz]              <- object@region.names[zz] #paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
+        #SLIDE.POS[[zz]]               <- bialpos
+        
+        outgroup[[zz]]                <- XXX@outgroup[[zz]]
+        populations[[zz]]             <- XXX@populations[[zz]]
+        synonymous[[zz]]              <- XXX@synonymous[[zz]][bialpos]
+        transitions[[zz]]             <- XXX@transitions[[zz]][bialpos]
+        biallelic.sites[[zz]]         <- XXX@biallelic.sites[[zz]][bialpos]  
+	biallelic.matrix[[zz]]        <- get.biallelic.matrix(object,zz) 
 
      ## Progress
      progr <- progressBar(zz,length(positions), progr)
@@ -257,7 +396,7 @@ if(!is.list(positions)){
       }
    }
 
-   if(is.list(positions) & type==2) {
+   if(is.list(positions) & type==2 & !can_con) {
 
 
      ### Progress
@@ -267,17 +406,19 @@ if(!is.list(positions)){
      for(zz in 1:length(positions)){
      
         bialpos                       <- positions[[zz]]
-        bialpos                       <- is.element(XXX@biallelic.sites[[1]],bialpos)
+        bialpos                       <- is.element(XXX@biallelic.sites[[zz]],bialpos)
         bialpos                       <- which(bialpos)
         
-        region.names[zz]              <- paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
-        SLIDE.POS[[zz]]               <- bialpos
-        outgroup[[zz]]                <- XXX@outgroup[[1]]
-        populations[[zz]]             <- XXX@populations[[1]]
-        synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
-        transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
-        biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos] 
-  
+        region.names[zz]              <- object@region.names[zz] #paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
+        #SLIDE.POS[[zz]]               <- bialpos
+        outgroup[[zz]]                <- XXX@outgroup[[zz]]
+        populations[[zz]]             <- XXX@populations[[zz]]
+        synonymous[[zz]]              <- XXX@synonymous[[zz]][bialpos]
+        transitions[[zz]]             <- XXX@transitions[[zz]][bialpos]
+        biallelic.sites[[zz]]         <- XXX@biallelic.sites[[zz]][bialpos] 
+	biallelic.matrix[[zz]]        <- get.biallelic.matrix(object,zz)[,bialpos,drop=FALSE] 
+	n.sites[zz]                   <- length(positions[[zz]])      
+
      ## Progress
      progr <- progressBar(zz,length(positions), progr)
      ####
