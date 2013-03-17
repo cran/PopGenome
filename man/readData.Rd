@@ -50,26 +50,22 @@ function. If there is no gff-file specified, an alignment in the right reading f
 Otherwise the examination of synonymous and nonsynonymous positions is useless. \cr \cr
 
 format: \cr \cr 
-
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
 \code{"MAF"},\code{"MEGA"},\code{"HapMap"},\code{"VCF"}, 
 \code{"VCFhap"} (haploid), \cr
 \code{"RData"} \cr \cr
 
 parallized: \cr \cr
-
 - only works on UNIX, because of the multicore package. \cr
 - will speed up calculation if you use a huge amount of alignments \cr \cr
 
 FAST:   \cr \cr
-
+- will not calculate syn/nonsyn SNPs
 - fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
   and biallelic substitutions \cr
 - can be switched to \code{TRUE} in case of SNP-data without loosing informations                   
 
-
 big.data: \cr \cr
-
 - using the ff-package \cr \cr
 - ff mechanism for biallelic.matrix and gff/gtf information \cr 
 - is done automatically for readVCF or readSNP \cr

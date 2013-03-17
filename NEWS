@@ -1,3 +1,22 @@
+Changes in PopGenome 1.3.0
+==========================
+
+BUGS FIXED:
+
+- 
+
+NEW FEATURES:
+ 
+- new Vignette
+- readMS(..., big.data=TRUE)
+- MS(..., big.data=TRUE)
+- MS_getStats
+- readData(..., progress_bar_switch)
+- get.codons(..., SNP.DATA=TRUE/FALSE)
+- read.big.fasta now much faster.
+- codontable() to define yout own genetic code
+- PopGplot 
+
 Changes in PopGenome 1.2.6
 ==========================
 

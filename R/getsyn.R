@@ -5,9 +5,9 @@ getsyn <- function(matrix){
 if(length(colnames(matrix))==0){colnames(matrix) <- 1:dim(matrix)[2]}
 
 
-    matrixone            <- deletecodongaps(matrix) #### 
+   # matrixone          <- deletecodongaps(matrix) #### changed codonise64
    
-   # matrixone <- matrix
+    matrixone <- matrix
   
 if(length(matrixone)==0){return(list(mono=as.matrix(NaN),syn=as.matrix(NaN),nonsyn=as.matrix(NaN),monoid=NaN,synid=NaN,nonsynid=NaN,Codons=as.list(NaN)))}
 

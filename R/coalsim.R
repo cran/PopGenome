@@ -186,7 +186,7 @@ preserveHaplotypeInfo <- 0
 #------------------------------------------------------------------------------#
 ## This is a convenience function, which is invoked with just an object of class 
 ## testparams, avoiding to pass on every single parameter to coalsim() directly.  
-coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE){
+coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE,big.data){
 	
 	#check validity of arguments
 	if (class(p)[1] != "test.params")
@@ -243,7 +243,7 @@ coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=
 		if ( length(p@seeds) == 0 )		
 			seeds <- NA
 		
-		return(coalsim(p@n.sam, p@n.iter, p@theta, nloci, npop, nsites, obsVal, printtree, fixedSegsites, recombination, geneConv, growth,demography,seeds,migration,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS))
+		return(coalsim(p@n.sam, p@n.iter, p@theta, nloci, npop, nsites, obsVal, printtree, fixedSegsites, recombination, geneConv, growth,demography,seeds,migration,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS,big.data))
 		
 	} else {
 		stop("not enough parameters set to do the simulation")	
@@ -255,7 +255,7 @@ coalsimC <- function(p,detail=FALSE,testNames,numTests,neutrality=FALSE,linkage=
 #------------------------------------------------------------------------------#
 #                            	 coalsim									   #
 #------------------------------------------------------------------------------#
-coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= NA, obsVal = NA,  printtree = 0, fixedSegsites = NA, recombination=NA, geneConv=NA, growth=NA, demography=NA, seeds=NA, migration=NA,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS){
+coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= NA, obsVal = NA,  printtree = 0, fixedSegsites = NA, recombination=NA, geneConv=NA, growth=NA, demography=NA, seeds=NA, migration=NA,detail,testNames,numTests,neutrality,linkage,F_ST,MSMS,big.data){
 
 	# do some error checking/handling prior to any calculation
 	if( !is.numeric(nsam) )
@@ -591,9 +591,12 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 		}
 			
 			
-			
+			    if(!big.data){		
   			    msout <- read.ms.output(file.ms.output="ms.out",MSMS=MSMS_in)
-                            
+                            }
+			    if(big.data){
+			    msout <- read.big.ms.output("ms.out")
+			    }		
 
 			    setwd(old_workspace)	
 
@@ -603,7 +606,14 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
                                 seeds <- NaN	
 				if(msout$segsites[zz]>0){ # wenn segsites da
 
-                                         haplotypes <- msout$gametes[[zz]]  
+					 if(big.data){
+					 open(msout$gametes[[zz]])  
+					 }
+                                         haplotypes <- msout$gametes[[zz]][,] 
+					 if(big.data){
+					 close(msout$gametes[[zz]])  
+					 }						
+					 
 					 positions  <- msout$positions[[zz]]
  					 
 

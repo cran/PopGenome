@@ -84,6 +84,8 @@ c(
 4, 4, 3, 
 4, 4, 4),ncol=3,byrow=3)
 
+Triplets <- rbind(Triplets,c(5,5,5))
+
 return(list(Protein=Protein,Triplets=Triplets))
 
 }

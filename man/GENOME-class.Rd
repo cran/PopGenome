@@ -39,6 +39,7 @@
 \alias{PG_plot.biallelic.matrix}
 
 
+
 \alias{getMS,GENOME-method}
 
 \alias{popFSTN,GENOME-method}

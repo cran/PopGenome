@@ -8,7 +8,7 @@
 
 
 \description{
- This generic function verifies which of the observed biallelic positions are synonymous. 
+ This generic function verifies which of the observed biallelic positions are synonymous.\cr
 }
 
 \usage{
@@ -33,6 +33,10 @@
 returned value is an modified object of class \code{"GENOME"} \cr 
   
   
+}
+
+\note{
+The data have to be read in with a corresponding GFF/GTF file (including the CDS fields !)
 }
 
 \examples{

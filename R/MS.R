@@ -1,5 +1,5 @@
 
-MS <- function(GENO,niter=10,thetaID="user",params=FALSE,detail=FALSE,neutrality=FALSE, linkage = FALSE,F_ST = FALSE, MSMS = FALSE){
+MS <- function(GENO,niter=10,thetaID="user",params=FALSE,detail=FALSE,neutrality=FALSE, linkage = FALSE,F_ST = FALSE, MSMS = FALSE, big.data=FALSE){
 
 
 ## User can define some additional parameters
@@ -271,7 +271,7 @@ if(length(popGetBial(GENO,xx))!=0){
   if(F_ST)      {params@obs.val      <-  getMS(GENO,xx,neutrality=FALSE,linkage=FALSE,F_ST=TRUE)}
   
   ## CALL MS with the parameters
-     locusData         <- c(locusData,coalsimC(params,detail=detail,testNames=testNames,numTests=numTests,neutrality=neutrality,linkage=linkage,F_ST=F_ST,MSMS))   # list of locus DATA
+     locusData         <- c(locusData,coalsimC(params,detail=detail,testNames=testNames,numTests=numTests,neutrality=neutrality,linkage=linkage,F_ST=F_ST,MSMS,big.data))   # list of locus DATA
 
 }else{locusData        <- c(locusData,NA)}  # Wenn überhaupt Segregating Sites existieren
 

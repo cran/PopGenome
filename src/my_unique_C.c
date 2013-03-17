@@ -6,7 +6,7 @@
 
 // SUBFUNCTIONS
 
-inline int in_compare(double *matrix, int row1, int row2, int I1, int J1){
+static inline int in_compare(double *matrix, int row1, int row2, int I1, int J1){
 
 int equal = 1;
 double value1;

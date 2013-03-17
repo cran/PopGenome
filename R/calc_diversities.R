@@ -49,8 +49,9 @@ matrix_hap_sub       <- matrix_hap[unique(unlist(populations)),,drop=FALSE]#### 
 
 
 # uniquematrix       <- unique(matrix_hap_sub)
-duplids              <- .Call("my_unique_C", matrix_hap_sub)
-uniquematrix         <- matrix_hap_sub[!duplids,,drop=FALSE]
+
+duplids             <- .Call("my_unique_C", matrix_hap_sub)
+uniquematrix        <- matrix_hap_sub[!duplids,,drop=FALSE]
 
 nhgesamt             <- dim(uniquematrix)[1]
 sfreqh               <- matrix(0,npops,nhgesamt)

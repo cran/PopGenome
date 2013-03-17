@@ -15,12 +15,13 @@ MS (Hudson, 2002 ) and MSMS (Greg, 2010)
 
 \usage{
 
-readMS(file)
+readMS(file,big.data=FALSE)
 
 }
 
 \arguments{
   \item{file}{the basepath of the MS/MSMS output}
+  \item{big.data}{The ff package is used}
 }
 
 \value{

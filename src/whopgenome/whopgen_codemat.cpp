@@ -457,6 +457,359 @@ EXPORT	SEXP	VCF_readIntoCodeMatrix( SEXP vcfptr, SEXP mat )
 	return RBool::True();
 }//...
 
+EXPORT	SEXP	VCF_readIntoCodeMatrixdiploid( SEXP vcfptr, SEXP mat )
+{
+	// statistics
+	int	nonbialcols=0,
+		bialcols=0;
+
+	//	get vcf
+	//
+	vcff * f = (vcff*)R_GetExtPtr( vcfptr , "VCFhandle" );
+	if( 0 == f )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: Parameter 1 is not a VCFhandle EXTPTR!\n");
+		return RBool::False();
+	}
+
+	//
+	//
+	unsigned int	samplefieldindex = f->getFirstSampleFieldIndex();
+	if( samplefieldindex <= FORMAT )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: VCF does not appear to have a FORMAT field!\n");
+		return RBool::False();
+	}
+	
+	//
+	//
+	RMatrix m(mat);
+	if( false == m.isValid() )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: Parameter 2 not an integer matrix!\n");
+		return RBool::False();
+	}
+	
+	//	biallelic matrices are integer-typed
+	//		save 4 bytes per entry over standard 'double' datatype
+	//
+	if( m.getType() != INTSXP )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: Parameter 2 not an integer matrix!\n");
+		return RBool::False();
+	}
+	
+	//	enough rows in matrix for all samples ?
+	//
+	if( f->num_wanted_samples < 1 )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: No samples selected!\n");
+		return RBool::False();
+	}
+
+	//
+	//
+	unsigned int	nrow = m.numRows();
+	if( f->num_wanted_samples > (unsigned)nrow )
+	{
+		Rprintf("VCF_readIntoCodeMatrix :: %d samples selected but matrix offers only rows for %d samples!\n",f->num_wanted_samples,nrow);
+		return RBool::False();
+	}
+
+	//
+	//
+	SEXP colnamvec = m.getColNames();
+	if( R_NilValue == colnamvec )
+	{
+		Rprintf("WhopGenome::VCF_readIntoCodeMatrix : WARNING : matrix has no column names vector! Cannot set SNP positions in matrix!\n");
+		return RBool::False();
+	}
+
+	//-
+	//-
+	//-		parse VCF and fill biallelic matrix
+	//-
+	//-
+	//-
+
+	unsigned int	ncol = m.numCols();
+	int*		 	ptr = m.getIntPtr();
+	
+	//
+	char			*fieldptr=0;
+	unsigned int	per_column = 0;		//vars here to find out what to clear
+	unsigned int	per_row = 0;		//	when too little data exists
+	
+	unsigned int	column_stepsize = nrow;
+	
+	int				snppos=-1;//unused
+	SEXP			minus1_char = mkChar("-1");
+	
+//	df1("ncol=%d, nrow=%d, wanted=%d\n",ncol,nrow,f->num_wanted_samples);
+
+	//
+	//
+	for( ; per_column < ncol ; per_column ++ )
+	{
+		//-
+		//
+		//	Get a valid biallelic SNP line from the file
+		//
+		//-
+
+		const char* refptr;
+		const char* altptr;
+		bool	bLineParsed = f->parseNextLine();
+		//
+		while( bLineParsed )
+		{
+
+			//
+			//	- make sure its a bi-allelic SNP line
+			//
+			refptr = (char*)f->getFieldPtr( REF );
+			altptr = (char*)f->getFieldPtr( ALT );
+			if( refptr && refptr[1] == '\t' )	
+			{
+				if( altptr && altptr[1] == '\t' )
+				{
+					break;
+				}
+				//else
+				//{
+				//	//df1("Not a biallelic SNP! (REF=%9s)\n",refptr);
+				//}
+			}
+			//else
+			//{
+			//	//df1("Not a SNP! (REF=%2s)\n",refptr);
+			//}
+
+			
+			//	try next line
+			//
+			bLineParsed = f->parseNextLine();
+
+		}//while( could read another line from VCF )
+		
+		//	if could not read another line from VCT, exit with error
+		//
+		if( bLineParsed == false )
+		{
+			//df1("No more lines!\n");
+			break;
+		}
+
+		//--------------
+		//
+		//	POSTCONDITION : got a line from VCF and it is a valid SNP
+		//
+		//--------------
+
+		//
+		fieldptr = (char*)f->getFieldPtr( POS );
+		if( fieldptr )
+		{
+			snppos = atoi( fieldptr );
+			if( snppos == 0 )
+			{
+				df1("VCF_readIntoCodeMatrix :: SNPpos=%d\n",snppos);
+			}
+		}
+
+		//-
+		//
+		//	Identify the GT-colon-field used in the per-individual fields
+		//
+		//-
+
+		//
+		//	- decompose FORMAT field
+		//		OPT: skip buffer-copying it
+		//		? what to do if missing ??
+		//	- find GT in FORMAT
+		//		! break with error if not found!
+		//	- memorise field-pos of GT
+		//
+		fieldptr = (char*)f->getFieldPtr( FORMAT );
+		int GTidx=0;
+		int i=0;
+		for( ; fieldptr[i]!=0 && fieldptr[i]!='\t';i++ )
+		{
+			if( (fieldptr[i]=='G') && (fieldptr[i+1]=='T') && (fieldptr[i+2]==':'||fieldptr[i+2]=='\t'||fieldptr[i+2]==0) )
+				break;
+			if( fieldptr[i]==':' )
+				GTidx++;
+		}
+
+		//
+		if( fieldptr[i]==0 || fieldptr[i]=='\t' )
+		{
+			df0("VCF_readIntoCodeMatrix :: NO GT FIELD DEFINED!\n");
+			return RBool::False();
+		}
+
+		//--------------
+		//
+		//	POSTCONDITIONS :
+		//		- got a line from VCF and it is a valid SNP
+		//		- successfully identified the GT subfield
+		//
+		//--------------
+
+
+		//-
+		//
+		//	for each selected individual, get the SNP genotype information
+		//		and store a 0 or 1 in the biallelic matrix
+		//
+		//-
+
+		bool	bHadRef = false,
+				bHadAlt = false;
+		
+		//
+		for( per_row = 0; per_row < f->num_wanted_samples ; per_row ++ )
+		{
+			
+			//	- get field of sample
+			//
+			fieldptr = (char*)f->getFieldPtr( f->wanted_samples[per_row] );
+			
+			//
+			if( fieldptr == 0 )
+			{
+				Rprintf("VCF_readIntoCodeMatrix ::  Problem with reading sample's data!\n");
+				Rprintf("	debug info : per_row =%d\nwanted_sample[per_row]=%d\n",per_row, f->wanted_samples[per_row] );
+				Rprintf("	baseindex=%d, field = %d\n",samplefieldindex, (samplefieldindex + f->wanted_samples[per_row]) );
+				Rprintf("	numparsedfields=%d\n",f->numParsedFields());
+				return RBool::False();
+			}
+
+			//	- find the GT subfield (skip ':' until found)
+			//
+			while( GTidx > 0 )
+			{
+				if( fieldptr[0] == ':' )
+					GTidx--;
+				fieldptr++;
+			}
+			
+			//
+			//	- parse the GT subfield ( regexp: [0-9]+[/|][0-9]+ )
+			//
+			int left_allele = fieldptr[0] - '0';
+			int right_allele = fieldptr[2] - '0';
+			//assert( left_allele >= 0 && left_allele <= 9 )
+			//assert( right_allele >= 0 && right_allele <= 9 )
+			
+			//
+			if( (fieldptr[1] != '|' && fieldptr[1] != '/') || (fieldptr[3] != '\t' && fieldptr[3] != ':') )
+			{
+				df0("VCF_readIntoCodeMatrix :: Malformed GT field!\n");
+				return RBool::False();
+			}
+
+			// any chromosome has alt allele -> result is alt allele
+			//
+			///char	actual_nucleotide;
+			// diploid
+			if( ((left_allele==1)||(right_allele==1)) )
+			{
+				bHadAlt=true;
+				//ptr[per_row] = nucleotide_mapping[(unsigned)*altptr];
+				if((left_allele==1) && (right_allele==0)){
+				ptr[per_row] =	10*nucleotide_mapping[(unsigned)*altptr]+nucleotide_mapping[(unsigned)*refptr];
+				}
+				if((left_allele==0) && (right_allele==1)){
+				ptr[per_row] =	10*nucleotide_mapping[(unsigned)*refptr]+nucleotide_mapping[(unsigned)*altptr];
+				}
+				if((left_allele==1) && (right_allele==1)){
+				ptr[per_row] =	10*nucleotide_mapping[(unsigned)*altptr]+nucleotide_mapping[(unsigned)*altptr];
+				}
+
+			}
+			else
+			{
+				bHadRef=true;
+				//ptr[per_row] = nucleotide_mapping[(unsigned)*refptr];
+				ptr[per_row]   = 10*nucleotide_mapping[(unsigned)*refptr]+nucleotide_mapping[(unsigned)*refptr];
+			}
+
+			//
+		}
+		
+		//
+		//	clear any unused matrix rows
+		//
+		if( (bHadRef&&bHadAlt) )
+		{
+			
+			//
+			for( ; per_row < nrow ; per_row ++ )
+			{
+				ptr[per_row] = 77;
+			}
+			
+			//
+			ptr += column_stepsize;
+			
+			bialcols++;
+			
+			
+			//	Set Column Names = SNP Positions
+			//
+			if( R_NilValue != colnamvec )
+			{
+				char posbuffer[256];
+				snprintf(posbuffer,sizeof(posbuffer)-2,"%d",snppos);
+				SET_STRING_ELT( colnamvec, per_column, mkChar(posbuffer) );
+			}
+		
+			//FIXME any rows beyond the ones we need : zero them out here
+			//	or as a separate step after this double for-loop
+		}
+		//
+		//	if the last VCF-line's individuals did not provide both alleles
+		//		reuse current column and try the next line
+		//
+		else
+		{			
+			//
+			per_column--;
+			nonbialcols++;
+		}
+
+	}//...for( each column in the matrix )
+	
+	//	Reset/clear unused columns
+	//
+	for( unsigned int rcol = per_column; rcol < ncol; rcol ++ )
+	{
+		//
+		for( unsigned int per_row=0; per_row < nrow ; per_row ++ )
+		{
+			ptr[per_row] = 77;
+		}
+		ptr += column_stepsize;
+			
+		//	Clear column name
+		//
+		if( R_NilValue != colnamvec )
+		{
+			SET_STRING_ELT( colnamvec, rcol, minus1_char );
+		}
+	}
+	
+	//	print some statistics
+	//
+	df1("VCF_readIntoCodeMatrix ::\n\t%d nonbial columns\n",nonbialcols);
+	df1("\t%d bial columns\n",bialcols);
+	df1("\t%d total columns\n",bialcols+nonbialcols);
+	
+	//
+	return RBool::True();
+}//...
 
 
 

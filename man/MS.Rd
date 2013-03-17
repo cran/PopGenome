@@ -14,7 +14,7 @@
 \usage{
 
 MS(GENO,niter=10,thetaID="user",params=FALSE,detail=FALSE,
-neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE)
+neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE,big.data=FALSE)
 
 }
 
@@ -29,6 +29,7 @@ neutrality=FALSE,linkage=FALSE,F_ST=FALSE,MSMS=FALSE)
   \item{params}{an object of class \code{"test.params"}. see \code{?test.params}}
   \item{detail}{detail statistics. Note:slower! default=\code{FALSE}}
   \item{MSMS}{specify parameter for MSMS simulation with selection (has to be specified as a string)}
+  \item{big.data}{if \code{TRUE} the ff-package is used}
 
 }
 

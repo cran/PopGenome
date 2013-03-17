@@ -38,6 +38,7 @@ exportMethods(get.codons)
 exportMethods(get.individuals)
 exportMethods(PG_plot.biallelic.matrix)
 
+
 export(create.PopGenome.method)
 export(concatenate.regions)
 export(concatenate.classes)
@@ -52,6 +53,8 @@ export(readVCF)
 export(save.session)
 export(load.session)
 export(readMS)
-
+export(MS_getStats)
+export(codontable)
+export(PopGplot)
 
 export(MS)

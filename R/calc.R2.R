@@ -101,7 +101,7 @@ if(subsites=="gene" & length(bial!=0)){
    
        if((lower.bound!=0) | (upper.bound !=1)){
         # Get the frequencies
-        freq <- jointfreqdist(bial,list(unlist(populations)) ) 
+        freq <- jointfreqdist(bial,list(unlist(populations))) 
 	freq <- freq$jfd        	
         sub       <- (freq >= lower.bound) & (freq <=upper.bound)
         bial      <- bial[,sub,drop=FALSE]

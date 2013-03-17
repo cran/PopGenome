@@ -1,5 +1,5 @@
 
-readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE )
+readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE, approx=TRUE)
 {
 
 frompos <- as.integer(frompos)
@@ -124,6 +124,11 @@ gffpath <- "GFFRObjects"
 	#
 #	mm <- matrix( nrow=12,ncol=10,data="-", dimnames=list(sl,rep("x",10)) )
 	mi <- matrix( nrow=length(schnittmengesamples),ncol=numcols,data=as.integer(0), dimnames=list(schnittmengesamples,rep("x",numcols)) )
+	if(approx==FALSE){
+	# save names for diploid data
+	dottwo    <- paste(schnittmengesamples,".2", sep="") 
+  	diplNAMES <- as.vector(rbind(schnittmengesamples,dottwo)) 
+	}
 
 	#
 	#
@@ -134,9 +139,13 @@ gffpath <- "GFFRObjects"
 	#
 	while( numusedcols == numcols )
 	{
+ 
 		#
+		if(approx){
 		.Call("VCF_readIntoCodeMatrix",v,mi)
-		
+		}else{
+		.Call("VCF_readIntoCodeMatrixdiploid",v,mi)
+		}
 		#
 		setcols     <- as.integer( colnames(mi) ) > 0
 		numusedcols <- sum(setcols)
@@ -162,7 +171,17 @@ gffpath <- "GFFRObjects"
 		#print(cn[1])
 		#print(cn[numusedcols])
 		#print(mi)
+		if(approx){
 		o_b_j_sub  <- list(matrix=mi,reference=NaN, positions=cn)
+                }else{
+		diplmi     <- mi
+		# modify matrix
+		diplmi     <- matrix(as.character(diplmi),nrow=dim(diplmi)[1],ncol=dim(diplmi)[2]) #apply(diplmi,2,as.character)
+		diplmi     <- apply(diplmi,2,function(x){as.numeric(sapply(strsplit(x,split=""),rbind))})
+                rownames(diplmi) <- diplNAMES		
+		o_b_j_sub  <- list(matrix=diplmi,reference=NaN, positions=cn)
+                }
+
 		save( file = fullfilename , o_b_j_sub  )
 
                 if(GFF){

@@ -13,7 +13,7 @@
 \usage{
 
 readVCF(filename, numcols, tid, frompos, topos,
-        samplenames=NA, gffpath = FALSE, include.unknown=FALSE )
+        samplenames=NA, gffpath = FALSE, include.unknown=FALSE,approx=TRUE)
 
 }
 
@@ -27,18 +27,25 @@ readVCF(filename, numcols, tid, frompos, topos,
   \item{samplenames}{a vector of individuals}
   \item{gffpath}{the corresponding GFF-file}
   \item{include.unknown}{including unknown positions}
+  \item{approx}{see details !}
 }
 
 \details{
-
+The readVCF function expects a tabixed VCF with a diploid GT-field. \cr
+In case of haploid data, the GT-field have to be transformed to a pseudo \cr
+diploid field like (0 -> 0|0). An alternative is readData(..., format="VCFhap") \cr
+which can read non-tabixed haploid VCFs directly. \cr 
+When \code{approx=TRUE} the algorithm will apply a logical OR to the GT-field.\cr
+(0|0=0,1|0=1,0|1=1,1|1=1). Note, this is only an approximation for diploid data and will \cr 
+speed up calculations. For haploid data \code{approx} should be switched to \code{TRUE}. \cr  
+If \code{approx=FALSE} the full diploid information will be considered.\cr
 The ff-package we use to store the SNP informations is limited by \cr
 individuals * (number of SNPs) <= .Machine$integer.max \cr
-Otherwise the bigmemory package will be applied. (slower) \cr
+In case of really huge data sets the bigmemory package will be used. (slower) \cr
 Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr 
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
-to get the individual names. \cr
-See also readData(..., format="VCF") !
-
+to get and define the individuals which should be considered in the analysis. \cr
+See also readData(..., format="VCF") ! \cr
 }
 
 \value{

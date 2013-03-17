@@ -6,9 +6,15 @@ FAST=FALSE,big.data=FALSE,SNP.DATA=FALSE){
 ## CHECK INPUT
 if(!file.exists(path)){stop("Cannot find path !")}
 if(!file.info(path)[2]){stop("Put your file/files in a folder !")}
-if(format=="HapMap"){SNP.DATA=TRUE}
-if(format=="VCF")   {SNP.DATA=TRUE}
-if(format=="VCFhap"){SNP.DATA=TRUE}
+
+if(gffpath[1]!=FALSE){
+	if(!file.exists(gffpath)){stop("Cannot find gff path !")}
+	if(!file.info(gffpath)[2]){stop("Put your file/files in a folder ! (GFF)")}
+}
+
+if(format=="HapMap"){SNP.DATA=TRUE;FAST=TRUE}
+if(format=="VCF")   {SNP.DATA=TRUE;FAST=TRUE}
+if(format=="VCFhap"){SNP.DATA=TRUE;FAST=TRUE}
 
 # Parallized version of readData
 
@@ -343,7 +349,7 @@ else{poppairs <- 1;nn <- "pop1"}
 
 
 ## PROGRESS #########################
-if(progress_bar_switch){ ### wegen parallized 
+if(progress_bar_switch){ ### because of parallized 
    progr <- progressBar()
 }
 #####################################
@@ -355,6 +361,10 @@ if(progress_bar_switch){ ### wegen parallized
 
  for(xx in 1:sizeliste){ # 
       
+    if(!progress_bar_switch){
+	print(liste[xx])
+    }	
+
     CCC <- try(PopGenread(liste[xx],format),silent=TRUE) 
     if(is.na(CCC$matrix[1])){next}
 

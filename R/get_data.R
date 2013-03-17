@@ -423,7 +423,7 @@ if(!SNP.DATA){
   if(x%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
  } 
 
-  matrix_codonpos <- unique(matrix_codonpos)
+ # matrix_codonpos <- unique(matrix_codonpos) important change !
   
  
  if(matrix_codonpos[length(matrix_codonpos)]>dim(matr)[2]){
@@ -489,7 +489,7 @@ if(size>0 & !SNP.DATA){  # wenn SNPS in den codierenden regionen existieren
   if(x%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
  } 
  
-  matrix_codonpos <- unique(matrix_codonpos)
+  # matrix_codonpos <-  unique(matrix_codonpos) IMPORTANT ! CHECK !
    
  if(matrix_codonpos[length(matrix_codonpos)]>dim(matr)[2]){
     ende            <- length(matrix_codonpos)-3

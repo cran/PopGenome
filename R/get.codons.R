@@ -1,11 +1,81 @@
 # ------------------------------------------------------------
 # get Codon Informations 
 # ------------------------------------------------------------
-setGeneric("get.codons", function(object, regionID, reading.start.pos, ref.chr) standardGeneric("get.codons"))
+setGeneric("get.codons", function(object, regionID, reading.start.pos, ref.chr, SNP.DATA=FALSE) standardGeneric("get.codons"))
  setMethod("get.codons", "GENOME",
- function(object, regionID, reading.start.pos, ref.chr){
+ function(object, regionID, reading.start.pos, ref.chr, SNP.DATA){
+
+if(!SNP.DATA){
+CodonInfo <- codontable()
+Triplets  <- CodonInfo$Triplets
+Protein   <- CodonInfo$Protein
+
+# Generate polarity Codon Vector
+POLARITY <- character(64)
+POLARITY[c(1:4,11,17:24,33:44,49:52)] <- "nonpolar"
+POLARITY[c(5:10,13:14,53:58,61:62)]   <- "polar"
+POLARITY[c(12,15:16)]                 <- "stop codon"
+POLARITY[c(25:32,59:60,63:64)]        <- "basic"
+POLARITY[45:48]                       <- "acidic"
+# --------------------------------
+
+# Get the codons from the GENOME slot
+minor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[1])}) # FIXME really minor ? done 
+mayor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[2])}) # FIXME really mayor ? done
+
+# ReCheck minor/mayor Codons
+minor.alleles <- object@region.data@minor.alleles[[regionID]]
+subst         <- object@region.data@biallelic.substitutions[[regionID]]
+
+for (xx in 1:length(minor)){
+
+	if(minor.alleles[xx]==subst[2,xx]){
+        minor[xx] <- mayor[xx]
+	mayor[xx] <- minor[xx]
+	}
+
+}
+
+# Create Polarity
+ALTPOL <- POLARITY[minor]
+REFPOL <- POLARITY[mayor]
 
 
+# Get Triplets
+ALT    <- Triplets[minor, ,drop=FALSE]
+REF    <- Triplets[mayor, ,drop=FALSE]
+
+# Character Codons
+MATCHNUCS <- c("T","C","G","A","N")
+NucALT    <- matrix(MATCHNUCS[ALT], ncol=3) 
+NucREF    <- matrix(MATCHNUCS[REF], ncol=3) 
+NucALT    <- apply(NucALT,1,function(x){paste(x,collapse="")})
+NucREF    <- apply(NucREF,1,function(x){paste(x,collapse="")})
+
+# Create Protein Vector 
+ALT     <- Protein[1,minor]
+REF     <- Protein[1,mayor]
+
+# Get coding SNP positions
+codeids  <- which(!is.na(object@region.data@synonymous[[regionID]]))
+
+# create syn/nonsyn vector
+erg      <- as.logical(object@region.data@synonymous[[regionID]][codeids])
+
+
+# Biallelic Positions
+bial.pos <- object@region.data@biallelic.sites[[regionID]][codeids]
+
+# Collect information and store in data.frame 
+XX    <- c("Position","Codons (major)","Codons (minor)","Protein (major)","Protein (minor)","synonymous", "Polarity (major)","Polarity (minor)")
+DATA  <- data.frame(bial.pos,NucALT, NucREF, ALT, REF, as.logical(erg), ALTPOL, REFPOL)
+colnames(DATA) <- XX
+
+return(DATA)
+
+}
+
+if(SNP.DATA){
 CodonInfo <- codontable()
 Triplets  <- CodonInfo$Triplets
 Protein   <- CodonInfo$Protein
@@ -87,5 +157,6 @@ DATA  <- data.frame(bial.pos,NucALT, NucREF, ALT, REF, as.logical(erg), ALTPOL, 
 colnames(DATA) <- XX
 
 return(DATA)
+}# END of if SNP.DATA
 
 })
