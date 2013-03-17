@@ -40,6 +40,8 @@ individuals * (number of SNPs) <= .Machine$integer.max \cr
 The text files containing the SNP information of each individual have to be stored in one folder. \cr
 The slots \code{transitions}, \code{biallelic.sites}, and \code{biallelic.substitutions} of the class \cr
 \code{"regions.data"} will be filled. \cr
+At this time, if a GFF/GTF is used the data should be organized in a way that \cr
+the "CHR" is a numerical value. The prefix "Chr" or "chr" is also supported.
 }
 
 \value{

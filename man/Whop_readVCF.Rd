@@ -45,6 +45,8 @@ individuals * (number of SNPs) <= .Machine$integer.max \cr
 In case of very large data sets, the bigmemory package will be used. \cr
 This may slow down calculations. \cr
 See also readData(..., format="VCF") ! \cr
+At this time, if a GFF/GTF is used the data should be organized in a way that \cr
+the "tid" is a numerical value. The prefix "Chr" or "chr" is also supported.
 }
 
 \value{

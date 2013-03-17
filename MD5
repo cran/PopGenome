@@ -1,6 +1,6 @@
-a5360606009ed972ff46bea2d9b91c0a *DESCRIPTION
+994b049a492b0a9a238386c0b0c5e610 *DESCRIPTION
 06335707827fdd59cc7f7a94408572c1 *NAMESPACE
-6530d11f0b847628a1a6f2328d9eb6e9 *NEWS
+7d8806a620b8ef8827e7a683899309de *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -9,7 +9,7 @@ a2d553dbe3add2009e53547cc969b7e5 *R/DsDn.R
 a5bf08f673d22d412b6455464b3c45eb *R/DsPsDnPn.R
 743a4a63a823a89416b8905133b09ee8 *R/Ewens_Watt.R
 9adaf760728ce160d31f9c51e8a5413a *R/GEN.R
-365e5763312a3b045d324fcbd693d4e0 *R/GENOME.R
+516dd7a194641d9a2fa93512767be395 *R/GENOME.R
 ee22716333ef161342134860e72039ea *R/LOAD.R
 6c54d7c8a33b31fb1e0bb56db3ee3671 *R/MK.R
 75d41ad45c56fdf2be2609b60536fb08 *R/MS.R
@@ -87,7 +87,7 @@ f42e7239d5c79f48933a346d2aac2691 *R/my_unique.R
 a9f24d2dae87e1f616bc1458d358a4c9 *R/pair_linkdisequ.R
 753bfafe971c35cb17ab37cb1479bfe6 *R/pair_linkdisequ_FAST.R
 22e62499d21a3ed10ff47925916fa6ca *R/parse_HapMap.R
-4c12df3ab50da840fe2be48f64d15408 *R/parse_gff.R
+acbb78a23667e7d43194caef3293be48 *R/parse_gff.R
 cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 6712336a405b501d229375346fc29054 *R/plot_cs.R
 15074c1142781a49df107401c1109d1b *R/polymorph.R
@@ -97,7 +97,7 @@ cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 4dc91a7811c362fc51884aeba5e59716 *R/read.big.fasta.R
 532457520d96727970d531a61f1192c4 *R/read.big.ms.output.R
 78382dde23fe3135604b17dbb7296f85 *R/read.ms.output.R
-0034ec54aaf9461c0dbbb2540a5124fd *R/readData.R
+d52cdfc24b8fc1d404198ffa3e38e4f5 *R/readData.R
 75f14e68f9b5694c16f4d10fd8761964 *R/readHapMap.R
 63180d8824f849178ed55e5ccee2228d *R/readMS.R
 b75d3b7d3058fccfa2a13c0eebaf58ac *R/readSNP.R
@@ -131,10 +131,10 @@ c4f74b26105aca59178c66f5618b4813 *data/fasta_file.txt.gz
 0b53db78131cc26aeaef426c3b47799f *data/gff_file.txt.gz
 a0656cc271cfd6c2095c005c74c73602 *data/snp_file.txt.gz
 c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
-6863bdc52e055bc8a67bbfdc17642c23 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-5281916bb0dd7c202bf41736f6861ea1 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+2ef3d8943f1a24e4b5fbee1804936505 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
+aeb5215ad7d0e516ebb5bda3938d8727 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 462d9efa03b0cfa2944edec554710773 *inst/doc/Integration_of_new_Methods.Rnw
-9984529122459f900f203bda17c3afb8 *inst/doc/Integration_of_new_Methods.pdf
+ab4338b19288efd078e446243f84526d *inst/doc/Integration_of_new_Methods.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 0f7995d2ee3f85fcdae7cbed74355f22 *man/F_ST.stats-methods.Rd
@@ -146,7 +146,7 @@ ee146c4b6326e746b998b0949eb4804f *man/MS_getStats.Rd
 05d7f7ea6b83e49faf410780681b5f09 *man/PG_plot.biallelic.matrix.Rd
 c4ae4c45b7d7537739ef78129f5c318c *man/PopGenome.Rd
 7f2fa306198101bea67d20de7a3be93c *man/PopGplot.Rd
-0c7e1c16e183046be2a9758b01ef3554 *man/Whop_readVCF.Rd
+b8cff73c43f03011a2566c1c4b8694ad *man/Whop_readVCF.Rd
 bdbbab2d669a79a3939e85a94657671d *man/calc.R2-methods.Rd
 d50522646a4a090d3e054bc37f2d8e10 *man/codontable.Rd
 2f6c2012cb04d15e0b2461b1a6a4c946 *man/concatenate.classes.Rd
@@ -167,11 +167,11 @@ a7d36c8d0149e8723fe79f92ef58534d *man/get_gff_info.Rd
 4024df51ec9d167ad060411d04b5b155 *man/mult.linkage.stats.Rd
 7542b42397fc343a107f23ff96d3f3a6 *man/neutrality.stats-methods.Rd
 b9291ef49ba370104dd79f4f1f20db5f *man/read.big.fasta.Rd
-3a4dd97a9d98c5853d2a4f629f84da7f *man/readData.Rd
+36ba5b00744033ced22ccf4e74a6f630 *man/readData.Rd
 274b9aedea8b73bb3f7648effd8954de *man/readHapMap.Rd
 d4c8d9df54f48fe873fa08dfb3bc5ce1 *man/readMS.Rd
-e0c432fe90312af63ed47c5aa6c6d784 *man/readSNP.Rd
-12a86f85308ef2f23cf6def8e0cfb098 *man/readVCF.Rd
+8d089f1035efd782e4754fea9e099d95 *man/readSNP.Rd
+e77de01094ef85ed6715b4c939924c5f *man/readVCF.Rd
 729b9ca78dd7b7dabbf09d65ae320182 *man/recomb.stats-methods.Rd
 06e45d751921660290fd31c8a8abc452 *man/region.as.fasta.Rd
 fc76b3b2e1741b7caff944d8ffe76433 *man/save.session.Rd
@@ -252,7 +252,6 @@ d43ff8593c4195ca2843c505c29e172b *src/whopgenome/whopgen_samples.cpp
 7703ed3c7b19ddfa03eb339a21153ecb *src/whopgenome/whoptbi_main.cpp
 9f269625102fc82ee35f51ce7a899c5f *src/whopgenome/whoptbi_read.cpp
 f99ec144d86b11c5c2fb3dc89ed483e1 *src/whopgenome/whoptbi_region.cpp
-fc373dfaeed74c9a8b326eec43885ad5 *src/zlib.h
 ae3bbb54820e1d49fb90cbba222e973f *src/zlib/adler32.c
 6a0331bd872c8053af4bfa357fbd5415 *src/zlib/compress.c
 1339c92938d2594a6eecfa21c374d1b6 *src/zlib/crc32.c
@@ -279,7 +278,7 @@ e62eee8757fecfc2cfbf2dda8956097e *src/zlib/uncompr.c
 e641130196e5448aa64a116181c459c7 *src/zlib/zlib.h
 e254a40578ee9bf35e7d7184cc658fb6 *src/zlib/zutil.c
 0b31d0c893d2f609cf5d5833e3c0b21f *src/zlib/zutil.h
-6863bdc52e055bc8a67bbfdc17642c23 *vignettes/An_introduction_to_the_PopGenome_package.Rnw
+2ef3d8943f1a24e4b5fbee1804936505 *vignettes/An_introduction_to_the_PopGenome_package.Rnw
 462d9efa03b0cfa2944edec554710773 *vignettes/Integration_of_new_Methods.Rnw
 7bb8bbd9ae15812a54725bb1965e4463 *vignettes/PopGenome_classes.pdf
 19635b1369b3545f9ca2b2bee07e7e1f *vignettes/XXX.pdf

@@ -2491,8 +2491,8 @@ else{stop("You have to define more than one population to calculate the MK Test"
   
    
   # INIT
-  MKmulti  <- vector("list",length(region.names))
-  MKTWO    <- matrix(,length(region.names),6)
+  MKmulti  <- vector("list",n.region.names)
+  MKTWO    <- matrix(,n.region.names,6)
   # Pn/Ps/Dn/Ds
  
   # Names
@@ -2542,7 +2542,8 @@ for(xx in 1:n.region.names){
     
     res <- apply(pairs,2,function(pop){
            
-           segsites  <- get_segsites(bial,populations)
+           #segsites  <- get_segsites(bial,populations)
+	   segsites   <- get_segsites(bial,list(populations[[pop[1]]],populations[[pop[2]]]))
 
            if( length(segsites[[1]])!=0 ){
            pop1mono  <- bialcount[-segsites[[1]]]

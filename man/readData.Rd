@@ -34,7 +34,7 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
   \item{outgroup}{vector of outgroup sequences}
   \item{include.unknown}{if positions with unknown nucleotides should be considered.}
   \item{populations}{list of populations. default:\code{FALSE}}
-  \item{gffpath}{the basepath of the corresponding GFF-files. default:\code{FALSE}}
+  \item{gffpath}{the basepath (folder) of the corresponding GFF-files. default:\code{FALSE}}
   \item{format}{data formats. \code{"fasta"} is default. See details !}
   \item{parallized}{parallel processing to accelerate the reading process. See details !}
   \item{progress_bar_switch}{progress_bar}
@@ -46,9 +46,12 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
 
 \details{
 All data (alignments or SNP-files) has to be stored in one folder. The folder is the input of this \cr 
-function. If no GFF file is specified, an alignment in the correct reading frame \cr
-(starting at a first codon position) is expected. \cr
+function. If no GFF file (which also have to be stored in a folder) is specified, an alignment in \cr
+the correct reading frame (starting at a first codon position) is expected. \cr
 Otherwise synonymous and non-synonymous positions are not identified correctly. \cr \cr
+Note: \cr 
+The GFF-files have to be EXACTLY the same names (without any extensions like .fas or .gff) \cr 
+as the files storing the nucleotide data to ensure correct matching \cr \cr
 
 format: \cr 
 \code{"fasta"},\code{"nexus"},\code{"phylip"}, \cr
@@ -61,7 +64,7 @@ parallized: \cr
 - will speed up calculations if you use a very large amount of alignments \cr \cr
 
 FAST:   \cr 
-- will not classify synonymous/non-synonymous SNPs
+- will not classify synonymous/non-synonymous SNPs directly
 - fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
   and biallelic substitutions \cr
 - can be switched to \code{TRUE} in case of SNP data without loss of information \cr \cr                  

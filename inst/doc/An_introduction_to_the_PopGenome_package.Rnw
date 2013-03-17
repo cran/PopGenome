@@ -236,7 +236,8 @@ the corresponding GFF-file.} \\
 
 \section{Reading data with GFF/GTF information}
 \textcolor{blue}{The GFF folder contains GFF-files for each alignment stored 
-in the FASTA folder. The GFF files should have the same names as the corresponding FASTA files (in this example: \textit{4CL1tl.gff, C4Htl.gff and CADtl.gff}) to ensure that sequence and annotation are matched correctly.}
+in the FASTA folder. The GFF files should have the same names (without any extensions like .fas or .gff) 
+as the corresponding FASTA files (in this example: \textit{4CL1tl, C4Htl and CADtl}) to ensure that sequence and annotation are matched correctly.}
 \begin{Schunk}
 \begin{Sinput}
 > GENOME.class <- readData("FASTA",gffpath="GFF")

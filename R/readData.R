@@ -16,6 +16,8 @@ if(format=="HapMap"){SNP.DATA=TRUE;FAST=TRUE}
 if(format=="VCF")   {SNP.DATA=TRUE;FAST=TRUE}
 if(format=="VCFhap"){SNP.DATA=TRUE;FAST=TRUE}
 
+if(SNP.DATA){big.data=TRUE}
+
 # Parallized version of readData
 
 if(parallized){
@@ -216,6 +218,9 @@ methods <- "DATA"
     # print(liste3)             
     #treffer      <- match(gff_liste3,liste3)
     treffer       <- match(liste3,gff_liste3)
+    #print(liste3)
+    #print(gff_liste3)
+	
     #print("------------")
     #print(treffer)
     gff_liste    <- gff_liste[treffer]

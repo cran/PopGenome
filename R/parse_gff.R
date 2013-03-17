@@ -146,6 +146,14 @@ gffRead <- function(gffFile, nrows = -1) {
      #cat("found", nrow(gff), "rows with classes:",
          #paste(sapply(gff, class), collapse=", "), "\n")
      stopifnot(!any(is.na(gff$start)), !any(is.na(gff$end)))
+
+# Sort the GFF- file -------
+POS        <- gff[,4]
+names(POS) <- 1:length(POS)
+POS        <- sort(POS)
+ids        <- as.numeric(names(POS))
+gff        <- gff[ids,,drop=FALSE]
+
      return(gff)
 }
 

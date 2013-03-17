@@ -47,6 +47,8 @@ Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
 to get and define the individuals which should be considered in the analysis. \cr
 See also readData(..., format="VCF") ! \cr
+At this time, if a GFF/GTF is used the data should be organized in a way that \cr
+the "tid" is a numerical value. The prefix "Chr" or "chr" is also supported.
 }
 
 \value{
