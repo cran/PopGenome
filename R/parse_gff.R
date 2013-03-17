@@ -105,7 +105,7 @@ if(length(GLOBAL.GFF$GFF)!=0){
   rev.strand <- vector(,length(Coding_ids))
   rev.strand[tab[Coding_ids,7]=="-"] <- TRUE
   rev.strand <- ff(rev.strand)
- }
+ }else{rev.strand <- NULL}
  
 
 return(list(Coding=Coding,Intron=Intron,UTR=UTR,Exon=Exon,Gene=Gene,reading.frame= READ,rev.strand=rev.strand))

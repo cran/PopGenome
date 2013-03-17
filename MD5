@@ -1,6 +1,6 @@
-019498cd586380ad8be138b561fe0f38 *DESCRIPTION
+fe881553afdf44d88b0d88d1d7094890 *DESCRIPTION
 06335707827fdd59cc7f7a94408572c1 *NAMESPACE
-75bc814c1af21c5685ea8e8cf803f86a *NEWS
+2101dc3542ed1c4e833a987ddee531a6 *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -19,7 +19,7 @@ f8c2b2b87ac64953ffee602c6217a120 *R/PG_plot.biallelic.matrix.R
 2e07ed27ede19e9962a829a6769ed36c *R/PopGplot.R
 e89ae313b51d19c176257a80575acc0e *R/PsPn.R
 94f8bcc2cb9a20c0fac621e9d6614f0f *R/SNPFST.R
-18de9df0e0ef14355fd1b164209dbb82 *R/Whop_readVCF.R
+a1d880d9ee56ba99161691b20c5c756e *R/Whop_readVCF.R
 debc0e7063142d9816482cad99090473 *R/Yach.stats.R
 ad79948e9ca0f18e01ea118fd8a30ed6 *R/calc.R2.R
 dbcd629091d2ad1b32560026a19655ec *R/calcR2.R
@@ -87,7 +87,7 @@ f42e7239d5c79f48933a346d2aac2691 *R/my_unique.R
 a9f24d2dae87e1f616bc1458d358a4c9 *R/pair_linkdisequ.R
 753bfafe971c35cb17ab37cb1479bfe6 *R/pair_linkdisequ_FAST.R
 22e62499d21a3ed10ff47925916fa6ca *R/parse_HapMap.R
-54af0b071c10248de881df795c69a908 *R/parse_gff.R
+4c12df3ab50da840fe2be48f64d15408 *R/parse_gff.R
 cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 6712336a405b501d229375346fc29054 *R/plot_cs.R
 15074c1142781a49df107401c1109d1b *R/polymorph.R
@@ -101,7 +101,7 @@ cb198ee8356ea5f4dfa1041884fe4c83 *R/permute.R
 75f14e68f9b5694c16f4d10fd8761964 *R/readHapMap.R
 63180d8824f849178ed55e5ccee2228d *R/readMS.R
 b75d3b7d3058fccfa2a13c0eebaf58ac *R/readSNP.R
-90ecee50794096594b08bafa976224db *R/readVCF.R
+0a8801241d7c2a7afc2844c6c2e731ff *R/readVCF.R
 e0dd14f1d074a27c6b56618ce1c6eace *R/readVCFchunk.R
 7cd3428b8b2615d941b986eb9b3c741b *R/readVCFchunkHap.R
 3d9031d2787a5d86db05cc393a5760f4 *R/recomb.stats.R
@@ -132,9 +132,9 @@ c4f74b26105aca59178c66f5618b4813 *data/fasta_file.txt.gz
 a0656cc271cfd6c2095c005c74c73602 *data/snp_file.txt.gz
 c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 6863bdc52e055bc8a67bbfdc17642c23 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-4ef70b3474a092f8d54978954073f1ae *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+d79e0aa560e69a1e2d1464cffc8db87e *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 462d9efa03b0cfa2944edec554710773 *inst/doc/Integration_of_new_Methods.Rnw
-e8f5d181c050c7723cf66fbc5503bccb *inst/doc/Integration_of_new_Methods.pdf
+f68f1f9711dd22037bf2c7dfdb07fd86 *inst/doc/Integration_of_new_Methods.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 0f7995d2ee3f85fcdae7cbed74355f22 *man/F_ST.stats-methods.Rd

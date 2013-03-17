@@ -26,8 +26,7 @@ cat("\n")
    if(length(grep("Chr",tid2))==1 | length(grep("chr",tid2))==1){
    tid2 <- substr(tid2,4,nchar(tid2))
    }
-   if(nchar(tid2)==1){CHR <- c(tid2,"z")}else{CHR <- tid2}
-   
+   if(nchar(tid2)==1){CHR <- c(tid2,"z")}else{CHR <- unlist(strsplit(tid2,""))}
    my_pos      <- .Call("find_lines_GFF_Human", gffpath, CHR)
    gff.table   <- read.table(gffpath,sep="\t",colClasses=c(rep("character",3),rep("integer",2),rep("character",2),"character","NULL"),
                              skip = my_pos[1], nrows = my_pos[2] - my_pos[1]
