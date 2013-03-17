@@ -57,6 +57,10 @@ Following slots will be modified in the \code{"GENOME"}  object \cr
 
 }
 
+\details{
+The nucleotide diversity have to be devided by \code{GENOME.class@n.sites}
+}
+
 \references{
 [1] Hudson, R. R., M. Slatkin, and W.P. Maddison (1992). \emph{Estimating of levels of gene flow from DNA sequence data.} Gentics 13(2),583-589 \cr \cr
 [2] Nei, M. (1987). \emph{Molecular Evolutionary Genetics.} Columbia Univ. Press, New York. \cr

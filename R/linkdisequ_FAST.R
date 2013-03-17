@@ -187,7 +187,13 @@ for(xx in 1:npops){
 
    # adjacent <- apply(sitepairs,2,function(x){return(x[2]==(x[1]+1))})
 
-   adjacent <- seq(1,n.segsites.pop^2,by=n.segsites.pop)
+adjacent <- rep(1,n.segsites.pop-1)
+fill     <- n.segsites.pop - 1
+for (yy in 2:length(adjacent)) {
+ adjacent[yy] <- adjacent[yy-1] + fill
+ fill <- fill - 1  
+}
+   
    ZA[xx]   <- sum(res[adjacent])/(n.segsites.pop-1)
    ZZ[xx]   <- ZA[xx] - znsvek[xx]
  

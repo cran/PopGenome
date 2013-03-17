@@ -209,7 +209,7 @@ open_write(int fd, int compress_level) // compress_level==-1 for the default lev
 }
 
 BGZF*
-bgzf_open(const char* __restrict path, const char* __restrict mode)
+bgzf_open(const char* path, const char* mode)
 {
     BGZF* fp = NULL;
     if (strchr(mode, 'r') || strchr(mode, 'R')) { /* The reading mode is preferred. */
@@ -250,7 +250,7 @@ bgzf_open(const char* __restrict path, const char* __restrict mode)
 }
 
 BGZF*
-bgzf_fdopen(int fd, const char * __restrict mode)
+bgzf_fdopen(int fd, const char * mode)
 {
 	if (fd == -1) return 0;
     if (mode[0] == 'r' || mode[0] == 'R') {

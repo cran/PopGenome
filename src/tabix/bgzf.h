@@ -68,14 +68,14 @@ extern "C" {
  * A subsequent bgzf_close will not close the file descriptor.
  * Returns null on error.
  */
-BGZF* bgzf_fdopen(int fd, const char* __restrict mode);
+BGZF* bgzf_fdopen(int fd, const char* mode);
 
 /*
  * Open the specified file for reading or writing.
  * Mode must be either "r" or "w".
  * Returns null on error.
  */
-BGZF* bgzf_open(const char* path, const char* __restrict mode);
+BGZF* bgzf_open(const char* path, const char* mode);
 
 /*
  * Close the BGZ file and free all associated resources.

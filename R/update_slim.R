@@ -416,6 +416,7 @@ A[excluded]               <-  A[excluded] + A_excluded
 
  r                       <-  runif(BBB$locnum)
 
+
 ### mod ---------------------------------------------
 #  A                       <-  tapply(A,GROUP,unique)
 #  r                       <-  runif(N.REGIONS)

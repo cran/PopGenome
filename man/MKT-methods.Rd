@@ -30,6 +30,7 @@
 This function assumes that in population genetic analysis the probability of two variants \cr
 in one codon is very small. Due to this only single nucleotide polymorphisms (SNPs) are examined. \cr 
 When there was no gff-file specified, an alignment in the right reading frame is expected. \cr
+The outgroup has to be defined as a population !
 
 }
 

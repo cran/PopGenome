@@ -1,6 +1,5 @@
 PopGenread <- function(filepath,format) {
 
-# require(ape)
 
 if(format=="VCF"){
  res  <- readVCFchunk(filepath)

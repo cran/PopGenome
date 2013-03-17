@@ -93,6 +93,8 @@ FAST=FALSE
 
 If \code{FAST} is switched on, this module only calculates \code{nuc.diversity.within}, \code{hap.diversity.within}, \code{haplotype.F_ST},
 \code{nucleotide.F_ST} and \code{pi}.
+Note: \cr 
+The nucleotide diversity have to be devided by \code{GENOME@n.sites}
  
 
 }

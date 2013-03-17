@@ -714,9 +714,15 @@ if(!between){
 
      res[,1]       <- object@nuc.diversity.within[,xx]
      res[,2]       <- object@hap.diversity.within[,xx]
+     if(length(object@Pi)!=0){
      res[,3]       <- object@Pi[,xx]
+     }
+     if(length(object@hap.F_ST.vs.all)!=0){
      res[,4]       <- object@hap.F_ST.vs.all[,xx]
+     }	
+     if(length(object@nuc.F_ST.vs.all)!=0){
      res[,5]       <- object@nuc.F_ST.vs.all[,xx]
+     }
 
      colnames(res) <- c("nuc.diversity.within","hap.diversity.within","Pi","hap.F_ST.vs.all","nuc.F_ST.vs.all")
      rownames(res) <- object@region.names
@@ -2537,8 +2543,19 @@ for(xx in 1:n.region.names){
     res <- apply(pairs,2,function(pop){
            
            segsites  <- get_segsites(bial,populations)
+
+           if( length(segsites[[1]])!=0 ){
            pop1mono  <- bialcount[-segsites[[1]]]
+           }else{
+           pop1mono  <- bialcount
+           }
+
+	   if( length(segsites[[2]])!=0 ){
            pop2mono  <- bialcount[-segsites[[2]]]
+	   }else{
+	   pop2mono  <- bialcount
+           }    
+
            pop12mono <- intersect(pop1mono,pop2mono)
            
            Pnpop1   <- sum(synonymous[segsites[[1]]]==FALSE,na.rm=TRUE)

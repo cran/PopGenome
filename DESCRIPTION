@@ -1,17 +1,17 @@
 Package: PopGenome
 Type: Package
 Title: A swiss army knife for population genetic & genomic analysis
-Version: 1.2.5
+Version: 1.2.6
 Date: 2013-03-17
 Author: Bastian Pfeifer, Ulrich Wittelsbuerger
 Maintainer: Bastian Pfeifer <Bastian.Pfeifer@uni-duesseldorf.de>
 Depends: R (>= 2.14.2), methods, ape, ff
 Suggests: parallel, bigmemory
-Description: PopGenome is an R-package for Population Genetic & Genomic
-        Analysis
+Description: PopGenome is an R-package for Population Genetic & Genomic Analysis
 License: GPL-3
+SystemRequirements: GNU make
 LazyLoad: yes
-Packaged: 2013-06-20 11:55:54 UTC; user
+Packaged: 2013-11-17 08:40:51 UTC; ripley
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-06-20 15:18:54
+Date/Publication: 2013-11-17 10:48:08

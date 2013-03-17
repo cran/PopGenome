@@ -1,3 +1,12 @@
+Changes in PopGenome 1.2.6
+==========================
+
+BUGS FIXED:
+
+- MKT Test failed with only one sequence as an outgroup
+- diversity.stats/get.diversity works
+- example files (subdirectory "data")
+
 Changes in PopGenome 1.2.5
 ==========================
 

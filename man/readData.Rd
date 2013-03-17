@@ -64,7 +64,8 @@ parallized: \cr \cr
 FAST:   \cr \cr
 
 - fast computation of biallelic matrix, biallelic sites, transversions/transitions \cr
-  and biallelic substitutions                    
+  and biallelic substitutions \cr
+- can be switched to \code{TRUE} in case of SNP-data without loosing informations                   
 
 
 big.data: \cr \cr

@@ -158,7 +158,7 @@ return(genome)
 #### End of parallization
 
 methods <- "DATA"
-require(ape)
+
 
 ########################
 # if (.Platform$OS.type == "unix") {
