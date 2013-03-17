@@ -83,7 +83,7 @@ Genome Res. 2005 15: 1566-1575 \cr \cr
 # CLR
 # create global set
 # GENOME.class  <- detail.stats(GENOME.class)
-# freq <- GENOME.class@region.stats@minor.allele.frequencies[[1]]
+# freq <- GENOME.class@region.stats@minor.allele.freqs[[1]]
 # freq.table <- list()
 # freq.table[[1]] <- table(freq)
 # define the region of interest

@@ -14,26 +14,18 @@ from the observed SNPs.
 
 
 \usage{
-\S4method{get.codons}{GENOME}(object, regionID, reading.start.pos, ref.chr, 
-SNP.DATA=FALSE, reverse.strand=FALSE)
+\S4method{get.codons}{GENOME}(object, regionID)
 }
 
 \arguments{
   \item{object}{an object of class \code{"GENOME"}}
   \item{regionID}{what region/alignment should be analyzed ?}
-  \item{reading.start.pos}{start position of the reading frame (nucleotide position of the reference seq.)}
-  \item{ref.chr}{reference chromosome as a FASTA file}
-  \item{SNP.DATA}{in case of SNP data. see details !}
-  \item{reverse.strand}{in case the coding region is on a reverse strand}
 }
 \details{
-In case of calculations based on alignments, the parameters \cr
-\code{reading.start.pos} and \code{ref.chr} are not required. \cr
-The alignment data has to be read in with the readData function \cr
-and the corresponding GFF-files to verify synonymous and nonsynonymous \cr
-sites. In case of SNP-data the GFF-file is not neccessary, but the start position \cr
-of the reading frame is needed. When splitting the data into coding regions \cr
-(\code{splitting.data}), the corresponding information is in the slot \code{GENOME.class.split@region.names}
+The slot GENOME.class@region.data@synonymous have to be set.\cr
+The data have to be read in with the correponding GFF file. \cr
+The function set.synnonsyn sets the syn/nonsny sites in case 
+of SNP data.
 }
 
 \value{
@@ -51,13 +43,15 @@ The function \code{get.codons} returns a data.frame with the following informati
 }
 
 \examples{
-# GENOME.class <- readSNP("MPI",CHR=1)
-# GENOME.class.split <- splitting.data(GENOME.class,positions=list(10000:20000),type=2)
-# get.codons(GENOME.class.split,1,1000,"chromosome1.fas",SNP.DATA=TRUE)
-# When splitting into coding regions (splitting.data(,subsites="coding")) 
-# the reading.start.position is in split@region.names
-# GENOME.class <- readData("Alignments", gffpath="GFF_folder")
-# get.codons(GENOME.class.split,2)
+
+# Alignments
+# GENOME.class <- readData("FASTA",gffpath="GFF")
+# get.codons(GENOME.class,1)
+# SNP data
+# GENOME.class <- readData("VCF",gffpath="GFF")
+# GENOME.class <- set.synnonsyn(GENOME.class, ref.chr="ref.fas")
+# get.codons(GENOME.class,1)
+
 }
 
 

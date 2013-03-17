@@ -1,5 +1,6 @@
 get_data <- function(matr,include.unknown=FALSE,gff=FALSE,FAST,SNP.DATA){
 
+reverse.codons <- FALSE
 
 # poly <- get.polymorph(matr)
 # matr <- matr[,poly,drop=FALSE]
@@ -472,6 +473,7 @@ features <- gff
    if(length(features$Coding)>0){ 
     Coding_region  <- as.vector(unlist(apply(features$Coding,1,function(x){return(x[1]:x[2])})))
     start.pos      <- as.vector(unlist(apply(features$Coding,1,function(x){return(rep(x[1],x[2]-x[1]+1))})))
+    end.pos        <- as.vector(unlist(apply(features$Coding,1,function(x){return(rep(x[2],x[2]-x[1]+1))})))
     # pump reverse strand #FIXME Performance
     JJJ            <- new.env()
     JJJ$count      <- 1
@@ -485,8 +487,10 @@ features <- gff
     rev.strand     <- rev.strand[ids]
 
  
-    start.pos      <- start.pos[ids] - 1
-   
+    start.pos      <- start.pos[ids] 
+    end.pos        <- end.pos[ids]
+  
+
     CodingSNPS     <- is.element(matrix_pos,Coding_region)
     Coding_region_length <- length(Coding_region)
     CodingSNPS2     <- matrix_pos[CodingSNPS]
@@ -496,20 +500,22 @@ features <- gff
 if(size>0 & !SNP.DATA){  # wenn SNPS in den codierenden regionen existieren
    y <- 1 
    matrix_codonpos <- vector(,3*size)
-  
+   reverse.codons  <- vector(,3*size)
+   rvt             <- c(T,T,T)
+
  for(xx in 1:size){
   x  <- CodingSNPS2[xx]
   if(rev.strand[xx]){# reverse strand
 
-   if((x-start.pos[xx])%%3==0){matrix_codonpos[y:(y+2)] <- c(x,x-1,x-2);y <- y+3;next;}
-   if((x-start.pos[xx])%%3==1){matrix_codonpos[y:(y+2)] <- c(x+2,x+1,x);y <- y+3;next;}
-   if((x-start.pos[xx])%%3==2){matrix_codonpos[y:(y+2)] <- c(x+1,x,x-1);y <- y+3;next;}
+   if((end.pos[xx]-x)%%3==0){reverse.codons[y:(y+2)] <- rvt;matrix_codonpos[y:(y+2)] <- c(x,x-1,x-2);y <- y+3;next;}
+   if((end.pos[xx]-x)%%3==1){reverse.codons[y:(y+2)] <- rvt;matrix_codonpos[y:(y+2)] <- c(x+1,x,x-1);y <- y+3;next;}
+   if((end.pos[xx]-x)%%3==2){reverse.codons[y:(y+2)] <- rvt;matrix_codonpos[y:(y+2)] <- c(x+2,x+1,x);y <- y+3;next;}
 
   }else{# non-reverse strand
 
-   if((x-start.pos[xx])%%3==0){matrix_codonpos[y:(y+2)] <- c(x-2,x-1,x);y <- y+3;next;}
-   if((x-start.pos[xx])%%3==1){matrix_codonpos[y:(y+2)] <- c(x,x+1,x+2);y <- y+3;next;}
-   if((x-start.pos[xx])%%3==2){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==0){matrix_codonpos[y:(y+2)] <- c(x,x+1,x+2);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==1){matrix_codonpos[y:(y+2)] <- c(x-1,x,x+1);y <- y+3;next;}
+   if((x-start.pos[xx])%%3==2){matrix_codonpos[y:(y+2)] <- c(x-2,x-1,x);y <- y+3;next;}
  
   }
  
@@ -568,7 +574,19 @@ if(!SNP.DATA){
 
  # GFF 
  testmatrix           <- matr[,matrix_codonpos,drop=FALSE]
+
+### change rows for reverse strands
+ if(any(reverse.codons)){
+ komplement         <- c(4,3,2,1,5,6)   
+ testmatrix.reverse <- testmatrix[,reverse.codons,drop=FALSE]
+ testmatrix.reverse <- apply(testmatrix.reverse,2,function(x){return(komplement[x])})
+ testmatrix[,reverse.codons] <- testmatrix.reverse
+ rm(testmatrix.reverse)
+ }
+
  rm(matr)          # -------------------------------------------------------> remove original matrix
+ 
+
  colnames(testmatrix) <- matrix_codonpos
  synnonsynL           <- getsyn(testmatrix)
  Codons               <- synnonsynL$Codons

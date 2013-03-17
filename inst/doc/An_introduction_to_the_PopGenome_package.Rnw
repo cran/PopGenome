@@ -224,7 +224,6 @@ as a numerical value} \\
 \textbf{codons} \\
 \textcolor{blue}{a list of length=n.coding.snps. The codon changes 
 are represented as numerical values.  \\
-This slot is only available for data in alignment format. \\
 For SNP data we provide the function \texttt{set.synnonsyn} because 
 of memory issues. See also \texttt{get.codons} for detailed information about the codon changes, and
 \texttt{codontable()} to define alternative genetic codes.} \\ 

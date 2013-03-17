@@ -305,13 +305,12 @@ if(obj@big.data){
 
   # init the gff informations
   if(obj@gff.info){
-
    if(obj@snp.data){
    # reading.frame + rev.strand
     cols.reading     <- sapply(obj@region.data@reading.frame,function(x){if(length(x)==0){return(0)};return(dim(x)[1])})
     R.reading        <- sum(cols.reading)
     if(R.reading>0){
-    reading.frame    <- ff(0,dim=c(R.reading,2))
+    reading.frame    <- ff(0,dim=c(R.reading,3))
     rev.strand       <- ff(0,R.reading)
     start.reading    <- 1
     }

@@ -52,8 +52,6 @@ MOD       <- .Call("fittingGFFC", as.matrix(AZ),positions)
 gff[,4:5] <- MOD
 
 na.ids <- which(MOD==-1,arr.ind=TRUE)
-
-
 na.ids <- unique(na.ids[,1])
 
 
@@ -64,11 +62,14 @@ if(length(na.ids)!=0){
   SIZE                  <- (LENGTH[,2] - LENGTH[,1]) + 1
   GLOBAL.GFF$GFF        <- SIZE
   GLOBAL.GFF$start      <- LENGTH[,1]
+  GLOBAL.GFF$end        <- LENGTH[,2]
+  #GLOBAL.GFF$na.ids     <- na.ids
 }else{
   LENGTH                <- AZ
   SIZE                  <- (LENGTH[,2] - LENGTH[,1]) + 1
   GLOBAL.GFF$GFF        <- SIZE
   GLOBAL.GFF$start      <- LENGTH[,1]
+  GLOBAL.GFF$end        <- LENGTH[,2]
 }
 
 return(gff)

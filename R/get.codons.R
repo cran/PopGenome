@@ -1,11 +1,11 @@
 # ------------------------------------------------------------
 # get Codon Informations 
 # ------------------------------------------------------------
-setGeneric("get.codons", function(object, regionID, reading.start.pos, ref.chr, SNP.DATA=FALSE, reverse.strand=FALSE) standardGeneric("get.codons"))
+setGeneric("get.codons", function(object, regionID) standardGeneric("get.codons"))
  setMethod("get.codons", "GENOME",
- function(object, regionID, reading.start.pos, ref.chr, SNP.DATA, reverse.strand){
+ function(object, regionID){
 
-if(!SNP.DATA){
+#if(!SNP.DATA){
 CodonInfo <- codontable()
 Triplets  <- CodonInfo$Triplets
 Protein   <- CodonInfo$Protein
@@ -24,16 +24,19 @@ minor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[1])}
 mayor  <- sapply(object@region.data@codons[[regionID]],function(x){return(x[2])}) # FIXME really mayor ? done
 
 # ReCheck minor/mayor Codons
+if(!object@snp.data){
+
 minor.alleles <- object@region.data@minor.alleles[[regionID]]
 subst         <- object@region.data@biallelic.substitutions[[regionID]]
 
-for (xx in 1:length(minor)){
+ for (xx in 1:length(minor)){
 
 	if(minor.alleles[xx]==subst[2,xx]){
         minor[xx] <- mayor[xx]
 	mayor[xx] <- minor[xx]
 	}
 
+ }
 }
 
 # Create Polarity
@@ -73,9 +76,31 @@ colnames(DATA) <- XX
 
 return(DATA)
 
-}
+#}
 
-if(SNP.DATA){
+
+
+
+
+
+
+
+
+
+
+#############################################################################################
+
+
+
+
+
+
+
+
+
+
+
+if(FALSE){#FIXME
 CodonInfo <- codontable()
 Triplets  <- CodonInfo$Triplets
 Protein   <- CodonInfo$Protein
@@ -95,16 +120,20 @@ bial.pos     <- object@region.data@biallelic.sites[[regionID]]
 minor        <- object@region.data@biallelic.substitutions[[regionID]][1,]
 major	     <- object@region.data@biallelic.substitutions[[regionID]][2,]
 
-
+if(reverse.strand){
+cod.pos      <- (reading.start.pos-bial.pos)   %%3
+}else{
 cod.pos      <- (bial.pos - reading.start.pos) %%3
+}
+
 # Generate Codon-Positions # Rows are SNP-positions
 codons <- matrix(,length(cod.pos),3)
 for (yy in 1:length(cod.pos)){
     if(reverse.strand){
 
-     if(cod.pos[yy]==0){codons[yy,]=c(bial.pos[yy]+2,bial.pos[yy]+1,bial.pos[yy]);next}
+     if(cod.pos[yy]==0){codons[yy,]=c(bial.pos[yy],bial.pos[yy]-1,bial.pos[yy]-2);next}
      if(cod.pos[yy]==1){codons[yy,]=c(bial.pos[yy]+1,bial.pos[yy],bial.pos[yy]-1);next}
-     if(cod.pos[yy]==2){codons[yy,]=c(bial.pos[yy],bial.pos[yy]-1,bial.pos[yy]-2);next}	
+     if(cod.pos[yy]==2){codons[yy,]=c(bial.pos[yy]+2,bial.pos[yy]+1,bial.pos[yy]-2);next}	
 
     }else{
 
@@ -127,13 +156,22 @@ Nuc.codons    <- matrix(Nuc.codons,ncol=3)
 ALT           <- Nuc.codons
 REF           <- Nuc.codons
 
+komplement <- c(4,3,2,1,5)
+
 for(yy in 1: dim(Nuc.codons)[1]){
 
  if(reverse.strand){
 
- if(cod.pos[yy]==0){REF[yy,3] <- minor[yy];ALT[yy,3] <- major[yy];next}
+  #convert to komplement nucleotides
+  REF[yy,]  <- komplement[REF[yy,]]
+  ALT[yy,]  <- komplement[ALT[yy,]]
+  minor[yy] <- komplement[minor[yy]]
+  major[yy] <- komplement[major[yy]]
+  ###########
+
+ if(cod.pos[yy]==0){REF[yy,1] <- minor[yy];ALT[yy,1] <- major[yy];next}
  if(cod.pos[yy]==1){REF[yy,2] <- minor[yy];ALT[yy,2] <- major[yy];next}
- if(cod.pos[yy]==2){REF[yy,1] <- minor[yy];ALT[yy,1] <- major[yy];next}
+ if(cod.pos[yy]==2){REF[yy,3] <- minor[yy];ALT[yy,3] <- major[yy];next}
 
   
  }else{ 

@@ -36,17 +36,27 @@ readframe   <- tab[Coding_ids,8]
 
 if(length(readframe)>0){
 
- for (xx in 1: dim(Coding)[1]){
-
-     if(readframe[xx]==1){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 1}
-     if(readframe[xx]==2){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 2}
- }
-
 # store reverse strand information
 rev.strand <- vector(,length(Coding_ids))
 rev.strand[tab[Coding_ids,7]=="-"] <- TRUE
 
+ #######
+ for (xx in 1: dim(Coding)[1]){
+
+   if(!rev.strand[xx]){
+     if(readframe[xx]==1){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 1}
+     if(readframe[xx]==2){Coding[xx,1] <- as.numeric(Coding[xx,1]) + 2}
+   }else{
+   if(readframe[xx]==1){Coding[xx,2] <- as.numeric(Coding[xx,2]) - 1}
+   if(readframe[xx]==2){Coding[xx,2] <- as.numeric(Coding[xx,2]) - 2}
+   }	
+ }
+ ############
+
+
+
 }
+
 }# END SNP
 
 
@@ -71,8 +81,9 @@ UTR        <- tab[UTR_ids,4:5,drop=FALSE]
 ### GLOBAL important for SNP DATA
 READ <- NULL
 
-if(length(GLOBAL.GFF$GFF)!=0){
+if(length(GLOBAL.GFF$GFF)!=0){ 
 
+ # not used
  CHECK                    <- GLOBAL.GFF$GFF
  GLOBAL.GFF$Coding        <- CHECK[Coding_ids]
  GLOBAL.GFF$Exon          <- CHECK[Exon_ids]
@@ -80,7 +91,7 @@ if(length(GLOBAL.GFF$GFF)!=0){
  GLOBAL.GFF$Intron        <- CHECK[Intron_ids]
  GLOBAL.GFF$UTR           <- CHECK[UTR_ids]
  #GLOBAL.GFF$GFF          <- NULL
-
+ #--------
  
  # When GFF3 --> vorletzte Zeile bearbeiten ! für READ
  vorl       <- tab[,8]
@@ -94,7 +105,10 @@ if(length(GLOBAL.GFF$GFF)!=0){
  #---------------
 
 
- READ                     <- cbind(GLOBAL.GFF$start[Coding_ids],vorl[Coding_ids])
+
+ READ                     <- cbind(GLOBAL.GFF$start[Coding_ids],GLOBAL.GFF$end[Coding_ids],vorl[Coding_ids])
+
+
  if(dim(READ)[1]>0){
   READ                    <- ff(READ,dim=dim(READ))
  }

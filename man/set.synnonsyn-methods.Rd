@@ -13,7 +13,7 @@
 
 \usage{
 
-\S4method{set.synnonsyn}{GENOME}(object,ref.chr)
+\S4method{set.synnonsyn}{GENOME}(object,ref.chr,save.codons=FALSE)
 
 
 
@@ -23,6 +23,7 @@
 
   \item{object}{an object of class \code{"GENOME"}}
   \item{ref.chr}{the reference chromosome in FASTA format}
+  \item{save.codons}{save codon changes}
 }
 
 
@@ -31,7 +32,8 @@
 
 
 The return value is a modified object of class \code{"GENOME"} \cr 
-  
+When \code{save.codons} is \code{TRUE} the SNP related codon changes \cr
+are saved. (see codontable() and codonise64())  
   
 }
 

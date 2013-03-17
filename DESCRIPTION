@@ -1,7 +1,7 @@
 Package: PopGenome
 Type: Package
 Title: A swiss army knife for population genetic & genomic analysis
-Version: 2.0.6
+Version: 2.0.7
 Date: 2013-03-17
 Author: Bastian Pfeifer, Ulrich Wittelsbuerger
 Maintainer: Bastian Pfeifer <Bastian.Pfeifer@uni-duesseldorf.de>
@@ -16,7 +16,7 @@ Copyright: This package uses zlib, Tabix and BGZF. Zlib by Jean-loup
         uses the Zlib licence. Tabix by Heng Li <lh3@live.co.uk> use
         the MIT licence. BGZF by Bob Handsaker and modified by Heng Li
         uses the MIT licence.
-Packaged: 2014-04-16 11:24:59 UTC; user
+Packaged: 2014-05-19 12:01:39 UTC; user
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2014-04-17 00:08:16
+Date/Publication: 2014-05-19 14:15:48

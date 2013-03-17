@@ -69,7 +69,6 @@ for (int j = 0; j < I; j++){
    //  printf("%d",Rpos[1]);
 
 // Searching if position exists
-
  
  for( int q = start; q < ll; q++ ){
     

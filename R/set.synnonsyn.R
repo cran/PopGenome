@@ -1,6 +1,6 @@
-setGeneric("set.synnonsyn", function(object,ref.chr=FALSE) standardGeneric("set.synnonsyn"))
+setGeneric("set.synnonsyn", function(object,ref.chr=FALSE,save.codons=FALSE) standardGeneric("set.synnonsyn"))
  setMethod("set.synnonsyn", "GENOME",
- function(object,ref.chr){
+ function(object,ref.chr,save.codons){
 
 
 if(ref.chr[1]==FALSE){
@@ -11,17 +11,56 @@ for (xyz in 1:length(ref.chr)){
 # erstmal nur für ein Chunk
 
 Coding.matrix            <- object@region.data@Coding.matrix2[[xyz]][,] # weil ff object, 2 because (fitting GFF)
-biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]
+biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]  # with respect to the refernce positions
 biallelic.sites          <- object@region.data@biallelic.sites[[xyz]]
-START                    <- object@region.data@reading.frame[[xyz]][,] # weil ff object
-REV                      <- object@region.data@rev.strand[[xyz]][,] #  reverse strand information #---
+START                    <- object@region.data@reading.frame[[xyz]][,] #  weil ff object
+REV                      <- object@region.data@rev.strand[[xyz]][,]    #  reverse strand information #---
 CodingSNPS               <- object@region.data@CodingSNPS[[xyz]]
 
-START                    <- START[,1] + START[,2]
+
+#print(REV)
+if(any(!REV)){
+pos.strand.shift         <- START[!REV,3]
+
+#zero			 <- pos.strand.shift==0
+#one 			 <- pos.strand.shift==1
+#two 			 <- pos.strand.shift==2	
+#pos.strand.shift[zero]   <- 0
+#pos.strand.shift[one]    <- 2
+#pos.strand.shift[two]    <- 1
+
+}else{
+pos.strand.shift         <- 0
+}
+
+if(any(REV)){
+rev.strand.shift         <- START[REV,3] 
+
+#zero			 <- rev.strand.shift==0 
+#one 			 <- rev.strand.shift==1 
+#two 			 <- rev.strand.shift==2
+#rev.strand.shift[zero]   <-  1
+#rev.strand.shift[one]    <-  2
+#rev.strand.shift[two]    <-  0
+}else{
+rev.strand.shift         <- 0
+}
+
+START                    <- START[,1]
+START[!REV]              <- START[!REV] + pos.strand.shift
+
+START[REV]               <- object@region.data@reading.frame[[xyz]][REV,2] - rev.strand.shift  
+
+#START[REV]  - rev.strand.shift
+
+
+#START                    <- START[,1] + START[,2]
+
 Coding.matrix            <- Coding.matrix
 
-#print(length(START)) ist ok :)
-#print(dim(Coding.matrix)) ist ok :)
+
+#print(START)
+
 
 # ---
 # unique
@@ -34,7 +73,7 @@ Coding.matrix            <- Coding.matrix
 synGLOBAL <- new.env() 
 
 # Create Region and save size of region 
-synGLOBAL$SIZE  <- numeric(dim(Coding.matrix)[xyz])
+synGLOBAL$SIZE  <- numeric(dim(Coding.matrix)[1])
 synGLOBAL$count <- 1
 
 erg  <- apply(Coding.matrix,1,function(xx){
@@ -48,11 +87,11 @@ erg  <- apply(Coding.matrix,1,function(xx){
 
 # what are the real positions ?
  erg         <- unlist(erg)
- bial.pos    <- .Call("my_match_C",erg,biallelic.sites2)
+
+ bial.pos    <- match(erg,biallelic.sites2) #.Call("my_match_C",erg,biallelic.sites2)
  bial.pos[bial.pos==-1] <- NaN
  #return(bial.pos)
  bial.pos    <- biallelic.sites[bial.pos]
-
 
 # Create Start Vector
  synGLOBAL$count <- 1
@@ -76,41 +115,65 @@ erg  <- apply(Coding.matrix,1,function(xx){
  START.vec   <- unlist(vec)
  REV.vec     <- unlist(vec_rev) #---
 
- cod.pos     <- (bial.pos - START.vec)%%3
- 
+#print(REV.vec)
+#print(START.vec)
+
+ cod.pos              <- (bial.pos - START.vec)%%3
+ # in case of reverse strand 
+ cod.pos[REV.vec]     <- (START.vec[REV.vec]-bial.pos[REV.vec])%%3
+ #FIXME
+
+
+  
 
  # Delete NaNs 
  cod.pos     <- cod.pos[!is.na(bial.pos)]
- bial.pos    <- bial.pos[!is.na(bial.pos)]
  rev.pos     <- REV.vec[!is.na(bial.pos)] #----
+ bial.pos    <- bial.pos[!is.na(bial.pos)]
+
  
+ #print(START.vec[300])
+
  ids         <- !duplicated(bial.pos)
  cod.pos     <- cod.pos[ids]
  bial.pos    <- bial.pos[ids]
  rev.pos     <- rev.pos[ids] #----
 
+ # print(rev.pos[1215])
+ # print(bial.pos[1215])
+ # print(cod.pos[1215])
+ #print(rev.pos)
+
 # Create the codons
 # bial.pos and cod.pos
 
 codons <- matrix(,length(cod.pos),3)
+
 for (xx in 1:length(cod.pos)){
    
-    if(rev.pos[xx]){# reverse strand 
-     if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx]+2,bial.pos[xx]+1,bial.pos[xx]);next}
+    if(rev.pos[xx]){# reverse strand #FIXME
+     if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx],bial.pos[xx]-1,bial.pos[xx]-2);next}
      if(cod.pos[xx]==1){codons[xx,]=c(bial.pos[xx]+1,bial.pos[xx],bial.pos[xx]-1);next}
-     if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx],bial.pos[xx]-1,bial.pos[xx]-2);next}
+     if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx]+2,bial.pos[xx]+1,bial.pos[xx]);next}
     }else{
      if(cod.pos[xx]==0){codons[xx,]=c(bial.pos[xx],bial.pos[xx]+1,bial.pos[xx]+2);next}
      if(cod.pos[xx]==1){codons[xx,]=c(bial.pos[xx]-1,bial.pos[xx],bial.pos[xx]+1);next}
      if(cod.pos[xx]==2){codons[xx,]=c(bial.pos[xx]-2,bial.pos[xx]-1,bial.pos[xx]);next}
-    }
+     }
 
 }
+#print(cod.pos)
+#print(codons)
 
 ## Reading the reference chromosome
 file.info <- .Call("get_dim_fasta",ref.chr[xyz])
+
+gc()
+#print(file.info)
+
 CHR       <- .Call("get_ind_fasta",ref.chr,1,file.info[[1]][2])
 
+#print(CHR[1:10])
 
 # Create codons with nucleotides
 Nuc.codons    <- CHR[codons]
@@ -122,12 +185,25 @@ Subst         <- object@region.data@biallelic.substitutions[[xyz]]
 minor         <- Subst[1,CodingSNPS]
 major         <- Subst[2,CodingSNPS]
 
+komplement <- c(4,3,2,1,5)
+
+#print(Nuc.codons)
+
 for(xx in 1: dim(Nuc.codons)[1]){
  
+
  if(rev.pos[xx]){
-  if(cod.pos[xx]==0){REF[xx,3] <- minor[xx];ALT[xx,3]<-major[xx];next}
+
+  #convert to komplement nucleotides
+  REF[xx,]  <- komplement[REF[xx,]]
+  ALT[xx,]  <- komplement[ALT[xx,]]
+  minor[xx] <- komplement[minor[xx]]
+  major[xx] <- komplement[major[xx]]
+  ###########
+  
+  if(cod.pos[xx]==0){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
   if(cod.pos[xx]==1){REF[xx,2] <- minor[xx];ALT[xx,2]<-major[xx];next}
-  if(cod.pos[xx]==2){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
+  if(cod.pos[xx]==2){REF[xx,3] <- minor[xx];ALT[xx,3]<-major[xx];next}
  }else{
   if(cod.pos[xx]==0){REF[xx,1] <- minor[xx];ALT[xx,1]<-major[xx];next}
   if(cod.pos[xx]==1){REF[xx,2] <- minor[xx];ALT[xx,2]<-major[xx];next}
@@ -136,9 +212,19 @@ for(xx in 1: dim(Nuc.codons)[1]){
 
 } 
 
+#print(REF)
+#print(ALT)
+
 # Coding Codons ...
+
+
+
 ALT <- codonise64(ALT)
 REF <- codonise64(REF)
+
+if(save.codons){
+saveALTREF <- cbind(REF,ALT)
+}
 
 CC  <- codontable()
 
@@ -147,15 +233,30 @@ REF <- CC$Protein[1,REF]
 
 CHECK <- cbind(ALT,REF)
 
+
+
 erg <- apply(CHECK,1,function(x){return(length(unique(x)))})
-erg[erg==2] <- FALSE #nonsyn
-erg[erg==1] <- TRUE  #syn
+erg[erg==2] <- 0 #nonsyn
+erg[erg==1] <- 1 #syn
 
 # Change object of class GENOME
 change <- object@region.data
 change@synonymous[[xyz]][CodingSNPS] <- erg
-object@region.data <- change 
 
+### save codons
+if(save.codons){
+n.coding.snps     <- sum(CodingSNPS)
+codonlist  <- vector("list",n.coding.snps)
+count <- 1
+
+for(vv in 1:n.coding.snps){
+    codonlist[[vv]] <- saveALTREF[vv,]
+}
+change@codons[[xyz]] <- codonlist
+}
+#######################
+
+object@region.data <- change 
 }# End Iteration over chunks or chromosomes
 
 return(object)
