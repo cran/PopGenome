@@ -2,7 +2,7 @@
 Whop_readVCF <- function(v, numcols, tid, frompos, topos, samplenames=NA, gffpath = FALSE, include.unknown=FALSE)
 {
 
-require(WhopGenome)
+# require(WhopGenome)
 # v is a vcf_handle from WhopGenome
 
 frompos <- as.integer(frompos)
@@ -177,7 +177,8 @@ gffpath <- "GFFRObjects"
 		#print( cn )
 		
 		#
-		fullfilename = paste( sep="", outdir, "/", filenum,":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+		#fullfilename = paste( sep="", outdir, "/", filenum,":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+                fullfilename = paste( sep="", outdir, "/", filenum,".RData" )
 		filenum      = filenum + 1
 		#print( fullfilename )
 		
@@ -215,7 +216,8 @@ gffpath <- "GFFRObjects"
                   if(length(SUB_GFF)!=0){
                    o_b_j_sub    <- SUB_GFF
                   
-                   fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+                   #fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+		    fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),".RData" )	
                    save( file = fullfilename , o_b_j_sub  )
                   }
 
@@ -240,7 +242,7 @@ if(res@genelength>1){
 
 }
  
- res@region.names   <- paste(tid,":",frompos,"-",topos,sep=" ")
+ res@region.names   <- paste(frompos,"-",topos,sep=" ")
  res@n.sites        <- as.numeric((topos - frompos + 1))
  res@keep.start.pos <- frompos
  res@gff.info       <- GFF

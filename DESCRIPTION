@@ -1,22 +1,28 @@
 Package: PopGenome
 Type: Package
 Title: An Efficient Swiss Army Knife for Population Genomic Analyses
-Version: 2.1.0
-Date: 2013-03-17
-Author: Bastian Pfeifer, Ulrich Wittelsbuerger
+Version: 2.1.5
+Date: 2015-05-1
+Author: Bastian Pfeifer [aut, cre], Ulrich Wittelsbuerger [ctb], Heng Li [ctb], Bob Handsaker [ctb]
+Authors@R: c(	person("Bastian", "Pfeifer", role = c("aut", "cre"), email = "Bastian.Pfeifer@uni-duesseldorf.de"),
+				person("Ulrich", "Wittelsbuerger", role = "ctb"),
+				person("Heng", "Li", role = "ctb"),
+				person("Bob", "Handsaker", role = "ctb")			)
 Maintainer: Bastian Pfeifer <Bastian.Pfeifer@uni-duesseldorf.de>
 Depends: R (>= 2.14.2),ff
 Imports: methods
 Suggests: parallel, bigmemory, BASIX, WhopGenome
-Description: PopGenome is an R-package for Population Genetic & Genomic Analysis
+Description: Provides efficient tools for population genomics data analysis,
+	able to process individual loci, large sets of loci, or whole genomes. PopGenome not only 
+	implements a wide range of population genetics statistics, but also facilitates the easy 
+	implementation of new algorithms by other researchers. PopGenome is optimized for speed via 
+	the seamless integration of C code.
 License: GPL-3
+URL: http://popgenome.weebly.com
 LazyLoad: yes
-Copyright: This package uses zlib, Tabix and BGZF. Zlib by Jean-loup
-        Gally <jloup@gzip> and Mark Adler <madler@alumni.caltech.edu>,
-        uses the Zlib licence. Tabix by Heng Li <lh3@live.co.uk> use
-        the MIT licence. BGZF by Bob Handsaker and modified by Heng Li
-        uses the MIT licence.
+Copyright: inst/COPYRIGHTS
+SystemRequirements: zlib headers and library.
 Repository: CRAN
-Packaged: 2014-11-03 11:44:05 UTC; user
 NeedsCompilation: yes
-Date/Publication: 2014-11-03 15:01:53
+Packaged: 2015-05-01 08:12:07 UTC; user
+Date/Publication: 2015-05-01 17:01:12

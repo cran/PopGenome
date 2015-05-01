@@ -82,7 +82,7 @@ res      <- readData(path,populations=populations,outgroup=outgroup,include.unkn
             parallized=parallized,progress_bar_switch=progress_bar_switch,
             FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA)
 
-# Löschen des Verzeichnisses
+# Loeschen des Verzeichnisses
 
 
 unlink("FASTARObjects", recursive=TRUE)

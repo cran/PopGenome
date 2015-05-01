@@ -132,7 +132,7 @@ for(xx in 1:npops){
    hap1     <- matrix_hap[names(freqq[x[1]]),]
    hap2     <- matrix_hap[names(freqq[x[2]]),]
    div      <- hap1!=hap2 # ohne substituitionsmodell
-   div      <- sum(div)
+   div      <- sum(div, na.rm=TRUE)
    return(2*freqq[x[1]]*freqq[x[2]]*div)               
    })
 n            <- length(populations[[xx]])

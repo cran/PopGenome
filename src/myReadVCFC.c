@@ -297,15 +297,29 @@ x = x+1; // skpip the End of line \n
  			x = x+1;
 			//printf("REF:%c",VCFbuffer[x]); 
                         nucmap[0] = nucleotide_mapping[(int)VCFbuffer[x]];
+			// check if REF is an insertion, if yes, set to unknknown 5
+				if(VCFbuffer[x+1]!='\t'){
+					while(VCFbuffer[x]!='\t'){x++;}
+					x--; // x is one position before \t
+				nucmap[0] = 5 ;
+				}	   
                         }
  			if(tabcount==4){ // ALT
 			x = x+1;
 			count = 1;
 				while(VCFbuffer[x]!='\t'){
                                 	if(VCFbuffer[x]!=','){
-					//printf("ALT:%c",VCFbuffer[x]);
-					 nucmap[count] = nucleotide_mapping[(int)VCFbuffer[x]];
-					 count++;	
+                                        	// if insertion skip to next
+						if(VCFbuffer[x+1] != '\t' && VCFbuffer[x+1] != ','){
+					 	 nucmap[count] = 5;
+						 count ++;
+ 						 while(VCFbuffer[x]!=',' && VCFbuffer[x]!='\t'){x++;} 
+						 x--;	                                        	
+						}else{
+						//printf("ALT:%c",VCFbuffer[x]);
+					 	 nucmap[count] = nucleotide_mapping[(int)VCFbuffer[x]];
+					 	 count++;
+						}	
 					}
 				x++;					
 				}
@@ -330,8 +344,8 @@ x = x+1; // skpip the End of line \n
 			 }
 			}
 		if(VCFbuffer[x]=='\n'){break;}
-		x++;
-		}
+		x++; // increase Buffer incr x
+		}// End of while 
 
 }
 

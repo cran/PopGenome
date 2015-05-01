@@ -201,9 +201,13 @@ save(file="Aln", Robject)
 
 GENOME.class <- readData("Alignments", format="RData")
 
+In case of SNP data:
+GENOME.class <- readData("SNPData",format="RData",FAST=TRUE,SNP.DATA=TRUE)
+
 \end{verbatim}
-You can split large datasets into chunks stored in a common folder; PopGenome
-will concatenate these.
+You can split large datasets into chunks (by genomic position) stored in a common folder; 
+Note, these chunks should be labeled with increasing ordered numeric values. (e.g 1.RData, 2.RData,...). PopGenome is able to concatenate them afterwards with the function 
+\texttt{concatenate.regions}. We recommend to produce GENOME classes for each chromosome seperately.
 
 \end{document}
 

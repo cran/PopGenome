@@ -257,7 +257,7 @@ BwPrp    <- minn - maxx
 ###################
 
 
-# veränder Frequenzen
+# veraender Frequenzen
 u     <- runif(BBB$locnum,0,BwPrp) + maxx 
 # samp_freq_new
 samp_freq_new     <- samp_freq

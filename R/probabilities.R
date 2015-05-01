@@ -59,7 +59,7 @@
 
 calc_probabilities <- function(cloci , niter, csStats, obsVal, lData,npop,testNames,numTests) {
 	
-	# lData beinhaltet zu cloci die statistiken für jede Population
+	# lData beinhaltet zu cloci die statistiken fuer jede Population
 	ntest <- dim(csStats[[1]])[2]
   
   # Init

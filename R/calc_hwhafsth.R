@@ -17,7 +17,7 @@ if(is.vector(matrix_pol)){
 if(length(rownames(matrix_pol))==0){rownames(matrix_pol) <- 1:dim(matrix_pol)[1]}
 
 ### WICHTIG !!!! ##########################
-# EINE DEFINIERTE OUTGROUP WIRD FÜR HAPW und HAPA 
+# EINE DEFINIERTE OUTGROUP WIRD FUER HAPW und HAPA 
 # ALS WEITERE POPULATION BETRACHTET !!!!!!!!!!!!!
 # HAPW1ALL betrachtet nur die Populationen
 ######################################
@@ -289,7 +289,7 @@ if(npops > 1){
  
 ##### GST #############################################################
 
-Dklmatrix <- init2 # Für Gstall wichtig !
+Dklmatrix <- init2 # Fuer Gstall wichtig !
 rownames(Dklmatrix) <- nam
 colnames(Dklmatrix) <- nam
 Gstmatrix <- init2
@@ -325,7 +325,7 @@ if(npops>1){
     Gst <- Dm/Ht
     
     Gstmatrix[pop2,pop1] <<- Gst
-    Dklmatrix[pop1,pop2] <<- Dkl # Für GstAll wichtig !
+    Dklmatrix[pop1,pop2] <<- Dkl # Fuer GstAll wichtig !
       
   return(Gst)  
      
@@ -350,7 +350,7 @@ hapwvek2 <- hapwvek[1:npops]
 names(fsth1all) <- paste("pop",1:npops,"/rest",sep="")
 
  for (xx in 1:npops){
-    nca  <- npops - 1  # Anzahl der übrigen Populationen
+    nca  <- npops - 1  # Anzahl der uebrigen Populationen
     hapw <- sum(hapwvek2[-xx],na.rm=TRUE)/nca
     fsth1all[xx] <- 1 - ((hapwvek[xx]+hapw)/2)/(hapa1all[xx]/nca)
  }  

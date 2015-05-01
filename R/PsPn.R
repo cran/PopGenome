@@ -25,7 +25,7 @@ Pn <- 0
 
 
 for(k in 1:cm){
-   # Spaltenweise über die codonise64 Matrix
+   # Spaltenweise ueber die codonise64 Matrix
    csite  <- cseq[ ,k,drop=FALSE]
    # csite <- as.matrix(csite)
    H      <- counthaplotype(csite)
@@ -103,7 +103,7 @@ return(list(cps=cps,cpn=cpn))
 
 
 i_mutnum <- function (seq){
-#seq ist decodiert. gehe über alle drei Spalten
+#seq ist decodiert. gehe ueber alle drei Spalten
 
  m_num <- 0
 for(k in 1:3){

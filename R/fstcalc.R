@@ -159,7 +159,7 @@ sv2 <- (FREQ_LIST[[pop[1]]]["freq1",id2]*FREQ_LIST[[pop[2]]]["freq2",id2] + FREQ
                       (FREQ_LIST[[pop[1]]]["freq0",id2]*FREQ_LIST[[pop[2]]]["freq0",id2])
 
 
-SV1[pop[1],pop[2]]  <<- sum(sv1) # GLOBAL damit beim AUfruf das Veränderte SV übernommen wird
+SV1[pop[1],pop[2]]  <<- sum(sv1) # GLOBAL damit beim AUfruf das Veraenderte SV uebernommen wird
 SV2[pop[1],pop[2]]  <<- sum(sv2) # GLOBAL
 
 

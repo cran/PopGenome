@@ -151,6 +151,7 @@ if(!is.list(positions)){
          bialpos                       <- bialpos[1]:bialpos[2]     
          }else{
           region.names[zz]             <- paste(Gene.matrix[zz,1],"-",Gene.matrix[zz,2])
+          n.sites[zz]                  <- Gene.matrix[zz,2] - Gene.matrix[zz,1] + 1 
           next
          }
 
@@ -251,6 +252,11 @@ if(!is.list(positions)){
         bialpos                       <- which(bialpos)
                
         region.names[zz]              <- paste(positions[[zz]][1],"-",positions[[zz]][length(positions[[zz]])])
+	n.sites[zz]                   <- length(positions[[zz]])
+
+        ## Progress
+        progr <- progressBar(zz,length(positions), progr)
+        ####
           
         if(length(bialpos)==0){next}
 
@@ -261,7 +267,10 @@ if(!is.list(positions)){
         synonymous[[zz]]              <- XXX@synonymous[[1]][bialpos]
         transitions[[zz]]             <- XXX@transitions[[1]][bialpos]
         biallelic.sites[[zz]]         <- XXX@biallelic.sites[[1]][bialpos] 
-        n.sites[zz]                   <- positions[[zz]][length(positions[[zz]])] - positions[[zz]][1] + 1 
+        
+
+        #positions[[zz]][length(positions[[zz]])] - positions[[zz]][1] + 1 
+
         biallelic.substitutions[[zz]] <- XXX@biallelic.substitutions[[1]][, bialpos, drop=FALSE]
 
         # GFF stuff
@@ -269,12 +278,7 @@ if(!is.list(positions)){
         CodingSNPS[[zz]]                    <- XXX@CodingSNPS[[1]][bialpos]        
         ExonSNPS[[zz]]                      <- XXX@ExonSNPS[[1]][bialpos]
         IntronSNPS[[zz]]                    <- XXX@IntronSNPS[[1]][bialpos]
-        }       
-   
-     ## Progress
-     progr <- progressBar(zz,length(positions), progr)
-     ####
-     
+        }                 
      }
    } 
 

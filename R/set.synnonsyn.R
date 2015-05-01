@@ -7,8 +7,13 @@ if(ref.chr[1]==FALSE){
 stop("Please verify the reference sequence")
 }
 
+if(object@gff.info == FALSE) {
+stop("No GFF file was read in !")
+}
+
+
 for (xyz in 1:length(ref.chr)){
-# erstmal nur für ein Chunk
+# erstmal nur fuer ein Chunk
 
 Coding.matrix            <- object@region.data@Coding.matrix2[[xyz]][,] # weil ff object, 2 because (fitting GFF)
 biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]  # with respect to the refernce positions
@@ -18,6 +23,11 @@ REV                      <- object@region.data@rev.strand[[xyz]][,]    #  revers
 REV                      <- as.logical(REV) 
 CodingSNPS               <- object@region.data@CodingSNPS[[xyz]]
 
+if(sum(CodingSNPS)==0){
+warning("No coding SNPs in this region !")
+print(object@region.names[xyz])
+next
+}
 
 #print(REV)
 if(any(!REV)){

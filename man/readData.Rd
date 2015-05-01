@@ -45,7 +45,7 @@ readData(path,populations=FALSE,outgroup=FALSE,include.unknown=FALSE,
 }
 
 \details{
-All data (alignments or SNP-files) has to be stored in one folder. The folder is the input of this \cr 
+All data (alignments or SNP-files) have to be stored in one folder. The folder is the input of this \cr 
 function. If no GFF file (which also have to be stored in a folder) is specified, an alignment in \cr
 the correct reading frame (starting at a first codon position) is expected. \cr
 Otherwise synonymous and non-synonymous positions are not identified correctly. \cr \cr
@@ -73,7 +73,7 @@ big.data: \cr
 - use the ff-package \cr 
 - ff mechanism is used for biallelic.matrix and GFF/GTF information \cr 
 - is automatically activated for readVCF or readSNP \cr
-- Note! you should set this to TRUE if you use big chunks \cr 
+- Note! you should set this to TRUE if you use big chunks of data \cr 
   and you want to later concatenate them in the PopGenome framework \cr
   (for example: sliding windows of the whole dataset).\cr \cr
 

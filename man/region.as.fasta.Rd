@@ -28,12 +28,22 @@ This generic function writes a FASTA file of the observed biallelic positions to
 }
 
 
+\details{
+In case of \code{type=2} we recommend to use the function 
+splitting.data(,positions=list( ... ), type=2) before and apply 
+the region.as.fasta() to this splitted object afterwards. The \code{type=1}
+method will write a FASTA file including only the biallelic.sites. \cr
+\code{region.id} is the the region number specified in the PopGenome class \code{GENOME}.
+}
+
 
 \examples{
 
 #GENOME.class       <- readSNP("Arabidopsis",CHR=1)
-#GENOME.class.split <- splitting.data(GENOME.class, positions=list(100:200))
-#region.as.fasta(GENOME.class.split,1,"my_fasta_file.fas")
+# split the data into the genmic positions 100 to 2000
+#GENOME.class.split <- splitting.data(GENOME.class, positions=list(100:2000),type=2)
+#GENOME.class.split@region.names
+#region.as.fasta(GENOME.class.split,1,"my_fasta_file.fas",type=2, ref.chr="chrom1.fas")
 
 }
 

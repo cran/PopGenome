@@ -609,13 +609,13 @@ coalsim <- function(nsam=c(10), niter=2, theta=c(5.0), nloci=1, npop=1, nsites= 
 					 if(big.data){
 					 open(msout$gametes[[zz]])  
 					 }
-                                         haplotypes <- msout$gametes[[zz]][,] 
+                                         haplotypes <- msout$gametes[[zz]][,,drop=FALSE] 
 					 if(big.data){
 					 close(msout$gametes[[zz]])  
 					 }						
 					 
 					 positions  <- msout$positions[[zz]]
- 					 
+ 					 #print(haplotypes)
 
                                              ## STATISTICS ########################################
                                                if(neutrality){

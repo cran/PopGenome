@@ -22,7 +22,7 @@ if(SNP.DATA){big.data=TRUE}
 
 if(parallized){
  
-	library(parallel)
+	#library(parallel)
 	n.cores <- parallel::detectCores() #multicore:::detectCores()
 	#n.cores <- n.cores - 1 
 	#options(cores=n.cores)
@@ -116,7 +116,7 @@ liste    	       <- list.files(path,full.names=TRUE)
 genome@genelength      <- length(liste)
 
 if(FAST){
-genome@Pop_Slide$calculated      <- TRUE # nur wegen Einschränkungen, die auch im Slid Modus gelten
+genome@Pop_Slide$calculated      <- TRUE # nur wegen Einschraenkungen, die auch im Slid Modus gelten
 }else{
 genome@Pop_Slide$calculated      <- FALSE
 }
@@ -190,7 +190,7 @@ methods <- "DATA"
 # if (.Platform$OS.type == "unix") {
 # path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.so")
 # }else{
-# ## muss je nach 32 64 Win geändert werden !
+# ## muss je nach 32 64 Win geaendert werden !
 # path_C_code      <- file.path(.path.package("PopGenome"),"libs","PopGenome.dll")
 # }
 # dyn.load(path_C_code,PACKAGE="PopGenome")

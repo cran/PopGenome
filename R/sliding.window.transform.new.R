@@ -164,7 +164,7 @@ genomeobj@genelength                <- length(NAM)
 genomeobj@n.sites                   <- n.sites
 
  if(length(ddatt@popmissing)==0){ddatt@popmissing <- vector("list",length(genomeobj@region.names))}
-        # weil liste füllen mit NULL nicht funktioniert, eh besser die Sachen schon vorher zu definieren
+        # weil liste fuellen mit NULL nicht funktioniert, eh besser die Sachen schon vorher zu definieren
 
 
 ddatt@biallelic.matrix <- biallelic.matrix

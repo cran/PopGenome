@@ -96,7 +96,8 @@ Note: \cr
 1) The nucleotide diversities have to be devided by the size of region considered (e.g. \code{GENOME@n.sites}) to give diversities per site. \cr
 2) When missing or unknown nucleotides are included (include.unknown=TRUE) those sites are completely deleted in case of haplotype based statistics. \cr
 3) The function \code{detail.stats(...,site.FST=TRUE)} will compute SNP specific FST values which are then 
-stored in the slot \code{GENOME.class@region.stats@site.FST}.
+stored in the slot \code{GENOME.class@region.stats@site.FST}.\cr
+4) We recommend to use \code{mode="nucleotide"} in case you have many unknowns included in your dataset.
 }
 
 \references{

@@ -6,7 +6,7 @@ readVCF <- function( filename, numcols, tid, frompos, topos, samplenames=NA, gff
 ############# Parallel Computations ############################################
 if(parallel){
 
-require(parallel)
+#require(parallel)
 
 n.cores <- parallel::detectCores() 
  #cl <- makeCluster(getOption("cl.cores", n.cores))
@@ -206,6 +206,7 @@ gffpath <- "GFFRObjects"
 	fileprefix=paste(sep="","chr:","_",tid,"_",frompos,"-",topos,"_")
 
 	#
+        N.SITES2 <- 0
 	while( numusedcols == numcols )
 	{
  
@@ -220,7 +221,8 @@ gffpath <- "GFFRObjects"
 		#
 		setcols     <- as.integer( colnames(mi) ) > 0
 		numusedcols <- sum(setcols)
-	
+		N.SITES2    <- N.SITES2 + numusedcols
+		#print(mi)
 
 		#if(numusedcols==0){
                 #   .Call("VCF_close",v)
@@ -233,8 +235,9 @@ gffpath <- "GFFRObjects"
 		#print( cn )
 
 		
-		fullfilename = paste( sep="", outdir, "/", filenum,":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
-		filenum      = filenum + 1
+		#fullfilename = paste( sep="", outdir, "/", filenum,":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+		fullfilename = paste( sep="", outdir, "/", filenum,".RData" )
+                filenum      = filenum + 1
 		#print( fullfilename )
 		
 		#
@@ -273,7 +276,8 @@ gffpath <- "GFFRObjects"
                   if(length(SUB_GFF)!=0){
                    o_b_j_sub    <- SUB_GFF
                   
-                   fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+                   #fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),":","chr",tid,"_",cn[1],"-",cn[numusedcols],"_",".RData" )
+		   fullfilename <- paste( sep="","GFFRObjects", "/", (filenum-1),".RData" )	
                    save( file = fullfilename , o_b_j_sub  )
                   }
 
@@ -296,8 +300,9 @@ if(length(res@region.names)>1){
 
 }
  
- res@region.names   <- paste(tid,":",frompos,"-",topos,sep=" ")
+ res@region.names   <- paste(frompos,"-",topos,sep=" ")
  res@n.sites        <- as.numeric((topos - frompos + 1))
+ res@n.sites2       <- N.SITES2 # because part of the last matrix is usually unused 
  res@keep.start.pos <- frompos
  res@gff.info       <- GFF
 

@@ -89,9 +89,42 @@ fillids   <- match(bial.sites,s_tart:e_end)
 RETMAT[,fillids] <- bial
 
 rownames(RETMAT) <- ind.names
+
+# if a region is specified via splitting.data concatenate left and right-hand nucleotides
+if( length(grep("-",object@region.names[region.id]))!=0 ){
+
+	leftrightPOS <- as.numeric(strsplit(object@region.names[region.id]," - ")[[1]])
+        leftPOS      <- leftrightPOS[1] 
+	rightPOS     <- leftrightPOS[2]
+        # s_tart 
+	# ---------------------------------------------------------------------------------
+        # left hand matrix
+	leftRegion   <- leftPOS:(s_tart-1)
+        leftNUCS     <- CHR[leftRegion]
+        # convert to character
+	leftNUCS     <- nuc[match(leftNUCS,number)] 
+        leftNUCS     <- rep(leftNUCS,length(ind.names))
+        leftNUCS     <- matrix(leftNUCS,nrow=length(ind.names),ncol=length(leftRegion),byrow=TRUE)
+        #e_end
+	# ----------------------------------------------------------------------------------
+	# right hand matrix
+	rightRegion  <- (e_end+1):rightPOS
+        rightNUCS    <- CHR[rightRegion]
+        # convert to character
+	rightNUCS    <- nuc[match(rightNUCS,number)] 
+        rightNUCS    <- rep(rightNUCS,length(ind.names))
+        rightNUCS    <- matrix(rightNUCS,nrow=length(ind.names),ncol=length(rightRegion),byrow=TRUE)
+
+# concatenate matrices
+
+RETMAT <- cbind(leftNUCS,RETMAT,rightNUCS)
+
+}
+
+
 APE_write.dna(RETMAT,file=filename,colsep="",format="fasta") # This function is from the ape package on CRAN 
 
-return(bial)
+return(RETMAT)
 
 
 }

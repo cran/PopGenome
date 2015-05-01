@@ -279,7 +279,7 @@ erg <- apply(matr,2,function(check){
        return(RETURN)    
       } # end size==2
  
-    }# end of !fünfsechs
+    }# end of !fuenfsechs
   
 
      if(sechs){   

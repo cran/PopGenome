@@ -43,7 +43,7 @@ happairs   <-  combn(n.haps,2)
 apply(happairs,2,function(x){
      hap1                  <-  uniquebial[x[1],]
      hap2                  <-  uniquebial[x[2],]
-     GLxx$DistM[x[1],x[2]] <-  sum(hap1!=hap2)
+     GLxx$DistM[x[1],x[2]] <-  sum(hap1!=hap2, na.rm=TRUE)
      })
 
 # Calc Frequencies of Haplotypes in each population

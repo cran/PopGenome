@@ -1,3 +1,31 @@
+Changes in PopGenome 2.1.5
+===========================
+
+BUG FIXED:
+
+- readData(,format="VCF") didn't handle insertions.
+  Those positions are now treated as unknowns
+- MS() failed for low theta values   
+- minor issue in set.synnonsyn()
+
+NEW FEATURES:
+
+- region.as.fasta(,type=2) now uses the information 
+  stored in the slot GENOME.class.split@region.names 
+  to extract the FASTA.
+- VCF_split_into_scaffolds()
+- GFF_split_into_scaffolds()
+- count.unknowns()
+- new manual on CRAN 
+- split_data_into_GFF_attributes()
+- get.feature.names()
+
+THX:
+
+- Mara
+- Tina
+- Tony
+
 Changes in PopGenome 2.1.0
 ===========================
 

@@ -67,7 +67,7 @@ return(unic)
 R2 <- function(unic,pi,sample_size,S)
 {
     # pi is thetaT
-    # sample_size -> Größe der Population 
+    # sample_size -> Groesse der Population 
 
     sm2 <- 0
     

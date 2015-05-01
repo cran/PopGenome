@@ -41,7 +41,7 @@ exportMethods(region.as.fasta)
 exportMethods(get.codons)
 exportMethods(get.individuals)
 exportMethods(PG_plot.biallelic.matrix)
-
+exportMethods(count.unknowns)
 
 export(create.PopGenome.method)
 export(concatenate.regions)
@@ -61,5 +61,9 @@ export(MS_getStats)
 export(codontable)
 export(PopGplot)
 export(Whop_readVCF)
+export(VCF_split_into_scaffolds)
+export(GFF_split_into_scaffolds)
+export(split_data_into_GFF_attributes)
+export(get.feature.names)
 
 export(MS)

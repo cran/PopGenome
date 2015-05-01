@@ -37,10 +37,10 @@ rbind_list2 <- vector("list",length(chromosomes)) # gff
 
 for(xx in 1:length(chromosomes)){
 
-# 1e+08 ist zu groß ca.
+# 1e+08 ist zu gross ca.
 o_b_j_       <- create_SNP_matrix(rbind_list[[xx]],rbind_list2[[xx]])
 
-# hier könnte man dann anfangen zu splitten
+# hier koennte man dann anfangen zu splitten
 rows <- dim(o_b_j_$matrix)[1]
 cols <- dim(o_b_j_$matrix)[2]
 
@@ -96,7 +96,7 @@ res      <- readData(path,populations=populations,outgroup=outgroup,include.unkn
             parallized=parallized,progress_bar_switch=progress_bar_switch,
             FAST=FAST,big.data=big.data,SNP.DATA=SNP.DATA)
 
-# Löschen des Verzeichnisses
+# Loeschen des Verzeichnisses
 
 #if(.Platform$OS.type=="windows"){
 #  shell(paste("rmdir ",file.path(getwd(),"HapMapRObjects")," /s /q",sep=" "))

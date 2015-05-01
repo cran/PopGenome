@@ -12,6 +12,7 @@ poppairs     =   "vector",      # population pairs
 outgroup     =   "vector",      # outgroup
 #region.names    =   "character",   # region.names
 region.names =   "character",
+feature.names=   "character",
 genelength   =   "numeric",     # number of genes that where calculated
 n.sites      =   "numeric",
 n.sites2     =   "numeric", # important for SNP data
@@ -114,6 +115,7 @@ MDG2="matrix",
 D		       =   "matrix",              # introgression slots
 f		       =   "matrix",              
 jack.knife             =   "logical",
+missing.freqs          =   "matrix",
 
 genes                  =   "list",                # a list of statistics objects
 region.data            =   "region.data",         # list of class GEN
@@ -999,9 +1001,9 @@ if(length(XX@region.data@biallelic.sites[[bialmatNr]])==0){return(NULL)}
 #  bial <- XX@region.data@biallelic.matrix[[bialmatNr]]}
 ###########
 
-  if(length(bial)>1){ # sollte das UNTERE lösen :)
+  if(length(bial)>1){ # sollte das UNTERE loesen :)
 
-            #if(!is.na(bial[1])){ # is na wegen sliding window mode letztes NULL verschwindet :( FIXME müssen diese Zeilen ? include.unknown problem
+            #if(!is.na(bial[1])){ # is na wegen sliding window mode letztes NULL verschwindet :( FIXME muessen diese Zeilen ? include.unknown problem
 	 
              return(bial)
  
@@ -3211,7 +3213,7 @@ genomeobj@region.names              <- paste(1:length(NAM),":",NAM,sep="")
 genomeobj@genelength                <- length(NAM)
 
  if(length(ddatt@popmissing)==0){ddatt@popmissing <- vector("list",length(genomeobj@region.names))}
-        # weil liste füllen mit NULL nicht funktioniert, eh besser die Sachen schon vorher zu definieren
+        # weil liste fuellen mit NULL nicht funktioniert, eh besser die Sachen schon vorher zu definieren
 
 genomeobj@region.data               <- ddatt
 genomeobj@Pop_Neutrality$calculated <- FALSE

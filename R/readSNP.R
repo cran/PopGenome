@@ -380,7 +380,7 @@ if(too.big){
 }
 
 
-# Löschen des Verzeichnisses
+# Loeschen des Verzeichnisses
 
 unlink("SNPRObjects", recursive=TRUE)
 if(gffpath[1]!=FALSE){

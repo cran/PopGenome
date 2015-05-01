@@ -45,7 +45,7 @@ If \code{approx=FALSE}, the full diploid information will be considered.\cr
 The ff-package PopGenome uses to store the SNP information limits total data size to \cr
 individuals * (number of SNPs) <= .Machine$integer.max \cr
 In case of very large data sets, the bigmemory package will be used; \cr
-this will slow down calculations. \cr
+this will slow down calculations (e.g. this package have to be installed first !!!).\cr
 Use the function \code{vcf_handle <-.Call("VCF_open", filename)} \cr 
 to open a VCF-file and \code{.Call("VCF_getSampleNames",vcf_handle)} \cr 
 to get and define the individuals which should be considered in the analysis. \cr

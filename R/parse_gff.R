@@ -93,7 +93,7 @@ if(length(GLOBAL.GFF$GFF)!=0){
  #GLOBAL.GFF$GFF          <- NULL
  #--------
  
- # When GFF3 --> vorletzte Zeile bearbeiten ! für READ
+ # When GFF3 --> vorletzte Zeile bearbeiten ! fuer READ
  vorl       <- tab[,8]
  punkte     <- which(vorl==".")
  if(length(punkte)>0){

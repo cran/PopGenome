@@ -39,7 +39,7 @@
 \alias{PG_plot.biallelic.matrix}
 \alias{introgression.stats}
 \alias{jack.knife.transform}
-
+\alias{count.unknowns}
 
 
 \alias{getMS,GENOME-method}
@@ -65,6 +65,7 @@
     \item{\code{poppairs}:}{---}
     \item{\code{outgroup}:}{A vector of outgroup sequences}
     \item{\code{region.names}:}{Names/identifier of each region}
+    \item{\code{feature.names}:}{Feature attributes of a given region}
     \item{\code{genelength}:}{Number of regions }
     \item{\code{keep.start.pos}:}{Start positions for sliding window}
     \item{\code{n.sites}:}{Total number of sites}
@@ -151,6 +152,7 @@
     \item{\code{D}}{Pattersons D statistic}
     \item{\code{f}}{the fraction of the genome that is admixed}
     \item{\code{jack.knife}}{jacknife mode}
+    \item{\code{missing.freqs}:}{Missing nucleotide frequency}
   }
 }
 \section{Methods}{
@@ -195,6 +197,7 @@
     \item{usage}{---}
     \item{PG_plot.biallelic.matrix}{Plot the biallelic matrix}
     \item{introgression.stats}{Methods to measure archaic admixture}
+    \item{count.unknowns}{Calculates the frequencies of missing nucleotides}
   }
 }
 

@@ -33,21 +33,21 @@
 #   possible cell combinations that would still result in the marginal frequencies
 #   as highlighted) such that,
 #
-#          H(a+b) = {X: X € H and a+b = r1}.
+#          H(a+b) = {X: X  H and a+b = r1}.
 #
 #   Then,
 #
-#          P(a,b|a+b,n) = P(X|X € H(r1)) = b(a;c1,p)*b(b;c2,p)/b(a+b;n,p).
+#          P(a,b|a+b,n) = P(X|X  H(r1)) = b(a;c1,p)*b(b;c2,p)/b(a+b;n,p).
 #
 #   This binomials relationship reduces each 2x2 table to the exact hypergeometric 
 #   distribution to compute the P-value. Now considering only the binomial 
 #   coefficients,
 #
-#          P(X|X € H(r1)) = C(c1,a)*C(c2,b)/C(n,a+b)
+#          P(X|X H(r1)) = C(c1,a)*C(c2,b)/C(n,a+b)
 #
 #   Thereby Fisher's exact P-values are readily evaluated as,
 #
-#          P = SUM(P(X|X € H(r1))).        
+#          P = SUM(P(X|X H(r1))).        
 #
 #   IMPORTANT: Due that Matlab could not work for factorials greater than 170. We
 #   use the function sum([log(x+1)......]), in order to avoid further calculation 

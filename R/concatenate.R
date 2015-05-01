@@ -301,7 +301,7 @@ if(obj@big.data){
 
   if(rows_bial*cols_bial>.Machine$integer.max){
     print("Warning: Matrix too big for ff package --> using the bigmemory package! ")
-    require(bigmemory)
+    #require(bigmemory)
     options(bigmemory.allow.dimnames=TRUE)
     biallelic.matrix <- bigmemory::filebacked.big.matrix(backingfile="BIGBIAL",ncol=cols_bial,nrow=rows_bial, type="double")
   }else{
@@ -466,12 +466,16 @@ if(obj@n.biallelic.sites[xx]==0){next}
           if(R.coding2){
            if(cols.coding2[xx]!=0){
             end.coding2                                <- start.coding2 + cols.coding2[xx] - 1
-            open(dat@Coding.matrix2[[xx]])        
-            Coding.matrix2[start.coding2:end.coding2,] <- dat@Coding.matrix2[[xx]][,] + ADD.GFF
+            open(dat@Coding.matrix2[[xx]]) 
+            if(xx>1){       
+            Coding.matrix2[start.coding2:end.coding2,] <- dat@Coding.matrix2[[xx]][,] + sum(ADD.SITES[1:(xx-1)]) #+ ADD.GFF
+            }else{
+	    Coding.matrix2[start.coding2:end.coding2,] <- dat@Coding.matrix2[[xx]][,]	
+	    }
             close(dat@Coding.matrix2[[xx]])
             start.coding2 <- end.coding2 + 1           
            }
-           ADD.GFF       <- ADD.GFF + ADD.SITES[xx]
+           #ADD.GFF       <- ADD.GFF + ADD.SITES[xx]
           }
 
           if(R.exons){

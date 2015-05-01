@@ -27,19 +27,19 @@ getsynnonsyndiff_my<-function(...){
 
 ########################   codontable    ##################################################
 codontable<-list()
-codontable[1]<- "FFLLSSSSCCW*YY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Standard' # geändert !
-codontable[2]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSS**NNKK-"  #   'Vertebrate Mitochondrial' # geändert !
-codontable[3]<- "FFLLSSSSCCWWYY**TTTTPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSRRNNKK-"  #   'Yeast Mitochondrial' # geändert !
-codontable[4]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Mold, Protozoan, and CoelenterateMitochondrial and Mycoplasma/Spiroplasma'# geändert !
-codontable[5]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSSSNNKK-"  #   'Invertebrate Mitochondrial # geändert !
-codontable[6]<- "FFLLSSSSCCW*YYQQLLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Ciliate, Dasycladacean and Hexamita Nuclear'# geändert !
-codontable[7]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSSSNNKN-"  #   'Echinoderm Mitochondrial' # geändert !
-codontable[8]<- "FFLLSSSSCCWCYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Euplotid Nuclear'# geändert !
-codontable[9]<- "FFLLSSSSCCW*YY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    '"Bacterial"' # geändert !
-codontable[10]<-"FFLLSSSSCCW*YY**LLSLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    'Alternative Yeast Nuclear' # geändert !
-codontable[11]<-"FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSGGNNKK-"  #    'Ascidian Mitochondrial' # geändert !
-codontable[12]<-"FFLLSSSSCCWWYY*YLLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSSSNNKN-"  #    'Flatworm Mitochondrial' # geändert !					
-codontable[13]<-"FFLLSSSSCCW*YYQ*LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    'Blepharisma Nuclear' # geändert !
+codontable[1]<- "FFLLSSSSCCW*YY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Standard' # geaendert !
+codontable[2]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSS**NNKK-"  #   'Vertebrate Mitochondrial' # geaendert !
+codontable[3]<- "FFLLSSSSCCWWYY**TTTTPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSRRNNKK-"  #   'Yeast Mitochondrial' # geaendert !
+codontable[4]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Mold, Protozoan, and CoelenterateMitochondrial and Mycoplasma/Spiroplasma'# geaendert !
+codontable[5]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSSSNNKK-"  #   'Invertebrate Mitochondrial # geaendert !
+codontable[6]<- "FFLLSSSSCCW*YYQQLLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Ciliate, Dasycladacean and Hexamita Nuclear'# geaendert !
+codontable[7]<- "FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSSSNNKN-"  #   'Echinoderm Mitochondrial' # geaendert !
+codontable[8]<- "FFLLSSSSCCWCYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #   'Euplotid Nuclear'# geaendert !
+codontable[9]<- "FFLLSSSSCCW*YY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    '"Bacterial"' # geaendert !
+codontable[10]<-"FFLLSSSSCCW*YY**LLSLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    'Alternative Yeast Nuclear' # geaendert !
+codontable[11]<-"FFLLSSSSCCWWYY**LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMMTTTTSSGGNNKK-"  #    'Ascidian Mitochondrial' # geaendert !
+codontable[12]<-"FFLLSSSSCCWWYY*YLLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSSSNNKN-"  #    'Flatworm Mitochondrial' # geaendert !					
+codontable[13]<-"FFLLSSSSCCW*YYQ*LLLLPPPPRRRRHHQQVVVVAAAAGGGGDDEEIIMITTTTSSRRNNKK-"  #    'Blepharisma Nuclear' # geaendert !
 
 ######################## CODON  and   TABLE   ,syndDif  and  AsynDif  ##################################################
  s1<-c(rep(1,16),rep(2,16),rep(3,16),rep(4,16))

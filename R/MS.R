@@ -133,7 +133,7 @@ if(thetaID=="user" &  PAR ){
  locusData                     <-  NULL
 
 
-### Rufe für jedes GEN MS einzelnd auf !
+### Rufe fuer jedes GEN MS einzelnd auf !
 
 ## PROGRESS #########################
  progr <- progressBar()
@@ -262,7 +262,7 @@ if(length(popGetBial(GENO,xx))!=0){
   params@n.sam           <-  nsammy
   params@n.sites         <-  GENO@n.sites[xx]
 
-  # Notlösung (ändern)
+  # Notloesung (aendern)
   # params@fixed.seg.sites <-  GENO@n.biallelic.sites[xx]
   #
 
@@ -273,7 +273,7 @@ if(length(popGetBial(GENO,xx))!=0){
   ## CALL MS with the parameters
      locusData         <- c(locusData,coalsimC(params,detail=detail,testNames=testNames,numTests=numTests,neutrality=neutrality,linkage=linkage,F_ST=F_ST,MSMS,big.data))   # list of locus DATA
 
-}else{locusData        <- c(locusData,NA)}  # Wenn überhaupt Segregating Sites existieren
+}else{locusData        <- c(locusData,NA)}  # Wenn ueberhaupt Segregating Sites existieren
 
 
     if(nloci > 1000){
@@ -284,7 +284,7 @@ if(length(popGetBial(GENO,xx))!=0){
     progr <- progressBar(xx,nloci, progr)
 ##################################################################
 
-} # End of über alle GENE
+} # End of ueber alle GENE
 
 #####################################################################################################
 # Prepare the summary class over all loci	

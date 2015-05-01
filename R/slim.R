@@ -106,7 +106,7 @@ modification <- FALSE
        
 
 	if(length(delete)>0){
-         # GROUP2 eventuell noch ändern ....
+         # GROUP2 eventuell noch aendern ....
          # mod # GROUP      <<- GROUP[-delete] 
          # mod # N.REGIONS  <<- length(unique(GROUP))
          for(xx in 1:popnum){
@@ -316,7 +316,7 @@ modification <- FALSE
 	
   
 
-}# end of pilot runs (äußere Schleife)
+}# end of pilot runs 
 
   	
         #################################################################

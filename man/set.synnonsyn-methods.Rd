@@ -34,10 +34,12 @@ are saved in the corresponding slot \code{GENOME.class@region.data@codons}. \cr
 }
 
 \note{
-The data has to be read in with a corresponding GFF/GTF file (including the CDS fields); 
-otherwise a correct classification is not possible.
+The data has to be read in with a corresponding GFF/GTF file (CDS fields must be specified); 
+otherwise a correct classification is not possible. The set.synnonsyn() function does 
+not work for splitted objects e.g produced via sliding.window.transform() or splitting.data(). 
 Note, transcripts which are in the same CDS region but have different reading frames are \cr
 are not specified correctly. PopGenome can also handle coding regions on reverse strands.
+We have used the program SNPeff to validate our results.
 }
 
 \examples{

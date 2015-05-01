@@ -35,7 +35,7 @@ for(xx in 1:npops){
       namesX <- namesX[-isit]
      }
    
-   # unbekannte gelöscht ! 
+   # unbekannte geloescht ! 
     Populations[[xx]]   <- match(namesX,rownames(Code_matrix))
     Populations2[[xx]]  <- namesX
   } # End Population is character
@@ -81,7 +81,7 @@ if(is.character(outgroup)){
       warning("region.stats",attr(Code_matrix,"path"))
    }
   warning("The outgroup allele ----->: ",namesX[isit], "<---- doesnt exist")
-  namesX   <- namesX[-isit] # unbekannte gelöscht !
+  namesX   <- namesX[-isit] # unbekannte geloescht !
  
  } 
   outgroup  <- match(namesX,rownames(Code_matrix))

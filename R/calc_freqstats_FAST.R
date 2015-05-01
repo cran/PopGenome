@@ -126,7 +126,7 @@ if(Achaz){
   Yach[[xx]] <- freqtestn_achaz(popsize,sfreqn,THETA_ERG["S",xx],w1,w2)
 } # End if Achaz  
  
- }# End for über alle populationen
+ }# End for ueber alle populationen
 
   #----------------------------------------------------------------
   THETA_ERG             <- rbind(THETA_ERG,matrix(NaN,2,npops))
