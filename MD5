@@ -1,6 +1,6 @@
-cc8b34e02b65773e3e4e5324b9e09a3b *DESCRIPTION
+e041630268526e171e9f090c1a487f98 *DESCRIPTION
 b5e61a4f87b4644a416759804b1fc434 *NAMESPACE
-3999ccb9c5a396c39282fbd6856edf76 *NEWS
+d884588b3ed352a73c5a45b9bde01940 *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -61,7 +61,7 @@ cd94ac57cf9af366d8946258313b8588 *R/freqtest_achaz.R
 59052286bebef5e82640f6878e016494 *R/genetree.R
 f755e44be4be94dcef7bbb055797f8ce *R/get.biallelic.matrix.R
 c0a3bd1e50a8c2782b2f1ac03ce8120c *R/get.codons.R
-72c6b1c18219962f3fabbd33b08e9a4a *R/get.feature.names.R
+99d973abca9a3d0935e51270aaacfc75 *R/get.feature.names.R
 f6f8fd738cddbacb642f084047f0284d *R/get.individuals.R
 9fe2932c7e132f66ae52fb4b4df788d9 *R/get.recomb.R
 d8ad98f74ce59203392de6d2fa0de2ad *R/get.sweeps.R
@@ -129,7 +129,7 @@ c7edc90937281f975d3ad7818f0e27f3 *R/site_FST.R
 ce42f458430f6943a29a8e561d8a678d *R/snn.R
 57a8aa456b3dc240460a63ac0fe2e836 *R/sortmatrix.R
 15b5f0fb07b9dd771052d4b9b51d449e *R/split.GFF.R
-ad5702e9eb3ab7cbdc847c2ec2585031 *R/split_data_into_GFF_attributes.R
+3857541f8395f6fc7a72e8c730304b61 *R/split_data_into_GFF_attributes.R
 7c233912ac13d5ce9b3556f0adcc880c *R/splitting.data.R
 ea5be774610e7e02c1883457b8e4643c *R/splitting.data.sep.R
 de01f2810a8c7d3774b2a91b58d9fc68 *R/sweeps.stats.R
@@ -146,11 +146,11 @@ c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 921298844664c2107a8579da549dd51d *inst/CITATION
 f1ee62347d9ec008bc135b6199159bbb *inst/COPYRIGHTS
 bf7e82a4e684fdfcc00a49aeb6736075 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-36c51a851d399d4cadd6a05760ae1bcf *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+0fd6a04531dba483eff726bbe107414e *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 7d07b1fe69933e9bce2f4266d5ba7860 *inst/doc/Integration_of_new_Methods.Rnw
-6752ba384ad587e6ddaaf769a506b6e7 *inst/doc/Integration_of_new_Methods.pdf
+aad1cdbd948bbeb82831c5d90002f039 *inst/doc/Integration_of_new_Methods.pdf
 bccacbbf031d49412295cf3d887c9ea5 *inst/doc/Whole_genome_analyses_using_VCF_files.Rnw
-7b5b03966b20976356a66de940cc7e73 *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
+8799e646af6dedd005436c72e3534434 *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 7143646aeb017b223d2a11a1ab7781da *man/F_ST.stats-methods.Rd

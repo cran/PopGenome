@@ -29,7 +29,7 @@ chr <- as.character(chr)
 		 mm  <- grep(attribute, Str)
 		 id  <- mm[1]
                  Str <- Str[id]
-        print("Found atribute")
+        print("Found attribute")
         break
         }
  }
@@ -52,7 +52,8 @@ chr <- as.character(chr)
 		 mm  <- grep(attribute, Str2)
 		 id  <- mm[1]
                  Str2 <- Str2[id]
-                if(Str2!=Str){SAVENAMES[xx] <- Str; Str <- Str2}
+                #if(Str2!=Str){SAVENAMES[xx] <- Str; Str <- Str2}
+		 SAVENAMES[xx] <- Str2
         }
  }
 
@@ -65,6 +66,7 @@ chr <- as.character(chr)
  # Generate position of each unique attribute id
  for(xx in 1:length(SAVENAMES)){
     cat(SAVENAMES[xx],":",xx,"of",length(SAVENAMES),"\n")
+    #ids   <- grep(SAVENAMES[xx],Attr)
     ids  <- SAVENAMES[xx] == XSAVENAMES
     ids  <- which(ids)
     pos  <- gff.table[ids,2:3]

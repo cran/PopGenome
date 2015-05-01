@@ -1,7 +1,7 @@
 Package: PopGenome
 Type: Package
 Title: An Efficient Swiss Army Knife for Population Genomic Analyses
-Version: 2.1.5
+Version: 2.1.6
 Date: 2015-05-1
 Author: Bastian Pfeifer [aut, cre], Ulrich Wittelsbuerger [ctb], Heng Li [ctb], Bob Handsaker [ctb]
 Authors@R: c(	person("Bastian", "Pfeifer", role = c("aut", "cre"), email = "Bastian.Pfeifer@uni-duesseldorf.de"),
@@ -24,5 +24,5 @@ Copyright: inst/COPYRIGHTS
 SystemRequirements: zlib headers and library.
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2015-05-01 08:12:07 UTC; user
-Date/Publication: 2015-05-01 17:01:12
+Packaged: 2015-05-02 13:33:06 UTC; user
+Date/Publication: 2015-05-04 23:40:49

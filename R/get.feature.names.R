@@ -26,7 +26,7 @@ chr <- as.character(chr)
 		#match.pos <- match.pos[1]
                 attr <- paste(gff.table[match.pos,1],gff.table[match.pos,4],sep="-->")
 	        attr <- paste(attr,collapse=";")
-		print(attr)
+		# print(attr)
         }else{next}
         # print(match.pos)
 	# set attribute to feature.names
