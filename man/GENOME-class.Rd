@@ -10,6 +10,7 @@
 \alias{F_ST.stats.2}
 \alias{detail.stats}
 \alias{diversity.stats}
+\alias{diversity.stats.between}
 \alias{MKT}
 \alias{recomb.stats}
 \alias{sweeps.stats}
@@ -40,6 +41,10 @@
 \alias{introgression.stats}
 \alias{jack.knife.transform}
 \alias{count.unknowns}
+\alias{calc.fixed.shared}
+\alias{set.filter}
+
+
 
 
 \alias{getMS,GENOME-method}
@@ -153,12 +158,24 @@
     \item{\code{f}}{the fraction of the genome that is admixed}
     \item{\code{jack.knife}}{jacknife mode}
     \item{\code{missing.freqs}:}{Missing nucleotide frequency}
+    \item{\code{n.fixed.sites}:}{...}
+    \item{\code{n.shared.sites}:}{...}
+    \item{\code{n.monomorphic.sites}:}{...}
+    \item{\code{BD}:}{...}
+    \item{\code{BDF}:}{...}
+    \item{\code{Bd_clr}:}{...}
+    \item{\code{Bd_dir}:}{...}
+    \item{\code{D.pval}:}{...}
+    \item{\code{D.z}:}{...}    
+    \item{\code{P.Bd_clr}:}{...}    
+    \item{\code{RNDmin}:}{...}
   }
 }
 \section{Methods}{
   \describe{
     \item{detail.stats}{Several misc. statistics}
     \item{diversity.stats}{Haplotype and nucleotide diversities}
+    \item{diversity.between}{Haplotype and nucleotide diversities}	
     \item{F_ST.stats.2}{Snn from Hudson }
     \item{F_ST.stats}{Fixation index }
     \item{getBayes}{Get the input for BayeScanR}
@@ -198,6 +215,9 @@
     \item{PG_plot.biallelic.matrix}{Plot the biallelic matrix}
     \item{introgression.stats}{Methods to measure archaic admixture}
     \item{count.unknowns}{Calculates the frequencies of missing nucleotides}
+    \item{calc.fixed.shared}{Calculates the frequencies of missing nucleotides}
+    \item{set.filter}{SNP Filtering}
+ 
   }
 }
 

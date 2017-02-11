@@ -18,8 +18,8 @@ for (xyz in 1:length(ref.chr)){
 Coding.matrix            <- object@region.data@Coding.matrix2[[xyz]][,] # weil ff object, 2 because (fitting GFF)
 biallelic.sites2         <- object@region.data@biallelic.sites2[[xyz]]  # with respect to the refernce positions
 biallelic.sites          <- object@region.data@biallelic.sites[[xyz]]
-START                    <- object@region.data@reading.frame[[xyz]][,] #  weil ff object
-REV                      <- object@region.data@rev.strand[[xyz]][,]    #  reverse strand information #---
+START                    <- object@region.data@reading.frame[[xyz]][,]  #  weil ff object
+REV                      <- object@region.data@rev.strand[[xyz]][,]     #  reverse strand information #---
 REV                      <- as.logical(REV) 
 CodingSNPS               <- object@region.data@CodingSNPS[[xyz]]
 

@@ -1,7 +1,36 @@
-setGeneric("introgression.stats", function(object,subsites=FALSE,do.D=TRUE) standardGeneric("introgression.stats"))
+setGeneric("introgression.stats", function(object,subsites=FALSE,do.D=FALSE, do.BD=FALSE, do.BDF=FALSE, keep.site.info=TRUE, block.size=FALSE, dxy.table=FALSE, D.global=FALSE, do.CLR=FALSE, dgt=2, do.RNDmin=FALSE, lambda=1) standardGeneric("introgression.stats"))
 
-setMethod("introgression.stats","GENOME",function(object,subsites,do.D){
+setMethod("introgression.stats","GENOME",function(object,subsites,do.D, do.BD, do.BDF, keep.site.info,block.size,dxy.table, D.global, do.CLR, dgt, do.RNDmin, lambda){
+
   
+if(do.CLR){
+keep.site.info <- TRUE
+do.BD          <- TRUE
+if(length(D.global)<=1){
+stop("To calculate the Bd-clr >>D.global<< has to be specified !")
+}
+}
+
+if(do.D){ 
+do.BD     <- FALSE
+do.BDF    <- FALSE
+}
+
+if(do.BD){ 
+do.D      <- FALSE
+do.BDF    <- FALSE
+#do.RNDmin <- FALSE
+}
+
+if(do.BDF){ 
+do.BD    <- FALSE
+do.D     <- FALSE
+}
+
+
+
+
+
   region.names                 <- object@region.names
   n.region.names               <- length(region.names)
   if(object@big.data){region.names <- NULL} # because of memory space
@@ -9,18 +38,56 @@ setMethod("introgression.stats","GENOME",function(object,subsites,do.D){
     NEWPOP <- FALSE
     npops                       <- length(object@populations)     # total number of populations
      
+
+# If Jacknife should be done we need keep.site.info to be set
+if(block.size[1]!=FALSE){
+keep.site.info=TRUE
+}
+
    
 # init
   D      <- matrix(NaN,n.region.names,1)
+  BD     <- matrix(NaN,n.region.names,1)
+  BDF    <- matrix(NaN,n.region.names,1)
+  Bd_dir <- matrix(NaN,n.region.names,1)
+  Bd_clr <- matrix(NaN,n.region.names,1)
+P.Bd_clr <- matrix(NaN,n.region.names,1)
   f      <- matrix(NaN,n.region.names,1)
+  RNDmin <- matrix(NaN,n.region.names,1)
+  D.z    <- matrix(NaN,n.region.names,1) # jacknife
+  D.pval <- matrix(NaN,n.region.names,1) # jacknife
 #--------------------------------------------------
 
   # Names ----------------------------------------
   rownames(D)       <- region.names
   colnames(D)       <- "D statistic"
+  rownames(BD)      <- region.names
+  colnames(BD)      <- "BD statistic"
+  rownames(BDF)     <- region.names
+  colnames(BDF)     <- "BDF statistic"
+  rownames(Bd_dir)  <- region.names
+  colnames(Bd_dir)  <- "Direction"
+  rownames(Bd_clr)  <- region.names
+  colnames(Bd_clr)  <- "Bd-clr"
+  rownames(P.Bd_clr)  <- region.names
+  colnames(P.Bd_clr)  <- "P.Bd_clr"
   rownames(f)       <- region.names
   colnames(f)       <- "f statistic"
+  rownames(RNDmin)  <- region.names
+  colnames(RNDmin)  <- "RNDmin"
   # ----------------------------------------------
+
+  site.D         <- vector("list",n.region.names) # region stats
+  change    	 <- object@region.stats
+
+ # Bd-CLR
+ if(do.CLR==TRUE){
+ print("Calculate Bd-Transition Table")
+ D.global     <- D.global[!is.na(D.global)]
+ #D.global[is.na(D.global)] <- 0	
+ D.global     <- round(D.global, digits=dgt)
+ Trans.matrix <- calc_Bd_CLR_table(D.global, lambda)
+ }
 
 
 ## PROGRESS #########################
@@ -107,6 +174,12 @@ if(subsites=="intergenic"){
   bial           <- bial[,inter,drop=FALSE]
   #object@Pop_FSTH$sites <- "intergenic"
 }
+
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
+
 }# End if subsites
 ############### ---------------------------------
 
@@ -117,11 +190,70 @@ if(subsites=="intergenic"){
     outgroup    <- object@region.data@outgroup[[xx]]  
 
     if(do.D){
-    res       <- calc_D(bial, populations, outgroup) 
-    D[xx]     <- res$D
-    f[xx]     <- res$f
-
+	
+	    res       <- calc_D(bial, populations, outgroup, keep.site.info) 
+    	    D[xx]     <- res$D
+    	    f[xx]     <- res$f	 
+		
+   # fill detailed Slots --------------------------------# 
+     if(keep.site.info){	 	
+     site.D[[xx]]  		<- rbind(res$D_site,res$ABBA,res$BABA)
+     rownames(site.D[[xx]])     <- c("D","ABBA","BABA")
+     }		  
+   # ----------------------------------------------------# 
     }
+
+    if(do.BD){
+	    res        <- calc_BD(bial, populations, outgroup, keep.site.info, dxy.table) 
+    	    BD[xx]     <- res$D
+    	    #f[xx]      <- res$f
+            Bd_dir[xx] <- res$Bd_dir
+		
+   # fill detailed Slots --------------------------------# 
+     if(keep.site.info){	 	
+     site.D[[xx]]  		<- rbind(res$D_site,res$ABBA,res$BABA)
+     rownames(site.D[[xx]])     <- c("D","ABBA","BABA")
+     }		  
+   # ----------------------------------------------------# 
+    }
+
+    if(do.BDF){
+	    res        <- calc_BDF(bial, populations, outgroup, keep.site.info, dxy.table) 
+    	    BDF[xx]    <- res$D
+    	    #f[xx]      <- res$f
+            Bd_dir[xx] <- res$Bd_dir
+		
+   # fill detailed Slots --------------------------------# 
+     if(keep.site.info){	 	
+     site.D[[xx]]  		<- rbind(res$D_site,res$ABBA,res$BABA)
+     rownames(site.D[[xx]])     <- c("D","ABBA","BABA")
+     }		  
+   # ----------------------------------------------------# 
+    }
+
+
+   if(do.RNDmin){
+  	RNDmin[xx] <- calc_RNDmin(bial, populations, outgroup)
+   }		
+
+
+  # Perform Bd_clr
+  if(do.CLR==TRUE){
+	 D.local      <- site.D[[xx]][1,]
+	 D.local      <- round(site.D[[xx]][1,], digits=dgt)
+	 rett         <- calc_Bd_clr(D.local, Trans.matrix, lambda)
+  	 Bd_clr[xx]   <- rett[[1]]       
+         P.Bd_clr[xx] <- rett[[2]]	
+  }		
+   	
+  # Perform jacknife if requested
+  if(block.size[1]!=FALSE){
+	res        <- D_jacknife(site.D[[xx]], D[xx], block.size=block.size)
+	D.z[xx]	   <- res$z
+	D.pval[xx] <- res$pval		
+  }	
+
+
 
   ## PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
@@ -130,8 +262,20 @@ if(subsites=="intergenic"){
  }
 }
 
- object@D  <- D
- object@f  <- f
+ change@D      			<- site.D
+ object@region.stats            <- change
+ rm(change)
+ gc()
+ object@D        <- D
+ object@BD       <- BD
+ object@BDF      <- BDF
+ object@Bd_clr   <- Bd_clr
+ object@Bd_dir   <- Bd_dir
+ object@P.Bd_clr <- P.Bd_clr
+ object@f        <- f
+ object@D.z      <- D.z
+ object@D.pval   <- D.pval
+ object@RNDmin   <- RNDmin
  
  return(object)
  })

@@ -1,52 +1,21 @@
-setGeneric("SNPFST", function(object,new.populations=FALSE,subsites=FALSE,detail=TRUE,mode="ALL",only.haplotype.counts=FALSE) standardGeneric("SNPFST"))
+setGeneric("calc.fixed.shared", function(object, subsites=FALSE, new.populations=FALSE,fixed.threshold=1,fixed.threshold.fst=1) standardGeneric("calc.fixed.shared"))
 
-setMethod("SNPFST","GENOME",function(object,new.populations,subsites,detail,mode,only.haplotype.counts){
+setMethod("calc.fixed.shared","GENOME",function(object,subsites,new.populations,fixed.threshold,fixed.threshold.fst){
   
- # mode nur wegen Progress Balken !
-
- 
- # also calculate popFSTN
- if(mode[1]=="ALL"){
-
-   cat("nucleotide \n")
-   if(!missing(new.populations)){
-         object <- popFSTN(object,new.populations,subsites=subsites,detail=detail,mode=mode)
-   }else{
-         object <- popFSTN(object,subsites=subsites,detail=detail,mode=mode)
-   }
-   cat("\n")
-   cat("haplotype \n")
-
- }
-
-
- if(mode[1]=="nucleotide"){
-   
-    if(!missing(new.populations)){
-         object  <- popFSTN(object,new.populations,subsites=subsites,detail=detail,mode=mode)
-    }else{object <- popFSTN(object,subsites=subsites,detail=detail,mode=mode)
-    }
- 
- return(object)
- }
- #
- 
-  region.names                  <- object@region.names
+  region.names                 <- object@region.names
   n.region.names               <- length(region.names)
   if(object@big.data){region.names <- NULL} # because of memory space
  
-  object@Pop_FSTH$sites        <- "ALL"
-  object@Pop_FSTH$calculated   <- TRUE
    
   if(!missing(new.populations)){
     NEWPOP <- TRUE
     populations <- vector("list",length(new.populations))
     npops       <- length(populations)            # Wenn mehr Pops definiert werden
-    object@Pop_FSTH$Populations  <- new.populations
+    #object@Pop_FSTH$Populations  <- new.populations
   }else{
     NEWPOP <- FALSE
     npops                       <- length(object@populations)     # alte Anzahl der Populationen
-    object@Pop_FSTH$Populations <- object@populations
+    #object@Pop_FSTH$Populations <- object@populations
   }
  
  #########################################
@@ -75,27 +44,25 @@ else{poppairs <- 1;nn <- "pop1"}
 #########################################################################################  
   
 
-  nam    <- paste("pop",1:npops)
-  init1  <- matrix(0,n.region.names,npops)
-  init2  <- matrix(,n.region.names,1)
+  #nam    <- paste("pop",1:npops)
+  init1  	 <- matrix(0,n.region.names, poppairs)
   
-  FSTH   <- init2
-  Pi     <- init1
-  hapw   <- init1
-  haplotype.counts      <- vector("list",n.region.names) # region stats
+  fixed   	 <- init1
+  shared	 <- init1
+  mono           <- init1
+  #site.nucb      <- vector("list",n.region.names) # region stats
  
-  change    <- object@region.stats
-  Pop_FSTH  <- vector("list",n.region.names)
+  #change    <- object@region.stats
   
 #--------------------------------------------------
 
   # Names ----------------------------------------
-  rownames(FSTH)     <- region.names
-  colnames(FSTH)     <- "FST (Haplotype)"
-  rownames(Pi)       <- region.names
-  colnames(Pi)       <- nam
-  rownames(hapw)     <- region.names
-  colnames(hapw)     <- nam
+  rownames(fixed)     <- region.names
+  colnames(fixed)     <- nn
+  rownames(shared)    <- region.names
+  colnames(shared)    <- nn
+  rownames(mono)      <- region.names
+  colnames(mono)      <- nn
   # ----------------------------------------------
 
 
@@ -111,6 +78,7 @@ for(xx in 1:n.region.names){
 ### if Subsites ----------------------------------
 
 bial <- popGetBial(object,xx)
+if(length(bial)==0){next} 
 
 if(subsites[1]!=FALSE){
 
@@ -192,6 +160,7 @@ if(subsites=="included" & length(bial!=0)){
    bial             <- bial[,included,drop=FALSE]
 }
 
+
 }# End if subsites
 ############### ---------------------------------
 
@@ -224,29 +193,20 @@ if(subsites=="included" & length(bial!=0)){
     }else{populations <- object@region.data@populations[[xx]]} # Wenn keine neue Pop definiert !
     
 
-    if(NEWPOP)  {if(length(popmissing)!=0){respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}} # nur die Populationen, die existieren
-    if(!NEWPOP) {if(length(object@region.data@popmissing[[xx]])!=0){popmissing <- object@region.data@popmissing[[xx]];respop <- (1:npops)[-popmissing]}else{respop <- 1:npops}}
-
-    # if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden \FCberhaupt berechnet
-    # if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
+	if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden berechnet
+        if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
    
-      res                    <- calc_hwhafsth_FAST(bial,populations)
+        respop     <- temp$respop
+        respairpop <- temp$respairpop    
 
-
-      Pop_FSTH[[xx]]        <-  list(Populations=populations,Outgroup=NULL)   
-
-    # respop     <- temp$respop
-    # respairpop <- temp$respairpop
-    
-    
-   # fill detailed Slots --------------------------------#
-     haplotype.counts[[xx]]              <- res$sfreqh  
-  # ----------------------------------------------------# 
-    
-    FSTH[xx]          <- res$fsthALL
-    Pi[xx,respop]     <- res$PIW_nei
-    hapw[xx,respop]   <- res$hapw
-   
+      res 		     <- jointfreqdist(bial,populations,pooled=TRUE)	
+      res                    <- get_fixed_shared(res$jfd,fixed.threshold,fixed.threshold.fst,bial,populations)
+     
+     
+     fixed[xx,respairpop]    <- res[1,]	
+     shared[xx,respairpop]   <- res[2,]
+     mono[xx,respairpop]     <- res[3,]	   
+     
 
   # PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
@@ -255,17 +215,10 @@ if(subsites=="included" & length(bial!=0)){
  }
 }
 
- change@haplotype.counts      <- haplotype.counts
- change@Pop_FSTH              <- Pop_FSTH
- object@region.stats          <- change
-
- rm(change)
- gc()
-
- object@hap.diversity.within  <- hapw
- object@haplotype.F_ST        <- FSTH
- object@Pi                    <- Pi
-
+ object@n.fixed.sites       <- fixed
+ object@n.shared.sites      <- shared
+ object@n.monomorphic.sites <- mono
+ 
  return(object)
  })
 

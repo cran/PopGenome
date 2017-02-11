@@ -81,6 +81,7 @@ for(xx in 1:n.region.names){
 ### if Subsites ----------------------------------
 
 bial <- popGetBial(object,xx)
+if(length(bial)==0){next} 
 
 if(subsites[1]!=FALSE){
 

@@ -17,7 +17,7 @@ mean.div         <- apply(pop.within.div,2,mean)
 mean.div.between <- calc_average_nuc_diversity_between_per_site(bial, populations)
 
 FST <- 1 - (mean.div/mean.div.between)
-FST[is.na(FST)] <- 0
+FST[is.na(FST)] <- NaN
 
 return(FST)
 

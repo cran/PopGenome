@@ -1,4 +1,4 @@
-jointfreqdist <- function(matrix_pol,populations,outgroup=FALSE, keep.all.sites=FALSE, pooled=FALSE){
+MS_jointfreqdist <- function(matrix_pol,populations,outgroup=FALSE, keep.all.sites=FALSE){
 
 
 npops    <- length(populations)
@@ -87,10 +87,7 @@ if(outgroup[1]==FALSE){ ##########---------------------- NO OUTGROUP
   rownames(jfd) <- popnames
  # -----------------------------------------------
  
-
-if(!pooled){ # if pooled take 1 as the minor !
-
- for(xx in 1:npops){
+for(xx in 1:npops){
 
   # if(length(populations[[xx]])==0){next;}
    
@@ -98,35 +95,15 @@ if(!pooled){ # if pooled take 1 as the minor !
     jfd[xx,]       <- apply (m,2,function(x){
                        eins <- sum(x==1,na.rm=TRUE)
                        null <- sum(x==0,na.rm=TRUE)
-                       if(eins<=null){
-		       f     <- eins/(null+eins)
-                       }else{
- 		       f     <- null/(eins+null)        	
-                       }
+                       #if(eins<=null){
+		       f     <- eins/(null+eins) # because MS 1=minor
+                       #}else{
+ 		       #f     <- null/(eins+null)        	
+                       #}
                       return(f)
                       })
                            
- }
-
-}else{ #pooled
-
- for(xx in 1:npops){
-
-  # if(length(populations[[xx]])==0){next;}
-   
-    m              <- matrix_pol[populations[[xx]],,drop=FALSE]
-    jfd[xx,]       <- apply (m,2,function(x){
-                       eins <- sum(x==1,na.rm=TRUE)
-                       null <- sum(x==0,na.rm=TRUE)
-		       f     <- eins/(null+eins)
-                      return(f)
-                      })
-                           
- }
-
-
 }
-
 
 #eins      <- colSums(m==1,na.rm=TRUE)
 #null      <- colSums(m==0,na.rm=TRUE)
@@ -149,7 +126,7 @@ anc <- m_anc[length(m_anc)]
 vek <- m_anc[1:(length(m_anc)-1)]
 gapids <- !is.na(vek)            # delete gaps
 vek    <- vek[gapids]            # delete gaps
-mutations    <- sum(vek!=anc)    #sum(vek!=anc)
+mutations    <- sum(vek!=anc)
 nonmutations <- sum(vek==anc) + mutations
 f <- mutations/nonmutations
 return(f)

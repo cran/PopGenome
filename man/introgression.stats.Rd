@@ -14,7 +14,19 @@
 
 \usage{
 
-\S4method{introgression.stats}{GENOME}(object,subsites=FALSE,do.D=TRUE)
+\S4method{introgression.stats}{GENOME}(object,
+subsites=FALSE,
+do.D=FALSE,
+do.BD=FALSE,
+do.BDF=FALSE,
+keep.site.info=TRUE,
+block.size=FALSE,
+dxy.table=FALSE,
+D.global=FALSE,
+do.CLR=FALSE,
+dgt=2,
+do.RNDmin=FALSE,
+lambda=1)
 
 }
 
@@ -35,7 +47,17 @@
 		  \code{"intergenic"} : SNPs in intergenic regions. \cr
   } 
 
-  \item{do.D}{Pattersons D statistic}
+  \item{do.D}{Pattersons D and Martin's f statistic}
+  \item{do.BD}{...}
+  \item{do.BDF}{Bd-fraction}
+  \item{keep.site.info}{Keep site specific values}
+  \item{block.size}{jacknife}
+  \item{dxy.table}{... not used ...}
+  \item{D.global}{The global set of D,Bd values}
+  \item{do.CLR}{Composite Likelihood approach}
+  \item{dgt}{Digit for the CLR test}
+  \item{do.RNDmin}{RNDmin (Rosenzweig, 2016)}
+  \item{lambda}{Scale ... not used ...}
 
 }
 
@@ -54,6 +76,9 @@ The following slots will be modified in the \code{"GENOME"}  object \cr
           1.\tab \code{D}	            \tab [1;eq. 2]   \tab Pattersons D statistic \cr
 	  2.\tab \code{f}	            \tab [2]   \tab f statistic \cr
 
+ 3.\tab \code{BDF}	            \tab [x]   \tab Bd-fraction \cr
+ 4.\tab \code{RNDmin}	            \tab [x]   \tab RNDmin \cr
+ 
           }
 
 }
@@ -74,9 +99,12 @@ f is the fraction of the genome that is admixed [2].
 # GENOME.class <- readData("\home\Alignments")
 # GENOME.class <- set.populations(GENOME.class,list(1:3,4:8,9:12))
 # GENOME.class <- set.outgroup(GENOME.class,13)
-# GENOME.class <- introgression.stats(GENOME.class)
+# GENOME.class <- introgression.stats(GENOME.class, do.D=TRUE)
+# GENOME.class <- introgression.stats(GENOME.class, do.BDF=TRUE)
 # show the result:
 # GENOME.class@D
+# GENOME.class@f
+# GENOME.class@BDF
 
 }
 

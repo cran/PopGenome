@@ -20,13 +20,14 @@ miss.freq     <- matrix(0,npops,dim(matrix_pol)[2])
  miss.nuc[xx] <- n.M/All
 
  # Now for each SNP 
- miss.freq <- apply(popbial,2,function(x){
+ miss.freqq <- apply(popbial,2,function(x){
 	   
-           All <- length(x)
-           n.M <- sum(is.na(x))
-           return(n.M/All)
+            All <- length(x)
+            n.M <- sum(is.na(x))
+            return(n.M/All)
  })
  
+ miss.freq[xx,] <- miss.freqq
 
  }# end for over pops
 

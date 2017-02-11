@@ -1,3 +1,32 @@
+Changes in PopGenome 2.2.0
+===========================
+
+NEW FEATURES:
+
+- calc.fixed.shared()
+- diversity.stats.between()
+- set.filter()
+
+
+Changes in PopGenome 2.1.7
+===========================
+
+BUG FIXED:
+
+- diversity.stats()
+- introgression.stats: f-statistic
+- count.unknowns: GENOME.class@region.data@missing.freqs
+  not correctly displayed the values in a 'per population' fashion
+
+NEW FEATURES:
+
+- diversity.stats.between (with additional parameter)
+- introgression.stats (new parameter)
+	- jacknife; Z & P-values
+- calc.R2 now also saves the genomic position of the SNPs
+- new function set.filter() to filter data by missing data or SFS
+- new slot GENOME.class@region.data@included
+
 Changes in PopGenome 2.1.6
 ===========================
 

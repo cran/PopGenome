@@ -113,9 +113,22 @@ MDG1="matrix",
 MDG2="matrix",
 
 D		       =   "matrix",              # introgression slots
-f		       =   "matrix",              
+BD		       =   "matrix",              # introgression slots
+BDF		       =   "matrix",              # introgression slots
+
+Bd_clr		       =   "matrix",              # introgression slots
+Bd_dir		       =   "matrix",	 
+P.Bd_clr	       =   "matrix",
+f		       =   "matrix", 
+RNDmin 		       =   "matrix",
+D.z		       =   "matrix",              # introgression slots
+D.pval		       =   "matrix",              
 jack.knife             =   "logical",
 missing.freqs          =   "matrix",
+
+n.fixed.sites          =   "matrix",
+n.shared.sites         =   "matrix",
+n.monomorphic.sites    =   "matrix",
 
 genes                  =   "list",                # a list of statistics objects
 region.data            =   "region.data",         # list of class GEN
@@ -379,22 +392,32 @@ progr <- progressBar()
 for(xx in 1:length(object@region.names)){
 
 
-     bial <- object@region.data@biallelic.matrix[[xx]] # popGetBial(object,xx) # if it does not fit into RAM
-     
-     if(length(bial)==0){next}   
-  
+     bial    <- object@region.data@biallelic.matrix[[xx]] # popGetBial(object,xx) # if it does not fit into RAM	     
+     NAMES   <- rownames(bial)	
+
+     #if(length(bial)==0){next}   
+     if(length(NAMES)==0 && length(object@BIG.BIAL)==0){
+	next
+     }else{
+	if(length(object@BIG.BIAL)!=0){
+		NAMES <- rownames(object@BIG.BIAL[[1]])
+	}
+     }	  
+
       for(yy in 1:npops){
 
            if(is.character(new.populations[[yy]])){
-              #populations[[yy]] <- match(new.populations[[yy]],rownames(object@DATA[[xx]]@matrix_pol))
-              populations[[yy]]  <- match(new.populations[[yy]],rownames(bial))
+              #populations[[yy]]  <- match(new.populations[[yy]],rownames(bial))
+	      populations[[yy]]  <- match(new.populations[[yy]],NAMES)	
               naids              <- which(!is.na(populations[[yy]]))
               populations[[yy]]  <- populations[[yy]][naids]
-              populations2[[yy]] <- rownames(bial)[populations[[yy]]]
+              #populations2[[yy]] <- rownames(bial)[populations[[yy]]]
+	      populations2[[yy]] <- NAMES[populations[[yy]]]
 
            }else{
               populations[[yy]] <- new.populations[[yy]]
-              ids               <- which(populations[[yy]]>dim(bial)[1])
+              #ids               <- which(populations[[yy]]>dim(bial)[1])
+	      ids               <- which(populations[[yy]]>length(NAMES))
               if(length(ids)>0){ populations[[yy]] <- populations[[yy]][-ids]}   
            }      
        }
@@ -1201,6 +1224,11 @@ if(subsites=="gene" & length(bial!=0)){
   # object@Pop_Neutrality$sites <- "gene"
 }
 
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
+
 } # End of if subsites
 
 ############### ---------------------------------
@@ -1785,6 +1813,13 @@ if(subsites=="intergenic"){
   bial           <- bial[,inter,drop=FALSE]
  # object@Pop_FSTN$sites <- "intergenic"
 }
+
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
+
+
 }# end if subsites
 
 ############### ---------------------------------
@@ -2151,6 +2186,12 @@ if(subsites=="intergenic"){
   bial           <- bial[,inter,drop=FALSE]
   #object@Pop_FSTH$sites <- "intergenic"
 }
+
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
+
 }# End if subsites
 ############### ---------------------------------
 
@@ -2478,10 +2519,10 @@ if(subsites=="intergenic"){
 
  #########################################################################
  # MKT ####################################################################
- setGeneric("MKT", function(object,new.populations=FALSE, do.fisher.test=FALSE) standardGeneric("MKT"))
+ setGeneric("MKT", function(object,new.populations=FALSE, do.fisher.test=FALSE, fixed.threshold.fst=FALSE, subsites=FALSE) standardGeneric("MKT"))
  setMethod("MKT", "GENOME",
 
- function(object,new.populations, do.fisher.test){
+ function(object,new.populations, do.fisher.test, fixed.threshold.fst, subsites){
   
   region.names   <- object@region.names
   n.region.names <- length(object@region.names)
@@ -2526,11 +2567,11 @@ else{stop("You have to define more than one population to calculate the MK Test"
    
   # INIT
   MKmulti  <- vector("list",n.region.names)
-  MKTWO    <- matrix(,n.region.names,7)
+  MKTWO    <- matrix(,n.region.names,9)
   # Pn/Ps/Dn/Ds
  
   # Names
-  MKnames          <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
+  MKnames          <- c("P1_nonsyn","P2_nonsyn","P1_syn","P2_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
   
   if(!missing(new.populations)){
    NEWPOP <- TRUE
@@ -2548,6 +2589,92 @@ else{stop("You have to define more than one population to calculate the MK Test"
 for(xx in 1:n.region.names){
 
  bial <- popGetBial(object,xx)
+
+ if(subsites[1]!=FALSE){
+
+if(subsites=="transitions" & length(bial!=0)){
+   tran       <- which(object@region.data@transitions[[xx]]==TRUE)
+   bial       <- bial[,tran,drop=FALSE]
+  # object@Pop_FSTH$sites <- "transitions"   
+}
+
+if(subsites=="transversions" & length(bial!=0)){
+   transv       <- which(object@region.data@transitions[[xx]]==FALSE)
+   bial         <- bial[,transv,drop=FALSE]
+  # object@Pop_FSTH$sites <- "transversions"   
+} 
+
+if(subsites=="syn" & length(bial!=0)){
+   syn        <- which(object@region.data@synonymous[[xx]]==TRUE)
+   bial       <- bial[,syn,drop=FALSE]
+  # object@Pop_FSTH$sites <- "synonymous"
+}
+if(subsites=="nonsyn" & length(bial!=0)){
+   nonsyn        <- which(object@region.data@synonymous[[xx]]==FALSE)
+   bial          <- bial[,nonsyn,drop=FALSE]
+  # object@Pop_FSTH$sites <- "nonsynonymous"
+}
+
+if(subsites=="intron" & length(bial!=0)){
+   intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   #if(length(intron)==0){
+   #       intron <- object@region.data@GeneSNPS[[xx]] & !object@region.data@ExonSNPS[[xx]]	  
+   #}
+   bial          <- bial[,intron,drop=FALSE]
+  # object@Pop_Linkage$sites <- "introns"
+}
+
+if(subsites=="utr" & length(bial!=0)){
+   utr           <- which(object@region.data@UTRSNPS[[xx]]==TRUE)
+   bial          <- bial[,utr,drop=FALSE]
+  # object@Pop_FSTH$sites <- "utr"
+}
+
+if(subsites=="exon" & length(bial!=0)){
+   exon           <- which(object@region.data@ExonSNPS[[xx]]==TRUE)
+   bial           <- bial[,exon,drop=FALSE]
+  # object@Pop_FSTH$sites <- "exon"
+}
+
+if(subsites=="coding" & length(bial!=0)){
+   #coding           <- which(!is.na(object@region.data@synonymous[[xx]])==TRUE)
+   coding           <- which(object@region.data@CodingSNPS[[xx]]==TRUE)
+   bial             <- bial[,coding,drop=FALSE]
+  # object@Pop_FSTH$sites <- "coding"
+}
+
+if(subsites=="gene" & length(bial!=0)){
+   gene             <- which(object@region.data@GeneSNPS[[xx]]==TRUE)
+   bial             <- bial[,gene,drop=FALSE]
+  # object@Pop_FSTH$sites <- "gene"
+}
+
+if(subsites=="intergenic"){
+  intron        <- which(object@region.data@IntronSNPS[[xx]]==TRUE)
+   if(length(intron)==0){
+     intron <- !object@region.data@ExonSNPS[[xx]]	  
+   }
+
+  utr            <- object@region.data@UTRSNPS[[xx]]
+  exon           <- object@region.data@ExonSNPS[[xx]]
+  gene           <- object@region.data@GeneSNPS[[xx]]
+  coding         <- !is.na(object@region.data@synonymous[[xx]])  
+
+  inter          <- !(intron|utr|exon|gene|coding)
+  bial           <- bial[,inter,drop=FALSE]
+  #object@Pop_FSTH$sites <- "intergenic"
+}
+
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
+
+}# End if subsites
+############### ---------------------------------
+
+
+
 
  if(length(bial)!=0){ # if a biallelic position exists
     
@@ -2579,6 +2706,7 @@ for(xx in 1:n.region.names){
            #segsites  <- get_segsites(bial,populations)
 	   segsites   <- get_segsites(bial,list(populations[[pop[1]]],populations[[pop[2]]]))
 
+	   # get monomorphic sites	
            if( length(segsites[[1]])!=0 ){
            pop1mono  <- bialcount[-segsites[[1]]]
            }else{
@@ -2591,6 +2719,14 @@ for(xx in 1:n.region.names){
 	   pop2mono  <- bialcount
            }    
 
+	   
+	   if(fixed.threshold.fst){
+	   fst            <- site_FST(bial,list(populations[[pop[1]]],populations[[pop[2]]]))
+           fixed          <- which(fst>fixed.threshold.fst)
+	   segsites[[1]]  <- setdiff(segsites[[1]],fixed)
+	   segsites[[2]]  <- setdiff(segsites[[2]],fixed)
+	   }		
+
            pop12mono <- intersect(pop1mono,pop2mono)
            
            Pnpop1   <- sum(synonymous[segsites[[1]]]==FALSE,na.rm=TRUE)
@@ -2601,10 +2737,12 @@ for(xx in 1:n.region.names){
            pop1pop2        <- vector("list",1)
            pop1pop2[[1]]   <- unique(c(populations[[pop[1]]],populations[[pop[2]]]))
            
+	   if(!fixed.threshold.fst){
            segsites    <- get_segsites(bial,pop1pop2)
            # check fixed polymorphisms
            fixed       <- intersect(pop12mono,segsites[[1]])
-           
+	   }           
+
            Dn          <- sum(synonymous[fixed]==FALSE,na.rm=TRUE)
            Ds          <- sum(synonymous[fixed]==TRUE,na.rm=TRUE)
      
@@ -2618,8 +2756,11 @@ for(xx in 1:n.region.names){
            if(do.fisher.test){
            fisher.P <- fisher.test(rbind(c(Ps,Ds),c(Pn,Dn)))$p.value
            }           
+     # Names
+     #MKnames          <- c("P1_nonsyn","P2_nonsyn","P1_syn","P2_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
+  
 
-     return(c(Pn,Ps,Dn,Ds,NI,alpha,fisher.P))
+     return(c(Pnpop1,Pnpop2,Pspop1,Pspop2,Dn,Ds,NI,alpha,fisher.P))
             
     })
     
@@ -2646,7 +2787,7 @@ for(xx in 1:n.region.names){
   object@MKT         <- MKmulti
  }else{
   rownames(MKTWO)    <- region.names
-  colnames(MKTWO)    <- c("P_nonsyn","P_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
+  colnames(MKTWO)    <- c("P1_nonsyn","P2_nonsyn","P1_syn","P2_syn","D_nonsyn","D_syn","neutrality.index","alpha","fisher.P.value")
   object@MKT         <- MKTWO
  }
  
@@ -2811,6 +2952,10 @@ if(subsites=="coding" & length(bial!=0)){
   # object@Pop_Detail$sites <- "coding"
 }
 
+if(subsites=="included" & length(bial!=0)){
+   included         <- which(object@region.data@included[[xx]]==TRUE)
+   bial             <- bial[,included,drop=FALSE]
+}
 
 }# End if subsites
 

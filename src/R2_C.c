@@ -346,12 +346,23 @@ SEXP M;
 M = allocMatrix(INTSXP,(J*(J-1))/2,4); // for the fisher exact test
 SEXP Dist;
 Dist = allocVector(REALSXP,(J*(J-1))/2);
+SEXP SNP1;
+SNP1 = allocVector(REALSXP,(J*(J-1))/2);
+SEXP SNP2;
+SNP2 = allocVector(REALSXP,(J*(J-1))/2);
 
 // Init Dist
 for(int i=0; i < (J*(J-1))/2; i++){
 REAL(Dist)[i]=0; 
 }
-
+// Init SNP1
+for(int i=0; i < (J*(J-1))/2; i++){
+REAL(SNP1)[i]=0; 
+}
+// Init SNP2
+for(int i=0; i < (J*(J-1))/2; i++){
+REAL(SNP2)[i]=0; 
+}
 // Init ret
 for(int i=0; i < (J*(J-1))/2; i++){
 REAL(ret)[i]=0; 
@@ -441,6 +452,8 @@ for (int m=0; m < J-1; m++){
   INTEGER(M)[fill+((J*(J-1))/2)*2] = m10;
   INTEGER(M)[fill+((J*(J-1))/2)*3] = m11;
   REAL(Dist)[fill] = bialpos[i] - bialpos[m];
+  REAL(SNP1)[fill] = bialpos[i];
+  REAL(SNP2)[fill] = bialpos[m];
 
    if(valid_comp==0){continue;}
    //d_raw  = (double)count/(double)site_length - freqsite1*freqsite2;
@@ -458,12 +471,14 @@ for (int m=0; m < J-1; m++){
 SEXP list = R_NilValue;
 
    // Creating a list with 3 vector elements:
-   PROTECT(list = allocVector(VECSXP, 3)); 
+   PROTECT(list = allocVector(VECSXP, 5)); 
      // attaching myint vector to list:
    SET_VECTOR_ELT(list, 0, ret); 
      // attaching mydouble vector to list:
    SET_VECTOR_ELT(list, 1, M); 
    SET_VECTOR_ELT(list, 2, Dist);
+   SET_VECTOR_ELT(list, 3, SNP1);
+   SET_VECTOR_ELT(list, 4, SNP2);
 
      // and attaching the vector names:
      //setAttrib(list, R_NamesSymbol, list_names); 

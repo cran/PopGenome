@@ -13,7 +13,8 @@ This function plots the biallelic matrix of a specific region.
 
 \usage{
 
-\S4method{PG_plot.biallelic.matrix}{GENOME}(object,region, ind.names = FALSE , cex.axis = 0.5)
+\S4method{PG_plot.biallelic.matrix}{GENOME}(object,region, ind.names = FALSE , cex.axis = 0.5,
+title="")
 
 }
 
@@ -23,6 +24,8 @@ This function plots the biallelic matrix of a specific region.
   \item{region}{the region ID}
   \item{ind.names}{individual names/IDs. default:ALL}
   \item{cex.axis}{size of text (y-axis)}
+  \item{title}{Title of the plot}
+
 
 }  
 

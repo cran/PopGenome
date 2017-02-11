@@ -39,8 +39,11 @@ for(xx in 1:npops){
              })
  
  d_dist <- abs(res[[3]])
- res <- rbind(R2,P,d_dist)
- rownames(res) <-c("R2","P","Distance")
+ snp1   <- res[[4]]
+ snp2   <- res[[5]]
+
+ res           <- rbind(R2,P,d_dist,snp1,snp2)
+ rownames(res) <-c("R2","P","Distance","SNP1","SNP2")
 
 reslist[[xx]] <- res
 

@@ -47,7 +47,8 @@ biallelic.substitutions = "list", # subst
 minor.alleles    = "list", # mutations
 codons           = "list",
 sites.with.gaps  = "list", # gaps
-sites.with.unknowns = "list"
+sites.with.unknowns = "list",
+included = "list" # user defined sites which should be included for calculation
  
 ))
 
@@ -60,13 +61,13 @@ setMethod("show", "region.data",
  cat("-----\n")
  out <- data.frame(Slots=c("populations","populations2","outgroup","transitions","biallelic.matrix","n.singletons",
                    "biallelic.sites","reference","n.nucleotides","biallelic.compositions","synonymous","biallelic.substitutions","polyallelic.sites","sites.with.gaps","sites.with.unknowns",
-"minor.alleles","codons","IntronSNPS","UTRSNPS","CodingSNPS","ExonSNPS","GeneSNPS"),         
+"minor.alleles","codons","IntronSNPS","UTRSNPS","CodingSNPS","ExonSNPS","GeneSNPS","included"),         
                
 
                 Description=c("Samples of each population (rows)","Samples of each population (names)","Samples of outgroup",
                "Biallelic site transitions","Biallelic matrix","Number of singletons",
                "Position of biallelic sites","SNP reference","Number of nucleotides per sequence","Nucleotides per sequence (biallelic)",
-                "Synonymous biallelic sites","Biallelic substitutions","Sites with >2 nucleotides","Sites with gap positions","Sites with unknown positions","Minor alleles","Codons of biallelic substitutions","SNPs in intron region","SNPs in UTR region","SNPs in coding region","SNPs in exon region","SNPs in gene region") )
+                "Synonymous biallelic sites","Biallelic substitutions","Sites with >2 nucleotides","Sites with gap positions","Sites with unknown positions","Minor alleles","Codons of biallelic substitutions","SNPs in intron region","SNPs in UTR region","SNPs in coding region","SNPs in exon region","SNPs in gene region","SNPs to be included for analysis") )
  print(out)
  cat("\n---------------\n")
  cat("These are the Slots (class region.data) \n")
