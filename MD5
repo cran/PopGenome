@@ -1,6 +1,6 @@
-9634a05fb0ecbf74ca851ce8b612f476 *DESCRIPTION
-d913984e4e4ee557d0f71e0570df8c7f *NAMESPACE
-4bf5054173f89121b8b98557101689fa *NEWS
+2be21db6be1ad07a3b6ade0232a864d6 *DESCRIPTION
+9f10139a3ed782bcd87495cb6f7aa859 *NAMESPACE
+ed2cfceffcb4709ee14c76cdea5faedf *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
 4c7a32f0961f9448f8bb88ca262ba7d9 *R/APE_write.dna.R
 8ff4cfc9494bd57b2ab0d26a9881f405 *R/BAYESRETURN.R
@@ -150,7 +150,7 @@ de01f2810a8c7d3774b2a91b58d9fc68 *R/sweeps.stats.R
 dbd097b4d7d1fc35f9d62e6817f499d8 *R/update_slim.R
 6fce0f023ad124a3f0cf578c9b84ffd2 *R/wall99bq.R
 39437ab5e77aac260fa7a513ad30556c *R/zzz.R
-7d2d1818c0b696c0ef45f7615017428f *build/vignette.rds
+a50254ac5fcc217ab990d6d0c59e3954 *build/vignette.rds
 c4f74b26105aca59178c66f5618b4813 *data/fasta_file.txt.gz
 0b53db78131cc26aeaef426c3b47799f *data/gff_file.txt.gz
 a0656cc271cfd6c2095c005c74c73602 *data/snp_file.txt.gz
@@ -158,11 +158,11 @@ c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 921298844664c2107a8579da549dd51d *inst/CITATION
 f1ee62347d9ec008bc135b6199159bbb *inst/COPYRIGHTS
 bf7e82a4e684fdfcc00a49aeb6736075 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-28fd2dd7ea8cf77ca8f1f9ea5b97288b *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+5deda007d2caac377fedb291779c5029 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 7d07b1fe69933e9bce2f4266d5ba7860 *inst/doc/Integration_of_new_Methods.Rnw
-ad998ad8ca87d12c1e1843eaf94a623f *inst/doc/Integration_of_new_Methods.pdf
+88020df7ccdad9c8457dd0cfb7c930c4 *inst/doc/Integration_of_new_Methods.pdf
 bccacbbf031d49412295cf3d887c9ea5 *inst/doc/Whole_genome_analyses_using_VCF_files.Rnw
-cf4c1c610611a50624df4b8962b9048d *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
+7af54091c8199ccf51a7de5acf32b543 *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 7143646aeb017b223d2a11a1ab7781da *man/F_ST.stats-methods.Rd
@@ -226,8 +226,9 @@ ef69eabecdd1a4a68abb7c49f3e780bb *man/test.params-class.Rd
 2cb93d7f906ba4c36f1a7e1ad63b475d *man/vcf_file.Rd
 1d4885fe87566bbd1ea6b6de19f208ba *src/C_get_sfreqh_C.c
 e55e146839bdaa68f3e4a63c5e2094e3 *src/CompareVEK.c
-fa0c7cf051c7b14d153859a2ac3ee1d5 *src/Makevars
-311b203f0f162d79a9df2de8efb0c04b *src/Makevars.win
+580327a600d6463fe0fadfd250911239 *src/Makevars
+329575361ff873ccbd30bb5c8a099f41 *src/Makevars.win
+ac2a421f6d598a674db7d117dbce15a9 *src/PopGenome-win.def
 9459a116492cd8f663f198ef5fbe2107 *src/R2_C.c
 28bf27a5072d9c7e025981c11b4bf36f *src/VCF_split.cpp
 aaeb661afe98429ace4250d9b4eb0ed6 *src/ap_pop_C.c
@@ -246,6 +247,7 @@ e7758633c6fda62687c5eaafa4c47984 *src/find_windowC.c
 1a61b2e198b9ef45263e05c0e2eb0b45 *src/get_gff_info_C.c
 f2d125c68c29f5d698faaf021fb7e409 *src/get_ind_fasta.c
 9119fee1c5e8c2e1b9d6933380ab3cc7 *src/get_segsites_C.c
+a31338e2bfe43a4b31c6c0039397776f *src/init.c
 d00c8c3ffacaebbf6677ee423a39bf12 *src/makeBial.c
 01778e346691c4e55c3a0051e7bb0c93 *src/makeBialMatrix.c
 31b6ee7cd74fdc5b7b5a4cbff5737807 *src/myReadVCFC.c
@@ -253,8 +255,10 @@ d00c8c3ffacaebbf6677ee423a39bf12 *src/makeBial.c
 8838ee1f82dfd8fe8c26b3774e9f1883 *src/my_unique_C.c
 aba13a3883d7d117af33a6d8fe8c1ed1 *src/tabix/bam_endian.h
 a9f135cf6c369a13d43510eaff9c983b *src/tabix/bedidx.c
-8a82256add62459521e754ec6eb8f0a5 *src/tabix/bgzf.c
-fe232510243c7a6142bda8175e51d286 *src/tabix/bgzf.h
+0e6602a7ef27a78e2b9fa9db4218e6ad *src/tabix/bgzf.c
+919db52c2278a79c2da9e962fd371f02 *src/tabix/bgzf.h
+8a82256add62459521e754ec6eb8f0a5 *src/tabix/bgzf_bak.c
+fe232510243c7a6142bda8175e51d286 *src/tabix/bgzf_bak.h
 ebb10ce44fe49a7a02dffdf2e2b47a6e *src/tabix/index.c
 48cd8fc534ffa1468ad3a66fcf280712 *src/tabix/khash.h
 3a0bd3ecaa4cadf9ab943482ade4533f *src/tabix/knetfile.c
@@ -272,7 +276,7 @@ b22824b2f9f72abb22fa6c24ac74583b *src/tabix/kstring.h
 1cb146e566d242d448a5f7e6a786b426 *src/whopgenome/rdnapp_Phylip.h
 984a4e950a3ad352cdb7ec545cb7c49f *src/whopgenome/readdnapp.cpp
 ce38794789ad110d3b0c899fefb22bc9 *src/whopgenome/whop_r_dataframe.cpp
-2d5c3afba206a76f95ab0c1d1296232f *src/whopgenome/whop_rsupport.h
+45ec89b4f30439f1df3d4402a99403b9 *src/whopgenome/whop_rsupport.h
 0991193240d7197b8fa3d9ae84a99556 *src/whopgenome/whop_tabix.h
 006540b056b71696b3df59f7343ea44e *src/whopgenome/whop_tabix_internal.h
 a2074b57a6c8791dd88600906318d952 *src/whopgenome/whop_tools.h

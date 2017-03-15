@@ -1,3 +1,11 @@
+Changes in PopGenome 2.2.1
+===========================
+
+- fixed some warnings and errors 
+
+-- bgzf.c fixes (inline -> static inline)
+-- "whopgenome/whop_rsupport.h", line 58: Error: The function "strcasecmp" must have a prototype.
+
 Changes in PopGenome 2.2.0
 ===========================
 
@@ -6,7 +14,7 @@ NEW FEATURES:
 - calc.fixed.shared()
 - diversity.stats.between()
 - set.filter()
-
+- set.populations() # now also works on transformed objects
 
 Changes in PopGenome 2.1.7
 ===========================

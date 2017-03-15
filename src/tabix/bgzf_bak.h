@@ -27,17 +27,16 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <zlib.h>
-#define	_USE_KNETFILE
-	/*@added ubw*/
+#define	_USE_KNETFILE	//@added ubw
 #ifdef _USE_KNETFILE
 #include "knetfile.h"
 #endif
 
-/*typedef int8_t bool;*/
+//typedef int8_t bool;
 
 typedef struct {
     int file_descriptor;
-    char open_mode;  /* 'r' or 'w'*/
+    char open_mode;  // 'r' or 'w'
     int16_t owned_file, compress_level;
 #ifdef _USE_KNETFILE
 	union {
@@ -56,7 +55,7 @@ typedef struct {
     int block_offset;
 	int cache_size;
     const char* error;
-	void *cache; /* a pointer to a hash table*/
+	void *cache; // a pointer to a hash table
 } BGZF;
 
 #ifdef __cplusplus
@@ -69,14 +68,14 @@ extern "C" {
  * A subsequent bgzf_close will not close the file descriptor.
  * Returns null on error.
  */
-BGZF* bgzf_fdopen(int fd, const char* /*@ubw solaris does not like this: __restrict*/ mode);
+BGZF* bgzf_fdopen(int fd, const char* mode);
 
 /*
  * Open the specified file for reading or writing.
  * Mode must be either "r" or "w".
  * Returns null on error.
  */
-BGZF* bgzf_open(const char* path, const char* /*@ubw solaris does not like this: __restrict*/ mode);
+BGZF* bgzf_open(const char* path, const char* mode);
 
 /*
  * Close the BGZ file and free all associated resources.

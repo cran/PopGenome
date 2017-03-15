@@ -27,8 +27,12 @@
 
 	//
 //#include <stdio.h>
+//#include <vector>
+//#include <string>
+
 #include <vector>
 #include <string>
+#include <strings.h>
 
 //*
 //*			DEFINES
