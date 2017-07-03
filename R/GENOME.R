@@ -115,6 +115,11 @@ MDG2="matrix",
 D		       =   "matrix",              # introgression slots
 BD		       =   "matrix",              # introgression slots
 BDF		       =   "matrix",              # introgression slots
+BDF_bayes	       =   "matrix",              # introgression slots
+alpha_ABBA	       =   "matrix",              # introgression slots
+alpha_BABA	       =   "matrix",              # introgression slots
+beta_BBAA	       =   "matrix",              # introgression slots
+
 
 Bd_clr		       =   "matrix",              # introgression slots
 Bd_dir		       =   "matrix",	 

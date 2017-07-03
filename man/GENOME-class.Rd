@@ -163,6 +163,10 @@
     \item{\code{n.monomorphic.sites}:}{...}
     \item{\code{BD}:}{...}
     \item{\code{BDF}:}{...}
+    \item{\code{BDF_bayes}:}{...}
+    \item{\code{alpha_ABBA}:}{...}
+    \item{\code{alpha_BABA}:}{...}
+    \item{\code{beta_BBAA}:}{...}
     \item{\code{Bd_clr}:}{...}
     \item{\code{Bd_dir}:}{...}
     \item{\code{D.pval}:}{...}

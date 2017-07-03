@@ -49,6 +49,12 @@ keep.site.info=TRUE
   D      <- matrix(NaN,n.region.names,1)
   BD     <- matrix(NaN,n.region.names,1)
   BDF    <- matrix(NaN,n.region.names,1)
+  BDF_bayes  <- matrix(NaN,n.region.names,1)
+  alpha_ABBA  <- matrix(NaN,n.region.names,1)
+  alpha_BABA  <- matrix(NaN,n.region.names,1)
+  beta_BBAA  <- matrix(NaN,n.region.names,1)
+
+
   Bd_dir <- matrix(NaN,n.region.names,1)
   Bd_clr <- matrix(NaN,n.region.names,1)
 P.Bd_clr <- matrix(NaN,n.region.names,1)
@@ -65,6 +71,8 @@ P.Bd_clr <- matrix(NaN,n.region.names,1)
   colnames(BD)      <- "BD statistic"
   rownames(BDF)     <- region.names
   colnames(BDF)     <- "BDF statistic"
+  rownames(BDF_bayes)     <- region.names
+  colnames(BDF_bayes)     <- "BDF bayes factor"
   rownames(Bd_dir)  <- region.names
   colnames(Bd_dir)  <- "Direction"
   rownames(Bd_clr)  <- region.names
@@ -220,6 +228,11 @@ if(subsites=="included" & length(bial!=0)){
     if(do.BDF){
 	    res        <- calc_BDF(bial, populations, outgroup, keep.site.info, dxy.table) 
     	    BDF[xx]    <- res$D
+            BDF_bayes[xx] <- res$D_bayes
+            alpha_ABBA[xx] <- res$alpha_ABBA
+	    alpha_BABA[xx] <- res$alpha_BABA
+	    beta_BBAA[xx] <- res$beta_BBAA
+		
     	    #f[xx]      <- res$f
             Bd_dir[xx] <- res$Bd_dir
 		
@@ -269,6 +282,11 @@ if(subsites=="included" & length(bial!=0)){
  object@D        <- D
  object@BD       <- BD
  object@BDF      <- BDF
+ object@BDF_bayes      <- BDF_bayes
+ object@alpha_ABBA     <- alpha_ABBA
+ object@alpha_BABA     <- alpha_BABA
+ object@beta_BBAA      <- beta_BBAA
+ 
  object@Bd_clr   <- Bd_clr
  object@Bd_dir   <- Bd_dir
  object@P.Bd_clr <- P.Bd_clr

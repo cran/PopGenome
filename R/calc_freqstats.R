@@ -12,7 +12,7 @@ sfreq   <-  paste("sfreq",0:nsamtot)
 
 ####################################################
 # Following values we need from data
-# LENGTH und TOTAL_LENGTH
+# LENGTH and TOTAL_LENGTH
 ####################################################
 
 data_length <- numeric(npops)
@@ -29,8 +29,10 @@ if(length(data)!=0){
   samplesize <- numeric(npops)
   for(xx in 1:npops){
     # samplesize[xx] <- length(populations[[xx]])
-    # correct in case there are NaNs in the biallelic.matrix  (SNP data, sliding windows) 
-      samplesize[xx] <- sum(!is.na(matrix[populations[[xx]],,drop=FALSE]))/dim(matrix)[2]
+    # correct in case there are NaNs in the biallelic.matrix  (SNP data, sliding windows)
+    # Take care of sites with only NaN values (each pop seperately)
+      iddd           <- apply(matrix[populations[[xx]],,drop=FALSE],2,function(x){ return(!all(is.na(x)))}) 
+      samplesize[xx] <- sum(!is.na(matrix[populations[[xx]],iddd,drop=FALSE]))/dim(matrix[populations[[xx]],iddd,drop=FALSE])[2]       
   }  
 }
 

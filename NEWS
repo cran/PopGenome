@@ -1,3 +1,24 @@
+Changes in PopGenome 2.2.4
+===========================
+
+NEW FEATURES:
+
+- introgression.stats
+-- Bd-fraction and Bd-bayes-factor
+
+see: 
+"Estimates of Introgression as a Function of Pairwise Distances"
+bioRxiv
+doi: https://doi.org/10.1101/154377 
+
+BUG FIXED:
+
+- Tajima.D for missing data included.
+
+THX:
+Ari
+Durrell
+
 Changes in PopGenome 2.2.1
 ===========================
 
