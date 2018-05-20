@@ -35,6 +35,8 @@ exportMethods(introgression.stats)
 exportMethods(jack.knife.transform)
 exportMethods(diversity.stats.between)
 exportMethods(calc.fixed.shared)
+exportMethods(weighted.jackknife)
+
 
 exportMethods(F_ST.stats.2)
 exportMethods(get.sum.data)
@@ -75,6 +77,7 @@ export(Whop_readVCF)
 export(VCF_split_into_scaffolds)
 export(GFF_split_into_scaffolds)
 export(split_data_into_GFF_attributes)
+export(split_data_into_GFF_features)
 export(get.feature.names)
 
 export(MS)

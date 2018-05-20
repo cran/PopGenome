@@ -32,7 +32,10 @@ if(length(data)!=0){
     # correct in case there are NaNs in the biallelic.matrix  (SNP data, sliding windows)
     # Take care of sites with only NaN values (each pop seperately)
       iddd           <- apply(matrix[populations[[xx]],,drop=FALSE],2,function(x){ return(!all(is.na(x)))}) 
-      samplesize[xx] <- sum(!is.na(matrix[populations[[xx]],iddd,drop=FALSE]))/dim(matrix[populations[[xx]],iddd,drop=FALSE])[2]       
+    # in case of only NaN sites
+      if(any(iddd)){
+      samplesize[xx] <- sum(!is.na(matrix[populations[[xx]],iddd,drop=FALSE]))/dim(matrix[populations[[xx]],iddd,drop=FALSE])[2]
+      }else{samplesize[xx] <- 0}       
   }  
 }
 

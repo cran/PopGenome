@@ -16,17 +16,12 @@
 
 \S4method{introgression.stats}{GENOME}(object,
 subsites=FALSE,
-do.D=FALSE,
-do.BD=FALSE,
-do.BDF=FALSE,
+do.D=TRUE,
+do.BDF=TRUE,
 keep.site.info=TRUE,
 block.size=FALSE,
-dxy.table=FALSE,
-D.global=FALSE,
-do.CLR=FALSE,
-dgt=2,
 do.RNDmin=FALSE,
-lambda=1)
+l.smooth=FALSE)
 
 }
 
@@ -48,16 +43,11 @@ lambda=1)
   } 
 
   \item{do.D}{Pattersons D and Martin's f statistic}
-  \item{do.BD}{...}
   \item{do.BDF}{Bd-fraction}
-  \item{keep.site.info}{Keep site specific values}
-  \item{block.size}{jacknife}
-  \item{dxy.table}{... not used ...}
-  \item{D.global}{The global set of D,Bd values}
-  \item{do.CLR}{Composite Likelihood approach}
-  \item{dgt}{Digit for the CLR test}
+  \item{keep.site.info}{keep site specific values (\code{GENOME.class@region.stats})}
+  \item{block.size}{the block size for jackknife}
   \item{do.RNDmin}{RNDmin (Rosenzweig, 2016)}
-  \item{lambda}{Scale ... not used ...}
+  \item{l.smooth}{laplace smoothing for Bd-fraction}
 
 }
 
@@ -78,6 +68,10 @@ The following slots will be modified in the \code{"GENOME"}  object \cr
 
  3.\tab \code{BDF}	            \tab [x]   \tab Bd-fraction \cr
  4.\tab \code{RNDmin}	            \tab [x]   \tab RNDmin \cr
+ 5.\tab \code{D.z}	            \tab [x]   \tab z values (jackknife) \cr
+ 6.\tab \code{D.pval}	            \tab [x]   \tab P values (jackknife) \cr
+ 7.\tab \code{BDF.z}	            \tab [x]   \tab z values (jackknife) \cr
+ 8.\tab \code{BDF.pval}	            \tab [x]   \tab P values (jackknife) \cr
  
           }
 
@@ -100,12 +94,12 @@ f is the fraction of the genome that is admixed [2].
 # GENOME.class <- set.populations(GENOME.class,list(1:3,4:8,9:12))
 # GENOME.class <- set.outgroup(GENOME.class,13)
 # GENOME.class <- introgression.stats(GENOME.class, do.D=TRUE)
-# GENOME.class <- introgression.stats(GENOME.class, do.BDF=TRUE)
 # show the result:
 # GENOME.class@D
 # GENOME.class@f
+# GENOME.class <- introgression.stats(GENOME.class, do.BDF=TRUE)
+# show the result:
 # GENOME.class@BDF
-
 }
 
 

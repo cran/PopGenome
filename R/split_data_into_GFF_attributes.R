@@ -10,16 +10,18 @@ chr <- as.character(chr)
                            skip = start - 1, nrows = end - start + 1)
 
  #print(head(gff.table))
- Attr        <- gff.table[,4]
+ Attr        <- gff.table[,4] 
 
 
  # iterate over attributes to verify length of POSList
  # Found first attribute
 
+ Str <- NULL
  for(xx in 1:length(Attr)){
 	
         line <- Attr[xx]
 	line <- strsplit(line ,";")[[1]]
+        #print(line)
         mm   <- grep(attribute, line)
         if(length(mm)!=0){ # found attribute
                  if(gff.table[xx,1]=="chromosome"){next}
@@ -34,7 +36,8 @@ chr <- as.character(chr)
         }
  }
 
- print(Str)
+ if(length(Str)==0){stop("No attribute found")}
+ #print(Str)
  SAVENAMES    <- rep(NA,length(Attr))
  SAVENAMES[1] <- Str
 
@@ -48,7 +51,9 @@ chr <- as.character(chr)
 		 if(gff.table[xx,1]=="chromosome"){next}
         	 id  <- mm[1]         
 	         Str2 <- line[id]
+                 #print(Str)
 		 Str2 <- strsplit(Str2 ,",")[[1]]
+                 #print(Str)
 		 mm  <- grep(attribute, Str2)
 		 id  <- mm[1]
                  Str2 <- Str2[id]
@@ -58,9 +63,11 @@ chr <- as.character(chr)
  }
 
  XSAVENAMES <- SAVENAMES
+ #print(SAVENAMES)
  SAVENAMES  <- SAVENAMES[!is.na(SAVENAMES)]
  SAVENAMES  <- unique(SAVENAMES)
- 
+
+ #print(SAVENAMES) 
  POSList <- vector("list",length(SAVENAMES))
  
  # Generate position of each unique attribute id

@@ -1,6 +1,6 @@
-setGeneric("diversity.stats", function(object,new.populations=FALSE,subsites=FALSE,pi=FALSE) standardGeneric("diversity.stats"))
+setGeneric("diversity.stats", function(object,new.populations=FALSE,subsites=FALSE,pi=FALSE, keep.site.info=TRUE) standardGeneric("diversity.stats"))
 
-setMethod("diversity.stats","GENOME",function(object,new.populations,subsites,pi){
+setMethod("diversity.stats","GENOME",function(object,new.populations,subsites,pi, keep.site.info){
   
   region.names                 <- object@region.names
   n.region.names               <- length(region.names)
@@ -53,6 +53,7 @@ else{poppairs <- 1;nn <- "pop1"}
   hapw   <- init1
   nucw   <- init1
   haplotype.counts      <- vector("list",n.region.names) # region stats
+  nucws  <- vector("list",n.region.names) 
  
   change    <- object@region.stats
   Pop_FSTH  <- vector("list",n.region.names)
@@ -195,7 +196,7 @@ if(subsites=="intergenic"){
     # if(NEWPOP) {temp       <- checkpoppairs(npops,popmissing,pairs,nn)} # welche populationen wurden \FCberhaupt berechnet
     # if(!NEWPOP){temp       <- checkpoppairs(npops,object@region.data@popmissing[[xx]],pairs,nn)} 
    
-      res                    <- calc_diversities(bial,populations,pi)
+      res                    <- calc_diversities(bial,populations,pi,keep.site.info)
 
 
       Pop_FSTH[[xx]]        <-  list(Populations=populations,Outgroup=NULL)   
@@ -212,7 +213,13 @@ if(subsites=="intergenic"){
     }
 
     hapw[xx,respop]   <- res$hapw
-    nucw[xx,respop]   <- res$nucw   
+    nucw[xx,respop]   <- res$nucw
+
+    if(keep.site.info){
+    nucws[[xx]]                 <- res$nucwsite
+    rownames(nucws[[xx]])	<- nam
+     		   
+    }
 
   # PROGRESS #######################################################
     progr <- progressBar(xx,n.region.names, progr)
@@ -223,6 +230,9 @@ if(subsites=="intergenic"){
 
  change@haplotype.counts      <- haplotype.counts
  change@Pop_FSTH              <- Pop_FSTH
+ if(keep.site.info){
+ change@nuc.diversity.within  <- nucws
+ }
  object@region.stats          <- change
  rm(change)
  gc()

@@ -1,4 +1,4 @@
-calc_diversities <- function(matrix_pol,populations,pi=FALSE){
+calc_diversities <- function(matrix_pol,populations,pi=FALSE,keep.site.info=FALSE){
 
 # Only one polymorphic site
 if(is.vector(matrix_pol)){
@@ -53,6 +53,8 @@ matrix_hap_sub       <- matrix_hap[unique(unlist(populations)),,drop=FALSE]#### 
 duplids             <- .Call("my_unique_C", matrix_hap_sub)
 uniquematrix        <- matrix_hap_sub[!duplids,,drop=FALSE]
 
+#print(duplids)
+
 nhgesamt             <- dim(uniquematrix)[1]
 sfreqh               <- matrix(0,npops,nhgesamt)
  
@@ -102,10 +104,17 @@ for(xx in 1:npops){
 #---------------------------------------------------------
 # calculate nucleotide diversity
 
+nucwsite           <- matrix(NaN,npops,dim(matrix_pol)[2])
+rownames(nucwsite) <- nam
+colnames(nucwsite) <- colnames(matrix_pol) 
+
 for(xx in 1:npops){
 
-popmat      <- matrix_pol[populations[[xx]],,drop=FALSE]
-nucwvek[xx] <- calc_nuc_diversity_within(popmat)
+popmat        <- matrix_pol[populations[[xx]],,drop=FALSE]
+XXDIV         <- calc_nuc_diversity_within(popmat)
+nucwvek[xx]   <- XXDIV$div
+nucwsite[xx,] <- XXDIV$site.div
+
 
 }
 
@@ -144,7 +153,7 @@ PIW_nei[xx]  <- (n/(n-1))*sum(res,na.rm=TRUE)
 # end comment -----
 
 
-return(list(hapw=hapwvek,nucw=nucwvek,sfreqh=sfreqh,PIW_nei=PIW_nei))
+return(list(hapw=hapwvek,nucw=nucwvek,sfreqh=sfreqh,PIW_nei=PIW_nei,nucwsite=nucwsite))
 
 } # End of Function calc_diversities
 
@@ -157,7 +166,7 @@ calc_nuc_diversity_within <- function(matrix){
 
   #n.vergleiche    <- choose(dim(matrix)[1],2)
   
-  erg <- apply(matrix,2,function(x){
+  site.div <- apply(matrix,2,function(x){
              
          einsen       <- sum(x==1, na.rm=TRUE)
          nullen       <- sum(x==0, na.rm=TRUE)
@@ -168,8 +177,8 @@ calc_nuc_diversity_within <- function(matrix){
          return(div)
          })
 
-  erg <- sum(erg)
+  div <- sum(site.div)
 
-return(erg)
+return(list(div=div, site.div=site.div))
 }
 

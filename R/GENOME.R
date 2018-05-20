@@ -127,7 +127,11 @@ P.Bd_clr	       =   "matrix",
 f		       =   "matrix", 
 RNDmin 		       =   "matrix",
 D.z		       =   "matrix",              # introgression slots
-D.pval		       =   "matrix",              
+D.pval		       =   "matrix",
+BDF.z		       =   "matrix",              # introgression slots
+BDF.pval	       =   "matrix",
+BDF.SE		       =   "matrix",                            
+D.SE		       =   "matrix",
 jack.knife             =   "logical",
 missing.freqs          =   "matrix",
 

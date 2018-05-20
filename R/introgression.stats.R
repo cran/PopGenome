@@ -1,6 +1,13 @@
-setGeneric("introgression.stats", function(object,subsites=FALSE,do.D=FALSE, do.BD=FALSE, do.BDF=FALSE, keep.site.info=TRUE, block.size=FALSE, dxy.table=FALSE, D.global=FALSE, do.CLR=FALSE, dgt=2, do.RNDmin=FALSE, lambda=1) standardGeneric("introgression.stats"))
+setGeneric("introgression.stats", function(object, subsites=FALSE, do.D=TRUE, do.BDF=TRUE, keep.site.info=TRUE, block.size=FALSE, do.RNDmin=FALSE, l.smooth=FALSE) standardGeneric("introgression.stats"))
 
-setMethod("introgression.stats","GENOME",function(object,subsites,do.D, do.BD, do.BDF, keep.site.info,block.size,dxy.table, D.global, do.CLR, dgt, do.RNDmin, lambda){
+setMethod("introgression.stats","GENOME",function(object, subsites, do.D, do.BDF, keep.site.info, block.size, do.RNDmin, l.smooth){
+
+do.BD=FALSE
+dxy.table=FALSE
+D.global=FALSE
+do.CLR=FALSE
+dgt=FALSE
+lambda=FALSE
 
   
 if(do.CLR){
@@ -13,7 +20,7 @@ stop("To calculate the Bd-clr >>D.global<< has to be specified !")
 
 if(do.D){ 
 do.BD     <- FALSE
-do.BDF    <- FALSE
+#do.BDF   <- FALSE
 }
 
 if(do.BD){ 
@@ -24,11 +31,8 @@ do.BDF    <- FALSE
 
 if(do.BDF){ 
 do.BD    <- FALSE
-do.D     <- FALSE
+#do.D     <- FALSE
 }
-
-
-
 
 
   region.names                 <- object@region.names
@@ -62,6 +66,8 @@ P.Bd_clr <- matrix(NaN,n.region.names,1)
   RNDmin <- matrix(NaN,n.region.names,1)
   D.z    <- matrix(NaN,n.region.names,1) # jacknife
   D.pval <- matrix(NaN,n.region.names,1) # jacknife
+  BDF.z    <- matrix(NaN,n.region.names,1) # jacknife
+  BDF.pval <- matrix(NaN,n.region.names,1) # jacknife
 #--------------------------------------------------
 
   # Names ----------------------------------------
@@ -86,6 +92,8 @@ P.Bd_clr <- matrix(NaN,n.region.names,1)
   # ----------------------------------------------
 
   site.D         <- vector("list",n.region.names) # region stats
+  site.BDF       <- vector("list",n.region.names)
+
   change    	 <- object@region.stats
 
  # Bd-CLR
@@ -226,20 +234,20 @@ if(subsites=="included" & length(bial!=0)){
     }
 
     if(do.BDF){
-	    res        <- calc_BDF(bial, populations, outgroup, keep.site.info, dxy.table) 
-    	    BDF[xx]    <- res$D
-            BDF_bayes[xx] <- res$D_bayes
+	    res            <- calc_BDF(bial, populations, outgroup, keep.site.info, dxy.table, l.smooth) 
+    	    BDF[xx]        <- res$D
+            BDF_bayes[xx]  <- res$D_bayes
             alpha_ABBA[xx] <- res$alpha_ABBA
 	    alpha_BABA[xx] <- res$alpha_BABA
-	    beta_BBAA[xx] <- res$beta_BBAA
+	    beta_BBAA[xx]  <- res$beta_BBAA
 		
     	    #f[xx]      <- res$f
             Bd_dir[xx] <- res$Bd_dir
 		
    # fill detailed Slots --------------------------------# 
      if(keep.site.info){	 	
-     site.D[[xx]]  		<- rbind(res$D_site,res$ABBA,res$BABA)
-     rownames(site.D[[xx]])     <- c("D","ABBA","BABA")
+     site.BDF[[xx]]  		<- rbind(res$D_site,res$ABBA,res$BABA)
+     rownames(site.BDF[[xx]])   <- c("BDF","ABBA","BABA")
      }		  
    # ----------------------------------------------------# 
     }
@@ -261,10 +269,18 @@ if(subsites=="included" & length(bial!=0)){
    	
   # Perform jacknife if requested
   if(block.size[1]!=FALSE){
+        
+ 	if(do.D){
 	res        <- D_jacknife(site.D[[xx]], D[xx], block.size=block.size)
 	D.z[xx]	   <- res$z
-	D.pval[xx] <- res$pval		
-  }	
+	D.pval[xx] <- res$pval	
+	}
+	if(do.BDF){	
+	res          <- D_jacknife(site.BDF[[xx]], BDF[xx], block.size=block.size)	
+	BDF.z[xx]    <- res$z
+	BDF.pval[xx] <- res$pval	
+	}
+ }	
 
 
 
@@ -276,6 +292,7 @@ if(subsites=="included" & length(bial!=0)){
 }
 
  change@D      			<- site.D
+ change@BDF			<- site.BDF	
  object@region.stats            <- change
  rm(change)
  gc()
@@ -293,6 +310,9 @@ if(subsites=="included" & length(bial!=0)){
  object@f        <- f
  object@D.z      <- D.z
  object@D.pval   <- D.pval
+ object@BDF.z      <- BDF.z
+ object@BDF.pval   <- BDF.pval
+
  object@RNDmin   <- RNDmin
  
  return(object)

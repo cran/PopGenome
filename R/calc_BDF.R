@@ -1,4 +1,42 @@
-calc_BDF <- function(bial, populations, outgroup, keep.site.info=FALSE, dxy.table=FALSE){
+calc_BDF <- function(bial, populations, outgroup, keep.site.info=FALSE, dxy.table=FALSE, l.smooth){
+
+
+if(l.smooth){
+#print(l.smooth)
+## add one ! Laplace ####################################################
+pop1 <- bial[populations[[1]],,drop=FALSE]
+pop2 <- bial[populations[[2]],,drop=FALSE]
+
+out  <- bial[outgroup, ,drop=FALSE]
+# get the ancestral state 
+# return(out)
+res  <- apply(out,2,function(x){
+        vec <- x[!is.na(x)]
+	if(length(unique(vec))==1){return(!vec[1])}else{return(NaN)}	
+	})
+#check if pop1 all NaN sites
+pp1  <- apply(pop1,2,function(x){
+        return(all(is.na(x)))
+	})
+#check if pop2 all NaN sites
+pp2  <- apply(pop2,2,function(x){
+        return(all(is.na(x)))
+	})
+
+res[pp1] <- NaN
+res[pp2] <- NaN
+
+# add res to pop1 and pop2
+res2   <- as.numeric(!res)
+bial   <- rbind(bial,res, res2)
+populations[[1]] <- c(populations[[1]],dim(bial)[1],dim(bial)[1]-1)  
+populations[[2]] <- c(populations[[2]],dim(bial)[1],dim(bial)[1]-1)
+
+#print(populations[[1]])
+#print(populations[[2]])
+#return(bial)
+}
+##########################################################################
 
 # Patterson's D
 # f
@@ -103,7 +141,7 @@ root[root!=0] <- 1
 
 #Bd-fraction
 
-BABA  <-  p*d23 
+BABA  <-  p*d23
 ABBA  <-  q*d13  
 
 

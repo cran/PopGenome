@@ -46,31 +46,36 @@ INTEGER(ret)[xx] = 0;
 
 char ident[1000] = {""};
 char temp[2] = {""};
+//Rprintf("Identifier not found");
 
   while(1) {
     
     ch      = fgetc(fp);
 
-    if(ch==EOF){break;}
-
-    //printf("%c", *ident);
+    if(ch==EOF){break;} 
 
     if(ch=='\n'){
-
+	
       line_count ++;
         
              while(1){	                 
-             ch      = fgetc(fp);
-	     if(ch==EOF && FOUND==0){ Rprintf("Identifier not found");goto end;}
-	     if(ch==EOF && FOUND==1){ INTEGER(ret)[1]=line_count-1;goto end;}	
-             //if(ch==EOF){ Rprintf("Identifier not found");goto end;}
-	     if(ch=='\t'){break;}	
-             temp[0] = ch;
-	     strcat(ident,temp);
-             }
+	      ch      = fgetc(fp);
+              //printf("%c", ch);
 
-	    // printf("%c", *ident);
-	    // break;		
+	      //
+              if(ch=='#'){goto skip;}
+ 	      //
+	             
+	      if(ch==EOF && FOUND==0){ Rprintf("Identifier not found");goto end;}
+	      if(ch==EOF && FOUND==1){ INTEGER(ret)[1]=line_count-1;goto end;}	
+              //if(ch==EOF){ Rprintf("Identifier not found");goto end;}
+	      if(ch=='\t'){break;}	
+              temp[0] = ch;
+	      strcat(ident,temp);
+             }// end of while 
+
+	     //printf("%c", *ident);
+	     //break;		
 
 	     // compare identifiers
              if(FOUND==0){	
@@ -80,14 +85,18 @@ char temp[2] = {""};
              	}
 	     }else{	
              	if(strcmp(ident,chr)!=0){ // not identical  
+                //printf("%c", *ident);
               	INTEGER(ret)[1] = line_count-1;
               	break;
              	}
 	     }
      
+            skip: // skip line
             strcpy(ident, ""); // delete array 
-
+	    
     } // one line 
+
+
 
  } // End of while            
 

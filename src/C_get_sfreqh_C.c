@@ -32,11 +32,21 @@ J2    = INTEGER(Rdim)[1]; // Spalten
 PROTECT(freq     = Rf_allocVector(INTSXP,I1));
 
 
-Runiquematrix           = coerceVector(RRuniquematrix, INTSXP);
-int *R1                 = INTEGER(Runiquematrix);
+//Runiquematrix           = coerceVector(RRuniquematrix, INTSXP);
+//int *R1                 = INTEGER(Runiquematrix);
 
-Rmatrix                 = coerceVector(RRmatrix, INTSXP);
-int *R2                 = INTEGER(Rmatrix);
+//Rmatrix                 = coerceVector(RRmatrix, INTSXP);
+//int *R2                 = INTEGER(Rmatrix);
+
+//Rvalue           = coerceVector(RinMatrix, REALSXP);
+//double *Rval     = REAL(Rvalue);
+
+Runiquematrix           = coerceVector(RRuniquematrix, REALSXP);
+double *R1              = REAL(Runiquematrix);
+
+Rmatrix                 = coerceVector(RRmatrix, REALSXP);
+double *R2              = REAL(Rmatrix);
+
 
 int count;
 int equal;
