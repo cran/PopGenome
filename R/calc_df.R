@@ -1,4 +1,4 @@
-calc_BDF <- function(bial, populations, outgroup, keep.site.info=FALSE, dxy.table=FALSE, l.smooth){
+calc_df <- function(bial, populations, outgroup, keep.site.info=FALSE, dxy.table=FALSE, l.smooth){
 
 
 if(l.smooth){

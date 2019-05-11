@@ -1,57 +1,83 @@
-\name{weighted.jackknife}
+\name{weighted.jackknife-methods}
+
 \docType{methods}
 
 \alias{weighted.jackknife,GENOME-method}
 \alias{weighted.jackknife-methods}
 
+
 \title{Weighted Jackknife}
 
-
 \description{
- Implements the weighted drop-one jackknife procedure.   
+ Weighted Jackknife calculations.
 }
 
 \usage{
 
 \S4method{weighted.jackknife}{GENOME}(object,
-do.D=TRUE, 
-do.BDF=TRUE, 
-per.region=FALSE, 
-block.size=1
-	)
+do.D=TRUE,
+do.df=TRUE,
+per.region=FALSE,
+block.size=1)
 }
 
+ \arguments{
 
-\arguments{
-
-  \item{object}{an object of class \code{"GENOME"}}
-  \item{do.D}{default:\code{TRUE}}
-  \item{do.BDF}{default:\code{TRUE}}
-  \item{per.region}{\code{FALSE} drop a genomic region, \code{TRUE} drop single SNPs}
-  \item{block.size}{in case \code{per.region=TRUE} the number of SNPs to be dropped}
+  \item{object}{An object of class \code{"GENOME"}}
+  \item{do.D}{Pattersons D and Martin's f statistic}
+  \item{do.df}{d-fraction (distance fraction)}
+  \item{per.region}{jacknife within regions}
+  \item{block.size}{the block size for jackknife (SNPs)}
 }
+
 
 \value{
-The function creates a transformed object of class \code{"GENOME"}.\\
-The following slots are filled: \code{BDF.z},\code{BDF.pval},\code{BDF.SE},\code{D.z},\code{D.pval}
-and \code{D.SE}.
+
+Returned value is a modified object of class \code{"GENOME"} \cr  \cr
+--------------------------------------------------------- \cr
+The following slots will be modified in the \code{"GENOME"}  object \cr
+--------------------------------------------------------- \cr
+
+\tabular{rlll}{
+
+            \tab Slot                	    \tab Reference   \tab Description \cr
+ 1.\tab \code{df.z}	            \tab [3]   \tab z values (jackknife) \cr
+ 2.\tab \code{df.SE}	            \tab [3]   \tab standard error (jackknife) \cr
+ 3.\tab \code{df.pval}	            \tab [3]   \tab P values (jackknife) \cr
+ 4.\tab \code{D.z}	            \tab [x]   \tab z values (jackknife) \cr
+ 5.\tab \code{D.SE}	            \tab [x]   \tab standard error (jackknife) \cr
+ 6.\tab \code{D.pval}	            \tab [x]   \tab P values (jackknife) \cr
+ 
+          }
+
 }
 
-\note{
-The \code{introgression.stats} module has to be performed prior to the anaylses.
+\details{
+To perform the D and f statistic one needs to define 3 populations via the function \code{set.populations}, \cr
+where the third population represent the archaic population. In addition, an outgroup is required and have to be
+set via the function \code{set.outgroup}. Here, only SNPs where the outgroup is monomorphic are considered.
+f is the fraction of the genome that is admixed [2].
 }
 
+\references{
+[1] Durand, E. Y., Patterson, N. J., Reich, D., & Slatkin, M. (2011). \emph{Testing for ancient admixture between closely related populations.} \cr Molecular Biology and Evolution, 28(8), 2239--2252. doi:10.1093/molbev/msr048 \cr
+[2] Simon H Martin, Kanchon K Dasmahapatra, Nicola J Nadeau, et al. (2013). \emph{Genome-wide evidence for speciation with gene flow in Heliconius butterflies.} \cr Genome Res. doi:10.1101/gr.159426.113 \cr
+[3] Bastian Pfeifer and Durrell D. Kapan (2019). \emph{Estimates of introgression as a function of pairwise distances.} \cr BMC Bioinformatics. https://doi.org/10.1186/s12859-019-2747-z
+
+}
 
 \examples{
-# GENOME.class      <- readVCF("...", ...)
-# GENOME.class      <- set.populations()
-# GENOME.class.slide <- sliding.window.transform(...)
-# GENOME.class.slide <- introgression.stats(...)
-# GENOME.class.slide <- weighted.jackknife(GENOME.class.slide, per.region=FALSE)
-# GENOME.class.slide@BDF.z
-# GENOME.class.slide@D.z
+# GENOME.class <- readData("\home\Alignments")
+# GENOME.class <- set.populations(GENOME.class,list(1:3,4:8,9:12))
+# GENOME.class <- set.outgroup(GENOME.class,13)
+# GENOME.class <- introgression.stats(GENOME.class, do.D=TRUE)
+# show the result:
+# GENOME.class@D
+# GENOME.class@f
+# GENOME.class <- introgression.stats(GENOME.class, do.df=TRUE)
+# show the result:
+# GENOME.class@df
 }
-
 
 
 \keyword{methods}
