@@ -1,4 +1,4 @@
-96625f62c449763da90e670cecd9489e *DESCRIPTION
+d76e38efb77e52f30d5e363389540403 *DESCRIPTION
 c4eb8d6ec83e2edde8374c1861a79117 *NAMESPACE
 4bc11d2487db84b95f434732adf2aabd *NEWS
 6ea72f974ff1c3718d1cdcdc19adcd0f *R/APE_read.nexus.data.R
@@ -160,11 +160,11 @@ c0f0f2b4c7d9f84435e8757b68dfd643 *data/vcf_file.txt.gz
 921298844664c2107a8579da549dd51d *inst/CITATION
 f1ee62347d9ec008bc135b6199159bbb *inst/COPYRIGHTS
 bf7e82a4e684fdfcc00a49aeb6736075 *inst/doc/An_introduction_to_the_PopGenome_package.Rnw
-0ab02a7b4045865a24e40ee21fe56c50 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
+efb517dd8d2062cf079e5651c4244944 *inst/doc/An_introduction_to_the_PopGenome_package.pdf
 5e75901b2d303ced620e1e2190d0cb59 *inst/doc/Integration_of_new_Methods.Rnw
-eb4fa7f25821792ec2bb2e0b0d009e07 *inst/doc/Integration_of_new_Methods.pdf
+9e50afaba8d32e5f33450a10f4d5c510 *inst/doc/Integration_of_new_Methods.pdf
 3a4dc1248190af154a1caf5b035884a3 *inst/doc/Whole_genome_analyses_using_VCF_files.Rnw
-2132c42aad9e361421e60a75f406d65f *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
+062dbd07fbbb17e71125635ccf55e81b *inst/doc/Whole_genome_analyses_using_VCF_files.pdf
 6bce5a63da257525d9db67c5ab2b44c8 *man/Achaz.stats.Rd
 e827d56896a18683cd4d0f6158f4dcd0 *man/BayeScanR.Rd
 7143646aeb017b223d2a11a1ab7781da *man/F_ST.stats-methods.Rd
@@ -230,8 +230,8 @@ ef69eabecdd1a4a68abb7c49f3e780bb *man/test.params-class.Rd
 c0551903921402ddf3dfa75fb809b987 *man/weighted.jackknife.Rd
 1e3e46234cd76486ecd9a5d086c22e78 *src/C_get_sfreqh_C.c
 e55e146839bdaa68f3e4a63c5e2094e3 *src/CompareVEK.c
-2c59852cc4867da5842ac3f4e0ab1ebc *src/Makevars
-e24926dcfcf8b7f7e5ef9820b6d00891 *src/Makevars.win
+95edcd84f32f2358f0111acb42b926d0 *src/Makevars
+04729e63cd2f0ca46be9f2a98c3282e4 *src/Makevars.win
 ac2a421f6d598a674db7d117dbce15a9 *src/PopGenome-win.def
 8fef72508261dba2d8828b9fd9db90c4 *src/R2_C.c
 28bf27a5072d9c7e025981c11b4bf36f *src/VCF_split.cpp
@@ -251,7 +251,7 @@ f559c6b77b2d3b4d0347f28ebc6e3d77 *src/find_lines.c
 5ff81964cfc34633856e95d6a2c99e10 *src/get_gff_info_C.c
 59ab2020da40b35f57da2b12b9c7588a *src/get_ind_fasta.c
 9119fee1c5e8c2e1b9d6933380ab3cc7 *src/get_segsites_C.c
-a31338e2bfe43a4b31c6c0039397776f *src/init.c
+e6c99081f31556d8d13ab19b0288b7ff *src/init.c
 d00c8c3ffacaebbf6677ee423a39bf12 *src/makeBial.c
 01778e346691c4e55c3a0051e7bb0c93 *src/makeBialMatrix.c
 ab8243a505b62e09fb087dac53391b52 *src/myReadVCFC.c
